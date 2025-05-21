@@ -1,0 +1,35 @@
+body {
+    overflow-x: hidden
+}
+html {
+    scroll-behavior: smooth;
+}
+.nav-link.active {
+    font-weight: bold;
+    color: #2a2a2a;
+    border-bottom: solid 2px #2a2a2a;
+}
+.nav-link {
+    font-family: Plus Jakarta Sans, sans-serif !important;
+    color: #444444 !important;
+    transition: all 0.3s ease;
+    font-weight: normal;
+
+}
+.nav-link:hover {
+    color: #2a2a2a !important;
+    border-bottom: 2px solid #444444 !important;
+}
+.nav-link.active {
+        color: #2a2a2a !important;
+        border-bottom: 2px solid #2a2a2a;    
+}
+
+footer {
+    color: #858484 !important;
+    font-size: smaller !important;
+}
+
+.retiortuk {
+    color: #858484 !important;
+}
