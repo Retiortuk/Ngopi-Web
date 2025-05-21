@@ -4,7 +4,7 @@
 
 ## Project From Udemy WebDev Course | Bootstrap - 101 | 
 Original Repository <a href="https://github.com/Retiortuk/BootCampFullstackWeb/tree/main/101-BootStrap" target="_blank">BootcampFullstackWeb/101-BootStrap</a>
-See The Website <a href="https://github.com/Retiortuk/BootCampFullstackWeb/tree/main/101-BootStrap](https://retiortuk.github.io/Ngopi-Web" target="_blank">Ngopi.</a>
+See The Website <a href="https://retiortuk.github.io/Ngopi-Web" target="_blank">Ngopi.</a>
 
 ##### Currently Front-End Only Best Using Desktop For The Best Expreience
 ---
@@ -170,7 +170,7 @@ inside this nav-1 inlcudes Brand Name, Search Bar, Icon User and Cart
                 </div>  
                 <!-- FOR ICONS USER + CART(Mobile) END -->
 ```
-logo icon on the left is Brand and in the middle is search bar and on the right is user icon and cart, in responsive desaign when the dimension is small enough the Brand logo icon will move to the center and user icon will be on the left while cart icon will be on the right.
+logo icon on the left is Brand and in the middle is search bar and on the right is user icon and cart, in responsive design when the dimension is small enough the Brand logo icon will move to the center and user icon will be on the left while cart icon will be on the right.
 
 **- .nav-2**
 ```html
@@ -199,5 +199,5 @@ logo icon on the left is Brand and in the middle is search bar and on the right 
         <!-- NAVBAR-END -->
 ```
 Inside of .nav-2 there are menus wrapped by UL and LI in HTML
-there are Home, Featured, Menu and About Ngopi. they are centered align is responsive desaign if the dimension small enough About Ngopi. .nav-item will be removed knowing that it's not the important.
+there are Home, Featured, Menu and About Ngopi. they are centered align is responsive design if the dimension small enough About Ngopi. .nav-item will be removed knowing that it's not the important.
 
