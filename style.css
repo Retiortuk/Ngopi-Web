@@ -33,6 +33,39 @@ html {
     display: inline-block;
 } */
 
+.card-container-menu {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+    padding: 0rem;
+}
+.menu-card {
+    flex: 0 1 220px; /* grow 0, shrink 1, basis 220px */
+}
+
+.card-container-feature {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+    padding: 0rem;
+}
+.featured-card {
+    flex: 0 1 220px; /* grow 0, shrink 1, basis 220px */
+}
+
+.card {
+    width: 100%;
+    max-width: 100%;
+}
+
+.card-title {
+    font-size: 1rem;
+    white-space: normal; /* biar wrap tapi tetap rapi */
+    text-align: left;
+}
+
 footer {
     color: #858484 !important;
     font-size: smaller !important;
