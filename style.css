@@ -24,6 +24,14 @@ html {
         color: #2a2a2a !important;
         border-bottom: 2px solid #2a2a2a;    
 }
+/* .nav-menu-item {
+    font-size: 0.60rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: hidden;
+    max-width: 100px;
+    display: inline-block;
+} */
 
 footer {
     color: #858484 !important;
