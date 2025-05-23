@@ -201,3 +201,186 @@ logo icon on the left is Brand and in the middle is search bar and on the right 
 Inside of .nav-2 there are menus wrapped by UL and LI in HTML
 there are Home, Featured, Menu and About Ngopi. they are centered align is responsive design if the dimension small enough About Ngopi. .nav-item will be removed knowing that it's not the important.
 
+---
+
+#### - Main
+
+inside of this main wrapped by a main container called .container-main with id #scroll-container to sync scroll to active menu in the navbar
+
+```html
+<div id="scroll-container" class="container-main" data-bs-spy="scroll" data-bs-target="#navbar-example" data-bs-offset="100" tabindex="0">
+    <section id="home-sect"></section>
+    <section id="featured-sect"></section>
+    <section id="menu-sect"></section>
+    <section id="about-sect"></section>
+</div>
+<footer></footer>
+
+```
+inside of that container there are 4 main section are Home, Featured, Menu, About
+
+**- Section #home-sect**
+```html
+ <!-- home-sect -->
+            <section id="home-sect" class="py-1">
+                <div class="row home-section">
+                    
+                    <!-- Welcoming User -->
+                    <div class="col-12 mb-4" style="font-family: Plus Jakarta Sans, sans-serif;">
+                        <h1 class="text-center mt-5">Welcome to Ngopi.</h1>
+                        <p class="text-center">Your favorite coffee and toast shop</p>
+                    </div>
+    
+                    <!-- IMAGE-HOME and DESCRIPTION-PROFILE -->
+                    <div class="col-12 d-flex flex-md-row flex-column align-items-center justify-content-center mt-5 gap-5">
+                        <!-- IMAGE-HOME -->
+                        <div class="col-4 image-home">
+                                <img src="./images/coffee.png" class="img-fluid" alt="Coffee">
+                        </div>
+    
+                        <!-- DESCRIPTION-PROFILE -->    
+                        <div class="col-md-4 col-10 d-flex align-items-center justify-content-center text-md-start text-center mt-4 mt-md-0" style="font-family: Plus Jakarta Sans, sans-serif;">
+                            <div class="description-home">
+                                <h2 class="card-title text-md-start text-center mb-3">Coffee at Ngopi.</h2>
+                                <p class="card-text">Ngopi invites you to experience the authentic taste of Central Java with our wide range of local coffee blends. Grown in the fertile volcanic soil of our homeland, each blend captures the distinct terroir of the region, offering a unique sensory journey. From the robust kick of our Robusta to the nuanced sweetness of our Arabica, we meticulously select and expertly roast the finest beans to unlock their full aromatic potential. Discover coffee that is rich in flavor, steeped in tradition, and brimming with the spirit of Purwokerto.</p>
+                            </div>
+                        </div>
+                    </div>     
+                </div>
+            </section>
+            <!-- Home-Sect END -->
+```
+in Home section there are short welcoming user to the Ngopi. and text the short profile of the company on the left of that text there is a picture of the best signature of Ngopi's in responsive design when the dimension smal enough text will be in the center as well as the picture.
+
+**- Featured #featured-sect**
+```html
+ <!-- Featured-SECT -->
+            <section id="featured-sect" class="py-1">
+
+                <div class="row featured-section mt-5">
+                    <div class="col-12 mb-4">
+                        <h2 class="text-center" style="font-family: Plus Jakarta Sans, sans-serif;">Featured</h2>
+                        <p class="text-center" style="font-family: Plus Jakarta Sans, sans-serif;">Our best-selling coffee and toast</p>
+                    </div>
+    
+                    <!-- Featured-Card -->
+                    <div class="card-container-feature">
+                        <!-- FEATURED 1 -->
+                        <div class="featured-card">
+                            <div class="card">
+                                <img src="./images/kopi-toast.webp" class="card-img-top" alt="">
+                                <div class="card-body">
+                                    <h5 class="card-title">Combo Toast</h5>
+                                    <div class="price-cartAdd d-flex justify-content-between align-items-center">
+                                        <p class="card-text price fw-bold">$30</p>
+                                        <a href="#" class="btn btn-dark">+</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- SO On to The Nex Featured Item -->
+                    </div>
+                </div>
+            </section>
+```
+in Featured section there are cards that filled with best menus the component inside of that card includes image, menu's name, price, and the cart add button, in responsive design when the dimension small enough the cards will be on top each other.
+
+**- Menu Section #menu-sect**
+```html
+ <!-- MENUS SECT -->
+            <section id="menu-sect" class="py-1">
+
+                <div class="row menu-section mt-5 pt-4">
+                    <div class="col-12 mb-4">
+                        <h2 class="text-center" style="font-family: Plus Jakarta Sans, sans-serif;">Menu</h2>
+                        <p class="text-center" style="font-family: Plus Jakarta Sans, sans-serif;">All of our menus</p>
+                    </div>
+                </div>
+    
+                <!-- MENU CARD -->
+                <div class="card-container-menu">
+                    <!-- MENU 1 -->
+                    <div class="menu-card">
+                        <div class="card">
+                            <img src="./images/kopi-toast.webp" class="card-img-top" alt="">
+                            <div class="card-body">
+                                <h5 class="card-title">Combo Toast</h5>
+                                <div class="price-cartAdd d-flex justify-content-between align-items-center">
+                                    <p class="card-text price fw-bold">$30</p>
+                                    <a href="#" class="btn btn-dark">+</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+```
+inside of this section same as featured but this one is all of the menus.
+
+**- About Section #about-sect**
+```html
+   <!-- About Ngpi. -->
+            <section id="about-sect" class="py-1">
+
+                <div class="row about-section mt-5 pt-4 mb-5" style="font-family: Plus Jakarta Sans, sans-serif;">
+                    <!-- TAGLINE  -->
+                    <div class="col-12 about-headline text-center justify-content-center align-items-center mt-5 pt-5">
+                        <h1>About Ngopi.</h1>
+                        <p>Learn of our journey.</p>
+                    </div>
+    
+                    <!-- ABOUT CONTENT -->
+                    <div class="col-12 about-container d-flex flex-md-row flex-column justify-content-center align-items-center mt-3">
+                        <!-- IMG -->
+                        <div class="col-4">
+                            <img src="images/ngopi-icon.png" class="img-fluid" alt="Ngopi.">
+                        </div>
+    
+                        <!-- TEXT -->
+                        <div class="col-md-4 col-10 d-flex align-items-center justify-content-center text-md-start text-center mt-4 mt-md-0">
+                            <div class="about-text">
+                                <h2 class="mb-3">Ngopi.</h2>
+                                <p>Ngopi Caffee is more than just a coffee shop; it's a community hub, a place where the rich aroma of freshly brewed coffee blends with the warmth of good company and conversation. Rooted in the Indonesian tradition of "Ngopi" - a relaxed invitation to have coffee and connect - we aim to create a welcoming and vibrant space for everyone to enjoy their daily dose of delight.</p>
+                                <p>Inspired by the lively "warungs" and "kedais" of Indonesia, where coffee breaks are an integral part of daily life and social interaction, Ngopi Caffee was established in 2026 in the heart of Purwokerto. Our founders, Gesa, envisioned a modern interpretation of this tradition, offering high-quality coffee and a comfortable ambiance that encourages connection and relaxation</p>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <!-- MOTTO -->
+                    <div class="col-12 about-motto text-center align-items-center justify-content-center mt-5">
+                        <h2>"Let's Ngopi."</h2>
+                        <p class="fst-italic">~ Est. 2026 ~</p>
+                    </div>
+                </div>
+            </section>
+```
+in this section using row from bootstrap atribute and inside of that row there are 3 col, col for tagline is on the center tagline is About, and col for main about content inside of that there are two col and they're display flex on left is the image icon logo and on the right is about text the journey of Ngopi, and the last col is motto.
+
+**- Footer**
+```html
+  <!-- FOOTER -->
+        <footer class="bg-light text-center text-lg-start mt-5" style=" font-family: Plus Jakarta Sans, sans-serif; height: auto; box-shadow:  0px -0.5px 5px rgba(0, 0, 0, 0.1);">
+
+            <div class="text-center footer-container align-items-center justify-content-center pt-4 py-4">
+
+                <div class="row d-flex justify-content-center align-items-center">
+                    <div class="col align-items-center justify-content-center">
+                        <a href="https://github.com/Retiortuk" class="text-decoration-none" target="_blank">
+                            <svg width="24px" height="24px" viewBox="0 0 48 48" id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><defs><style>.cls-1{fill:none;stroke:#000000;stroke-linecap:round;stroke-linejoin:round;fill-rule:evenodd;}</style></defs><path class="cls-1" d="M24,2.5a21.5,21.5,0,0,0-6.8,41.9c1.08.2,1.47-.46,1.47-1s0-1.86,0-3.65c-6,1.3-7.24-2.88-7.24-2.88A5.7,5.7,0,0,0,9,33.68c-1.95-1.33.15-1.31.15-1.31a4.52,4.52,0,0,1,3.29,2.22c1.92,3.29,5,2.34,6.26,1.79a4.61,4.61,0,0,1,1.37-2.88c-4.78-.54-9.8-2.38-9.8-10.62a8.29,8.29,0,0,1,2.22-5.77,7.68,7.68,0,0,1,.21-5.69s1.8-.58,5.91,2.2a20.46,20.46,0,0,1,10.76,0c4.11-2.78,5.91-2.2,5.91-2.2a7.74,7.74,0,0,1,.21,5.69,8.28,8.28,0,0,1,2.21,5.77c0,8.26-5,10.07-9.81,10.61a5.12,5.12,0,0,1,1.46,4c0,2.87,0,5.19,0,5.9s.39,1.24,1.48,1A21.5,21.5,0,0,0,24,2.5"></path></g></svg>
+                            <p class="fst-italic retiortuk">Web Created By: Retiortuk</p>
+                        </a>
+                    </div>
+                </div>
+                <p>© 2026 Ngopi. All rights reserved.</p>
+                <div class="d-sm-flex d-none footer-credits justify-content-center align-items-center gap-3">
+                        <p>All Product Images By Janji Jiwa Kopi</p>
+                        <p>All Illustration Images Available in Freepik</p>
+                </div>
+            </div>
+
+        </footer>
+```
+this is foooter and inside of this footer is copyright and website created by Retiortuk.
+
+---
+
