@@ -1,0 +1,25 @@
+import { create } from "zustand";
+
+const getInitialCart = () => {
+    const cart = localStorage.getItem('cart');
+    return cart ? JSON.parse(cart) : [];
+};
+
+export const userCartStore = create((set) => ({
+    cart: getInitialCart(),
+
+    addToCart: (product) => {
+        set((state) => {
+            const existingProduct =  state.cart.find((item) => item.id === product.id);
+            let updatedCart
+
+            if(existingProduct) {
+                updatedCart = state.cart.map((item)=> item.id === product.id ? {...item, quantity: (item.quantity || 1) + 1} : item);
+            } else {
+                updatedCart = [...state.cart, {...product, quantity : 1}];
+            }
+            localStorage.setItem('cart', JSON.stringify(updatedCart));
+            return { cart : updatedCart}
+        })
+    }
+}))
