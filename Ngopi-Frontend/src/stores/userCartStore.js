@@ -20,6 +20,26 @@ export const userCartStore = create((set) => ({
             }
             localStorage.setItem('cart', JSON.stringify(updatedCart));
             return { cart : updatedCart}
-        })
+        });
+    },
+
+    removeFromCart: (product) => {
+        set((state) => {
+            const existingProduct = state.cart.find((item) => item.id === product.id);
+            let updatedCart;
+
+            if(!existingProduct) { //jika memang cart sudah kosong
+                return state;
+            }
+
+            if(existingProduct.quantity === 1) {
+                updatedCart =  state.cart.filter((item) => item.id !== product.id);
+            } else {
+                updatedCart = state.cart.map((item) => item.id === product.id ? {...item, quantity: item.quantity - 1 }: item)
+            }
+            localStorage.setItem('cart', JSON.stringify(updatedCart));
+            return { cart: updatedCart};
+        });
     }
-}))
+}));
+

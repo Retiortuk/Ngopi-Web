@@ -45,21 +45,6 @@ function App() {
         }}
         toastOptions={{
           duration: 4000,
-
-          style: {
-            fontFamily: 'Plus Jakarta Sans, sans-serif',
-            fontSize: '16px',
-            borderRadius: '5px',
-            background: '#212529',
-            color: '#fff'
-          },
-          success: {
-            duration: 4000,
-            iconTheme: {
-              primary: '#fff',
-              secondary: '#212529'
-            }
-          }
         }}
       />
 
