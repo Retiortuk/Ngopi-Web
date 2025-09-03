@@ -1,9 +1,8 @@
 import './App.css'
 import React, {useEffect, useState} from 'react';
 import Navbar from './components/Navbar.jsx';
-import HomePage from './Pages/HomePage.jsx';
+import { Outlet } from 'react-router-dom';
 import Footer from './components/Footer.jsx';
-import LoginPage from './Pages/LoginPage.jsx';
 
 function App() {
   const [activeSection, setActiveSection] = useState('');
@@ -38,10 +37,11 @@ function App() {
   return (
     <>
       <Navbar activeSection={activeSection} />
-      <HomePage />
+      <main>
+        <Outlet />
+      </main>
       <Footer />
 
-      <LoginPage />
     </>
   )
 }
