@@ -1,11 +1,9 @@
 import './App.css'
 import React, {useEffect, useState} from 'react';
 import Navbar from './components/Navbar.jsx';
-import HomeSection from './components/HomeSection.jsx';
-import FeaturedSection from './components/FeaturedSection.jsx';
-import MenuSection from './components/MenuSection.jsx';
-import AboutSection from './components/AboutSection.jsx';
+import HomePage from './Pages/HomePage.jsx';
 import Footer from './components/Footer.jsx';
+import LoginPage from './Pages/LoginPage.jsx';
 
 function App() {
   const [activeSection, setActiveSection] = useState('');
@@ -40,13 +38,10 @@ function App() {
   return (
     <>
       <Navbar activeSection={activeSection} />
-      <div id="scroll-container" className="container-main" data-bs-spy="scroll" data-bs-target="#navbar-example" data-bs-offset="100" tabIndex="0">
-        <HomeSection />
-        <FeaturedSection />
-        <MenuSection />
-        <AboutSection />
-      </div>
+      <HomePage />
       <Footer />
+
+      <LoginPage />
     </>
   )
 }
