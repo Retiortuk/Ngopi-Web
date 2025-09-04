@@ -11,7 +11,7 @@ const TrashIcon = () => (
     <svg width="21px" height="21px" viewBox="0 0 24.00 24.00" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ff0000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M10 11V17" stroke="#474747" stroke-width="1.7759999999999998" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M14 11V17" stroke="#474747" stroke-width="1.7759999999999998" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M4 7H20" stroke="#474747" stroke-width="1.7759999999999998" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M6 7H12H18V18C18 19.6569 16.6569 21 15 21H9C7.34315 21 6 19.6569 6 18V7Z" stroke="#474747" stroke-width="1.7759999999999998" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M9 5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5V7H9V5Z" stroke="#474747" stroke-width="1.7759999999999998" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
 );
 
-const OrderSummary = ({subtotal, totalFinall, taxCount}) => (
+const OrderSummary = ({subtotal, totalFinall, taxCount, taxRate}) => (
     <div className="card shadow-sm border-0">
         <div className="card-body">
             <h4 className="card-title mb-4">Your Summary Order</h4>
@@ -24,7 +24,7 @@ const OrderSummary = ({subtotal, totalFinall, taxCount}) => (
                 <p className="fw-bold text-success">-$0</p>
             </div>
             <div className="d-flex justify-content-between mb-2">
-                <p className="text-muted">Tax</p>
+                <p className="text-muted">Tax ({taxRate}%)</p>
                 <p className="fw-bold">${taxCount}</p>
             </div>
             <div className="dropdown">
@@ -49,9 +49,9 @@ const OrderSummary = ({subtotal, totalFinall, taxCount}) => (
 
 function CartPage() {
     const {cart, addToCart, removeFromCart, clearItemFromCart } = userCartStore();
-    let taxRate = 0.05
+    let taxRate = 6.25;
     const subtotal = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
-    const taxCount = subtotal * taxRate;
+    const taxCount = subtotal * (taxRate/100);
     const totalFinall = subtotal + taxCount
 
     return  (
@@ -64,7 +64,7 @@ function CartPage() {
                     {/* Cek Apakah Cart Kosong? */}
                     {cart.length === 0 ? (
                             <div className="alert alert-secondary mt-3">
-                                Your Cart is Empty <Link to='/' className="text-dark text-decoration-none">Let's Ngopi!</Link>
+                                Your Cart is Empty <Link to='/' className="text-dark">Let's Ngopi!</Link>
                             </div>
                     ): (
                         cart.map((item)=> (
@@ -106,7 +106,7 @@ function CartPage() {
                         {/* SUMMARY ONLY IN DESKTOP*/}
                         <div className="col-lg-4 d-none d-lg-block mt-4">
                             <div className="position-sticky" style={{ top: '120px' }}>
-                                <OrderSummary subtotal={subtotal} totalFinall={totalFinall} taxCount={taxCount} />
+                                <OrderSummary subtotal={subtotal} totalFinall={totalFinall} taxCount={taxCount} taxRate={taxRate} />
                             </div>
                         </div>
                         {/* ONLY IN MOBILE */}
