@@ -3,13 +3,13 @@ import React, {useEffect, useState} from 'react';
 import Navbar from './components/Navbar.jsx';
 import { Outlet } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
+import ScrollHandler from './utils/ScrollHandler.jsx';
 
 function App() {
   const [activeSection, setActiveSection] = useState('');
 
   useEffect(() => {
     const sections =  document.querySelectorAll('section[id]');
-
     const observer = new IntersectionObserver(
       (entries)=> {
         entries.forEach((entry)=> {
@@ -23,19 +23,13 @@ function App() {
       }
     );
 
-    sections.forEach((section)=> {
-      observer.observe(section);
-    });
-
-    return() => {
-      sections.forEach((section)=> {
-        observer.unobserve(section);
-      });
-    };
+    sections.forEach((section) => observer.observe(section));
+    return() => sections.forEach((section) => observer.unobserve(section))
   }, []);
 
   return (
     <>
+      <ScrollHandler setActiveSection={setActiveSection}/>
       <Toaster
         position='bottom-center'
         reverseOrder={false}
@@ -46,7 +40,6 @@ function App() {
           duration: 4000,
         }}
       />
-
       <Navbar activeSection={activeSection} />
       <main>
         <Outlet />
