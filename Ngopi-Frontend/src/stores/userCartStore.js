@@ -40,6 +40,14 @@ export const userCartStore = create((set) => ({
             localStorage.setItem('cart', JSON.stringify(updatedCart));
             return { cart: updatedCart};
         });
+    },
+    
+    clearItemFromCart: (product) => {
+        set((state)=> {
+            const updatedCart =  state.cart.filter((item) => item.id !== product.id);
+            localStorage.setItem('cart', JSON.stringify(updatedCart));
+            return {cart: updatedCart}
+        })
     }
 }));
 
