@@ -2,7 +2,6 @@ import './App.css'
 import React, {useEffect, useState} from 'react';
 import Navbar from './components/Navbar.jsx';
 import { Outlet } from 'react-router-dom';
-import Footer from './components/Footer.jsx';
 import { Toaster } from 'react-hot-toast';
 
 function App() {
@@ -52,8 +51,6 @@ function App() {
       <main>
         <Outlet />
       </main>
-      <Footer />
-
     </>
   )
 }

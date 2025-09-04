@@ -3,6 +3,7 @@ import HomeSection from "../components/HomeSection.jsx";
 import FeaturedSection from "../components/FeaturedSection.jsx";
 import MenuSection from "../components/MenuSection.jsx";
 import AboutSection from "../components/AboutSection.jsx";
+import Footer from "../components/Footer.jsx";
 
 function HomePage() {
     return(
@@ -11,6 +12,7 @@ function HomePage() {
             <FeaturedSection />
             <MenuSection />
             <AboutSection />
+            <Footer />
         </div>
     );
 }

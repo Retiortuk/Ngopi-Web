@@ -1,10 +1,12 @@
 import React from "react";
 import styles from './Navbar.module.css';
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { userCartStore } from "../stores/userCartStore";
 
 
 function Navbar({ activeSection }) {
+    const location = useLocation();
+    const isOnHomePage = location.pathname === '/';
     const cart =  userCartStore((state) => state.cart);
     const totalItems =  cart.reduce((total, item) => total + item.quantity, 0);
 
@@ -15,9 +17,9 @@ function Navbar({ activeSection }) {
                 {/* <!-- ROW FOR BRAND, SEARCH, USER REQ --> */}
                 <div className="row nav-1 align-items-center">
                     {/* <!-- Brand --> */}
-                    <div className="col-md-4 brand-container d-flex justify-content-center justify-content-md-start align-items-center text-center">
+                    <Link to='/' className="col-md-4 brand-container d-flex justify-content-center justify-content-md-start align-items-center text-center text-dark text-decoration-none">
                         <h1 className="ms-0 ms-md-5" style={{fontFamily: 'Plus Jakarta Sans, sans-serif'}}>Ngopi.</h1>
-                    </div>
+                    </Link>
                     
                     
                     {/* <!-- Search Bar --> */}
@@ -81,16 +83,24 @@ function Navbar({ activeSection }) {
                     <div className="col d-flex align-items-center justify-content-center">
                         <ul className="nav gap-1 gap-md-4 pt-3 justify-content-center flex-wrap">
                             <li className="nav-item">
-                                <a className={`${styles.navLink} nav-menu-item ${activeSection === 'home-sect' ? styles.active : ''}`} href="#home-sect">Home</a>
+                                <Link className={`${styles.navLink} nav-menu-item ${isOnHomePage && activeSection === 'home-sect' ? styles.active : ''}`} to="/#home-sect">
+                                    Home
+                                </Link>
                             </li>
                             <li className="nav-item">
-                                <a className={`${styles.navLink} nav-menu-item ${activeSection === 'featured-sect' ? styles.active : ''}`} href="#featured-sect">Featured</a>
+                                <Link className={`${styles.navLink} nav-menu-item ${isOnHomePage && activeSection === 'featured-sect' ? styles.active : ''}`} to="/#featured-sect">
+                                    Featured
+                                </Link>
                             </li>
                             <li className="nav-item">
-                                <a className={`${styles.navLink} nav-menu-item ${activeSection === 'menu-sect' ? styles.active : ''}`} href="#menu-sect">Menu</a>
+                                <Link className={`${styles.navLink} nav-menu-item ${isOnHomePage && activeSection === 'menu-sect' ? styles.active : ''}`} to="/#menu-sect">
+                                    Menu
+                                </Link>
                             </li>
                             <li className="nav-item d-none d-sm-block">
-                                <a className={`${styles.navLink} nav-menu-item ${activeSection === 'about-sect' ? styles.active : ''}`} href="#about-sect">About Ngopi.</a>
+                                <Link className={`${styles.navLink} nav-menu-item ${isOnHomePage && activeSection === 'about-sect' ? styles.active : ''}`} to="/#about-sect">
+                                    About Ngopi.
+                                </Link>
                             </li>
                         </ul>
                     </div>
