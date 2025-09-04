@@ -6,14 +6,20 @@ function ScrollHandler({ setActiveSection }) {
     useEffect(() => {
         if(location.hash) {
             const elementID = location.hash.substring(1);
-            const element = document.getElementById(elementID);
+            setActiveSection(elementID)
 
-            if(element) {
-                setActiveSection(element)
-                element.scrollIntoView({behavior: 'smooth', block: 'start'});
-            }
+            const timer = setTimeout(() => {
+                const element = document.getElementById(elementID);
+                if(element) {
+                    element.scrollIntoView({behavior: 'smooth', block: 'start'});
+                }
+            },50);
+
+            return () => clearTimeout(timer)
         }
     },[location, setActiveSection])
+
+    return null;
 }
 
 export default ScrollHandler;
