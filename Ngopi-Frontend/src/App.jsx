@@ -1,13 +1,14 @@
 import './App.css'
 import React, {useEffect, useState} from 'react';
 import Navbar from './components/Navbar.jsx';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import ScrollHandler from './utils/ScrollHandler.jsx';
 
+
 function App() {
   const [activeSection, setActiveSection] = useState('');
-
+  const location = useLocation();
   useEffect(() => {
     const sections =  document.querySelectorAll('section[id]');
     const observer = new IntersectionObserver(
@@ -25,7 +26,13 @@ function App() {
 
     sections.forEach((section) => observer.observe(section));
     return() => sections.forEach((section) => observer.unobserve(section))
-  }, []);
+  }, [location.pathname]);
+
+  useEffect(()=> {
+    if(location.pathname !== '/') {
+      setActiveSection('')
+    }
+  },[location.pathname])
 
   return (
     <>
