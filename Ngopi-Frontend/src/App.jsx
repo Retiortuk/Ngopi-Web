@@ -11,6 +11,12 @@ function App() {
   const location = useLocation();
   useEffect(() => {
     const sections =  document.querySelectorAll('section[id]');
+    const observerOptions = {
+      root: null,
+      rootMargin: '-170px 0px -50% 0px',
+      treeshold: 0,
+    }
+
     const observer = new IntersectionObserver(
       (entries)=> {
         entries.forEach((entry)=> {
@@ -19,9 +25,7 @@ function App() {
           }
         });
       },
-      {
-        threshold: 0.5,
-      }
+      observerOptions
     );
 
     sections.forEach((section) => observer.observe(section));
