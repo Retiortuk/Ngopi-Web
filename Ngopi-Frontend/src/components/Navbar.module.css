@@ -19,3 +19,8 @@
         color: #2a2a2a !important;
         border-bottom: 2px solid #2a2a2a;    
 } */
+
+.userDropDown {
+    right: 2% !important;
+    left: auto !important;
+}
