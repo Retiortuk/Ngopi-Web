@@ -1,0 +1,9 @@
+@media (max-width: 767.8px) {
+    .noteText {
+        font-size: 0.75rem;
+    }
+
+    .noteActionButton {
+        font-size: 0.76rem;
+    }
+}
