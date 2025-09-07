@@ -49,7 +49,7 @@ function ProductCard({ product }) {
         <div className="card-body">
             <h5 className="card-title">{product.title}</h5>
             <div className="price-cartAdd d-flex justify-content-between align-items-center">
-            <p className="card-text price fw-bold">${product.price}</p>
+            <p className="card-text price fw-bold">Rp.{new Intl.NumberFormat('id-ID').format(product.price)}</p>
             {quantityInCart === 0 ? (
                 <button onClick={handleAddToCart} className="btn btn-dark btn-sm">+</button>
             ): (

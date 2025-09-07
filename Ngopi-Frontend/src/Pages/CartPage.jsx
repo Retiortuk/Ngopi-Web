@@ -17,15 +17,15 @@ const OrderSummary = ({subtotal, totalFinall, taxCount, taxRate}) => (
             <h4 className="card-title mb-4">Your Summary Order</h4>
             <div className="d-flex justify-content-between mb-2">
                 <p className="text-muted">Subtotal</p>
-                <p className="fw-bold">${subtotal}</p>
+                <p className="fw-bold">Rp.{new Intl.NumberFormat('id-ID').format(subtotal)}</p>
             </div>
             <div className="d-flex justify-content-between mb-2">
                 <p className="text-muted">Diskon</p>
-                <p className="fw-bold text-success">-$0</p>
+                <p className="fw-bold text-success">-Rp.0</p>
             </div>
             <div className="d-flex justify-content-between mb-2">
-                <p className="text-muted">Tax ({taxRate}%)</p>
-                <p className="fw-bold">${taxCount}</p>
+                <p className="text-muted">PPN ({taxRate}%)</p>
+                <p className="fw-bold">Rp.{new Intl.NumberFormat('id-ID').format(taxCount)}</p>
             </div>
             <div className="dropdown">
                 <button className="btn btn-sm btn-dark dropdown-toggle" id="dropdownDiscount" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -38,7 +38,7 @@ const OrderSummary = ({subtotal, totalFinall, taxCount, taxRate}) => (
             <hr />
             <div className="d-flex justify-content-between fw-bold mt-3">
                 <p>Total</p>
-                <p>${totalFinall}</p>
+                <p>Rp.{new Intl.NumberFormat('id-ID').format(totalFinall)}</p>
             </div>
             <div className="d-grid mt-2">
                 <button type="button" className="btn btn-dark">Checkout</button>
@@ -49,7 +49,7 @@ const OrderSummary = ({subtotal, totalFinall, taxCount, taxRate}) => (
 
 function CartPage() {
     const {cart, addToCart, removeFromCart, clearItemFromCart } = userCartStore();
-    let taxRate = 6.25;
+    let taxRate = 10;
     const subtotal = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
     const taxCount = subtotal * (taxRate/100);
     const totalFinall = subtotal + taxCount
@@ -78,7 +78,7 @@ function CartPage() {
                                         {/* NAMA ITEM DAN HARGA */}
                                         <div className="ms-3 flex-grow-1">
                                             <h5 className="mb-1 fs-6 fs-md-5">{item.title}</h5>
-                                            <p className="small mb-0 text-muted fw-semibold fs-7">${item.price}</p>
+                                            <p className="small mb-0 text-muted fw-semibold fs-7">Rp{new Intl.NumberFormat('id-ID').format(item.price)}</p>
                                         </div>
         
                                         {/* CONTROL QTY */}
