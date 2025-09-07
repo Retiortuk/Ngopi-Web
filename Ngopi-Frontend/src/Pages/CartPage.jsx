@@ -15,7 +15,9 @@ const TrashIcon = () => (
 export const OrderSummary = ({subtotal, totalFinall, taxCount, taxRate, showBackLink}) => {
     const location = useLocation();
     const isOnCartPage = location.pathname === '/cart';
+    const isOnCheckOut = location.pathname === '/checkout'
 
+    // KALO MOBILE---------------------------------------------------------------------------------------------------
     if(showBackLink) {
         return (
             <div className="card shadow-sm border-0">
@@ -26,15 +28,20 @@ export const OrderSummary = ({subtotal, totalFinall, taxCount, taxRate, showBack
                             <small className="text-muted">Subtotal</small>
                             <small className="text-muted">Rp{new Intl.NumberFormat('id-ID').format(subtotal)}</small>
                         </div>
-                        <div className="d-flex justify-content-between">
-                            <small className="text-muted">Diskon</small>
-                            <small className="text-success">-Rp.0</small>
-                        </div>
+                        {/* Diskon Hanya Muncul di Checkout----------------- */}
+                        {isOnCheckOut && (
+                            <div className="d-flex justify-content-between">
+                                <small className="text-muted">Diskon</small>
+                                <small className="text-success">-Rp.0</small>
+                            </div>
+                        )}
+                        {/* --------------------------------------------------- */}
                         <div className="d-flex justify-content-between">
                             <small className="text-muted">PPN ({taxRate}%)</small>
                             <small className="text-muted">Rp{new Intl.NumberFormat('id-ID').format(taxCount)}</small>
                         </div>
-                        {isOnCartPage && (
+                        {/* DISKON HANYA SHOW DI CHECKOUT ------------------------------------------- */}
+                        {isOnCheckOut && (
                             <div className="dropdown mt-2">
                                 <button className="btn btn-sm btn-dark dropdown-toggle" id="dropdownDiscount" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Select Discount %
@@ -44,6 +51,7 @@ export const OrderSummary = ({subtotal, totalFinall, taxCount, taxRate, showBack
                                 </ul>
                             </div>
                         )}
+                        {/* ---------------------------------------------------------------------------------- */}
                     </div>
                     <hr className="my-2" />
                     
@@ -86,6 +94,8 @@ export const OrderSummary = ({subtotal, totalFinall, taxCount, taxRate, showBack
             </div>
         )
     }
+    
+    // KALO DESKTOP-------------------------------------------------------------------------------------
     return (
         <div className="card shadow-sm border-0">
             <div className="card-body">
@@ -102,8 +112,8 @@ export const OrderSummary = ({subtotal, totalFinall, taxCount, taxRate, showBack
                     <p className="text-muted">PPN ({taxRate}%)</p>
                     <p className="fw-bold">Rp.{new Intl.NumberFormat('id-ID').format(taxCount)}</p>
                 </div>
-                {/* Discount Hanya Muncul di CartPage */}
-                {isOnCartPage && (
+                {/* Discount Hanya Muncul di Cekout */}
+                {isOnCheckOut && (
                     <div className="dropdown">
                         <button className="btn btn-sm btn-dark dropdown-toggle" id="dropdownDiscount" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Select Discount %
@@ -130,8 +140,7 @@ export const OrderSummary = ({subtotal, totalFinall, taxCount, taxRate, showBack
             </div>
         </div>
     )
-    
-    
+    // --------------------------------------------------------------------------------------------------------
 } 
 
 
@@ -148,7 +157,7 @@ function CartPage() {
                 
                 {/* CART */}
                 <div className={`col-lg-8 mb-4  ${styles.cartListMobile}`}>
-                    <h2 className="mb-1 mt-lg-4">Your Cart ({cart.length})</h2>
+                    <h4 className="mb-1 mt-lg-4">Your Cart ({cart.length})</h4>
                     {/* Cek Apakah Cart Kosong? */}
                     {cart.length === 0 ? (
                             <div className="alert alert-secondary mt-3">

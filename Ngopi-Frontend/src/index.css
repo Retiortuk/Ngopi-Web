@@ -52,4 +52,8 @@
     .retiortuk {
         color: #858484 !important;
     }
+
+    .my-custom-radio {
+        accent-color: purple;
+    }
 }

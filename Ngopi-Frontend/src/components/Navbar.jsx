@@ -13,14 +13,19 @@ function Navbar({ activeSection }) {
     const cart =  userCartStore((state) => state.cart);
     const totalItems =  cart.reduce((total, item) => total + item.quantity, 0);
     // State For Dropdown
-    const [isDropDown, setIsDropDown] = useState(false);
-    const dropdownRef = useRef(null);
+    const [isDesktopDropdownOpen, setIsDesktopDropdownOpen] = useState(false);
+    const [isMobileDropdownOpen, setIsMobileDropdownOpen] = useState(false);
+    const desktopDropdownRef = useRef(null);
+    const mobileDropdownRef = useRef(null);
 
     // Dropdown In User Icon
     useEffect(()=> {
         function handleClickOutside(event) {
-            if(dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-                setIsDropDown(false);
+            if (desktopDropdownRef.current && !desktopDropdownRef.current.contains(event.target)) {
+                setIsDesktopDropdownOpen(false);
+            }
+            if (mobileDropdownRef.current && !mobileDropdownRef.current.contains(event.target)) {
+                setIsMobileDropdownOpen(false);
             }
         }
 
@@ -28,7 +33,7 @@ function Navbar({ activeSection }) {
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         }
-    },[dropdownRef]);
+    },[]);
 
     return (
         //  <!-- NABAR -->
@@ -59,28 +64,15 @@ function Navbar({ activeSection }) {
                         {/* <!-- Account User and Cart/Coffee Icon only visible on lg display --> */}
                         <div className="d-none d-md-flex gap-3 me-0 me-md-5">
                             {/* <!-- User --> */}
-                            <div className="dropdown-sm" ref={dropdownRef}>
-                                <button className="btn btn-link p-0 border-0" type="button" onClick={()=> setIsDropDown(!isDropDown)}>
+                            <div className="dropdown" ref={desktopDropdownRef}>
+                                <button className="btn btn-link p-0 border-0" type="button" onClick={() => setIsDesktopDropdownOpen(!isDesktopDropdownOpen)}>
                                     <svg width="24px" height="24px" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M8 7C9.65685 7 11 5.65685 11 4C11 2.34315 9.65685 1 8 1C6.34315 1 5 2.34315 5 4C5 5.65685 6.34315 7 8 7Z" fill="#000000"></path> <path d="M14 12C14 10.3431 12.6569 9 11 9H5C3.34315 9 2 10.3431 2 12V15H14V12Z" fill="#000000"></path> </g></svg>
                                 </button>
-                                {/* When Dropdown Open */}
-                                <ul className={`dropdown-menu  ${styles.userDropDown} ${isDropDown ? 'show' : ''}`}>
-                                    <li>
-                                        <Link className="dropdown-item" to='/login'onClick={() => setIsDropDown(false)}>
-                                            Login
-                                        </Link>
-                                    </li>
+                                <ul className={`dropdown-menu dropdown-menu-end ${styles.userDropDown} ${isDesktopDropdownOpen ? 'show' : ''}`}>
+                                    <li><Link className="dropdown-item" to='/login' onClick={() => setIsDesktopDropdownOpen(false)}>Login</Link></li>
                                     <li><hr className="dropdown-divider" /></li>
-                                    <li>
-                                        <Link className="dropdown-item" to='/orders' onClick={() => setIsDropDown(false)}>
-                                            Orders
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link className="dropdown-item" to='/history' onClick={() => setIsDropDown(false)}>
-                                            History
-                                        </Link>
-                                    </li>
+                                    <li><Link className="dropdown-item" to='/orders' onClick={() => setIsDesktopDropdownOpen(false)}>Orders</Link></li>
+                                    <li><Link className="dropdown-item" to='/history' onClick={() => setIsDesktopDropdownOpen(false)}>History</Link></li>
                                 </ul>
                             </div>
                             
@@ -100,33 +92,19 @@ function Navbar({ activeSection }) {
                 {/* <!-- ROW FOR BRAND, SEARCH, USER REQ END --> */}
 
                 {/* <!-- FOR ICONS USER IN THE LEFT TOP(Mobile) --> */}
-                <div className="d-md-none position-absolute top-0 start-0 py-2 px-3">   
-                    <div className="dropdown-sm" ref={dropdownRef}>
-                        <button className="btn btn-link p-0 border-0" type="button" onClick={()=> setIsDropDown(!isDropDown)}>
+                <div className="d-md-none position-absolute top-0 start-0 py-2 px-3"> 
+                    <div className="dropdown" ref={mobileDropdownRef}>
+                        <button className="btn btn-link p-0 border-0" type="button" onClick={() => setIsMobileDropdownOpen(!isMobileDropdownOpen)}>
                             <svg width="24px" height="24px" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M8 7C9.65685 7 11 5.65685 11 4C11 2.34315 9.65685 1 8 1C6.34315 1 5 2.34315 5 4C5 5.65685 6.34315 7 8 7Z" fill="#000000"></path> <path d="M14 12C14 10.3431 12.6569 9 11 9H5C3.34315 9 2 10.3431 2 12V15H14V12Z" fill="#000000"></path> </g></svg>
                         </button>
-                        {/* When Dropdown Open */}
-                        <ul className={`dropdown-menu   ${isDropDown ? 'show' : ''}`}>
-                            <li>
-                                <Link className="dropdown-item" to='/login'onClick={() => setIsDropDown(false)}>
-                                    Login
-                                </Link>
-                            </li>
+                        <ul className={`dropdown-menu ${isMobileDropdownOpen ? 'show' : ''}`}>
+                            <li><Link className="dropdown-item" to='/login' onClick={() => setIsMobileDropdownOpen(false)}>Login</Link></li>
                             <li><hr className="dropdown-divider" /></li>
-                            <li>
-                                <Link className="dropdown-item" to='/orders' onClick={() => setIsDropDown(false)}>
-                                    Orders
-                                </Link>
-                            </li>
-                            <li>
-                                <Link className="dropdown-item" to='/history' onClick={() => setIsDropDown(false)}>
-                                    History
-                                </Link>
-                            </li>
+                            <li><Link className="dropdown-item" to='/orders' onClick={() => setIsMobileDropdownOpen(false)}>Orders</Link></li>
+                            <li><Link className="dropdown-item" to='/history' onClick={() => setIsMobileDropdownOpen(false)}>History</Link></li>
                         </ul>
                     </div>
-                    
-                </div>                
+                </div>      
                 {/* <!-- FOR ICONS CART IN THE RIGHT TOP(Mobile) --> */}
                 <div className="d-md-none position-absolute top-0 end-0 py-2 px-3"> 
                         <Link to="/cart">

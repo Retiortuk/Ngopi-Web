@@ -1,0 +1,10 @@
+.formCheckInputDark:checked {
+    background-color: #212529; /* Warna hitam standar Bootstrap */
+    border-color: #212529;
+}
+
+.formCheckInputDark:focus {
+    border-color: #495057;
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgba(66, 70, 73, 0.25); 
+}
