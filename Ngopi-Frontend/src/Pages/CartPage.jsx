@@ -104,10 +104,13 @@ export const OrderSummary = ({subtotal, totalFinall, taxCount, taxRate, showBack
                     <p className="text-muted">Subtotal</p>
                     <p className="fw-bold">Rp.{new Intl.NumberFormat('id-ID').format(subtotal)}</p>
                 </div>
-                <div className="d-flex justify-content-between mb-2">
-                    <p className="text-muted">Discount</p>
-                    <p className="fw-bold text-success">-Rp.0</p>
-                </div>
+                {/* Discount Hanya Muncul di Cekout */}
+                {isOnCheckOut && (
+                    <div className="d-flex justify-content-between mb-2">
+                        <p className="text-muted">Discount</p>
+                        <p className="fw-bold text-success">-Rp.0</p>
+                    </div>
+                )}
                 <div className="d-flex justify-content-between mb-2">
                     <p className="text-muted">PPN ({taxRate}%)</p>
                     <p className="fw-bold">Rp.{new Intl.NumberFormat('id-ID').format(taxCount)}</p>

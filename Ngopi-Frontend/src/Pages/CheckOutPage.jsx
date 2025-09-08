@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { userCartStore } from "../stores/userCartStore.js";
 import { OrderSummary } from "./CartPage.jsx";
+import { generatePickupTime } from "../utils/timeHelper.js";
 import styles from "./CartPage.module.css";
 import radioStyles from "./CheckOutPage.module.css"
 import CheckOutItem from "./CheckOutItem.jsx";
@@ -11,17 +12,21 @@ import logoBCA from "../images/Payment/BCA_logo.svg";
 import logoMandiri from "../images/Payment/Bank_Mandiri_logo.svg";
 
 
-const paymentMethods = [
-    {id: 'qris', name: 'QRIS', logoSrc: logoQRIS },
-    { id: 'bni', name: 'BNI Virtual Account', logoSrc: logoBNI },
-    { id: 'bca', name: 'BCA Virtual Account', logoSrc: logoBCA },
-    { id: 'mandiri', name: 'Mandiri Virtual Account', logoSrc: logoMandiri },
-    { id: 'store', name: 'Pay at Cashier', logoSrc: null },
-];
+
+
 
 function CheckOutPage() {
+        const pickupTimes = generatePickupTime();
         const {cart} = userCartStore();
-        const [selectedPayment, setSelectedPayment] = useState('qris')
+        const [selectedPayment, setSelectedPayment] = useState('')
+        const [selectedPickupTimes, setSelectedPickupTimes] = useState('')
+        const paymentMethods = [
+            {id: 'qris', name: 'QRIS', logoSrc: logoQRIS },
+            { id: 'bni', name: 'BNI Virtual Account', logoSrc: logoBNI },
+            { id: 'bca', name: 'BCA Virtual Account', logoSrc: logoBCA },
+            { id: 'mandiri', name: 'Mandiri Virtual Account', logoSrc: logoMandiri },
+            { id: 'store', name: 'Pay at Cashier', logoSrc: null },
+        ];
 
         // PPN Dan Total
         let taxRate = 10;
@@ -48,6 +53,7 @@ function CheckOutPage() {
                                 // CART ITEMS END ------
                             ))
                         )}
+
                         <h4 className="mb-md-1 mt-4">Orders Detail</h4>
                         {/* DATA CUSTOMER------------------------------ */}
                         <div className="card shadow-sm border-0 mt-4">
@@ -79,6 +85,40 @@ function CheckOutPage() {
                         </div>
                         {/*------------------------------------------- */}
 
+                        {/* PICKUP TIMES------------------------------ */}
+                        <div className="card shadow-sm border-0 mt-4">
+                            <div className="card-body">
+                                <h5 className="card-title mb-4">Pickup Times</h5>
+                                {pickupTimes.map((pickup) => (
+                                <div key={pickup.times} className="form-check mb-5">
+                                    <input 
+                                        className={`form-check-input ${radioStyles.formCheckInputDark}`}
+                                        type="radio" 
+                                        name="pickupTimes" 
+                                        id={`pickup-${pickup.times}`}
+                                        checked={selectedPickupTimes === pickup.times}
+                                        onChange={() => setSelectedPickupTimes(pickup.times)}
+                                        disabled={pickup.disabled}
+                                        required
+                                    />
+                                    <label className="form-check-label w-100" htmlFor={`pickup-${pickup.times}`}>
+                                        <div className="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <span>{pickup.times}</span>
+                                                {pickup.times === 'Now' &&(
+                                                    <small className="form-text text-muted d-block mt-1">
+                                                        {pickup.description}
+                                                    </small>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </label>
+                                </div>
+                            ))}
+                            </div>
+                        </div>
+                        {/*------------------------------------------- */}
+
                         {/* PAYMENT METHOD------------------------------ */}
                         <div className="card shadow-sm border-0 mt-4">
                             <div className="card-body">
@@ -92,6 +132,7 @@ function CheckOutPage() {
                                         id={`payment-${method.id}`}
                                         checked={selectedPayment === method.id}
                                         onChange={() => setSelectedPayment(method.id)}
+                                        required
                                     />
                                     <label className="form-check-label w-100" htmlFor={`payment-${method.id}`}>
                                         <div className="d-flex justify-content-between align-items-center">
