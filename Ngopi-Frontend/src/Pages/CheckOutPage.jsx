@@ -12,9 +12,6 @@ import logoBCA from "../images/Payment/BCA_logo.svg";
 import logoMandiri from "../images/Payment/Bank_Mandiri_logo.svg";
 
 
-
-
-
 function CheckOutPage() {
         const pickupTimes = generatePickupTime();
         const {cart} = userCartStore();
