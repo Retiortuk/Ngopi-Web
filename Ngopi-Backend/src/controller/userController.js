@@ -102,4 +102,16 @@ const getUsers = asyncHandler(async(req, res)=> {
     res.json(users);
 })
 
-export {authUser, registerUser, getUserProfiles, updateProfile, getUsers};
+// DELETE USER
+const deleteUser = asyncHandler(async(req, res)=> {
+    const user = await User.findById(req.params.id);
+    if(user){
+        await user.deleteOne();
+        res.json({message: 'User berhasil dihapus'});
+    } else {
+        res.status(404);
+        throw new Error('User tidak ditemukan')
+    }
+})
+
+export {authUser, registerUser, getUserProfiles, updateProfile, getUsers, deleteUser};
