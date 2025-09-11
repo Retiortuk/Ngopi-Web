@@ -1,6 +1,7 @@
 import asyncHandler from 'express-async-handler';
 import User from '../models/userModel.js';
 import generateToken from '../utils/generateToken.js';
+import e from 'express';
 
 // POST LOGIN
 const authUser = asyncHandler(async(req, res)=> {
@@ -52,6 +53,7 @@ const registerUser = asyncHandler(async (req, res)=> {
     }
 });
 
+// GET USER PROFILE
 const getUserProfiles = asyncHandler(async(req, res)=> {
     const user = await User.findById(req.user._id);
 
@@ -68,4 +70,36 @@ const getUserProfiles = asyncHandler(async(req, res)=> {
     }
 });
 
-export {authUser, registerUser, getUserProfiles};
+// UPDATE USER PROFILE
+const updateProfile = asyncHandler(async(req, res)=> {
+    const user = await User.findById(req.user._id);
+
+    if(user) {
+        user.name = req.body.name || user.name;
+        user.email = req.body.email || user.email;
+        if(req.body.password) {
+            user.password = req.body.password;
+        }
+        
+        const updatedUser = await user.save();
+        res.json({
+            _id: updatedUser._id,
+            name: updatedUser.name,
+            email: updatedUser.email,
+            password: updatedUser.password,
+            isAdmin: updatedUser.isAdmin,
+            token: generateToken(updatedUser._id)
+        });
+    } else {
+        res.status(404);
+        throw new Error('User Tidak Ditemukan')
+    }
+});
+
+// GET ALL USERS
+const getUsers = asyncHandler(async(req, res)=> {
+    const users = await User.find({});
+    res.json(users);
+})
+
+export {authUser, registerUser, getUserProfiles, updateProfile, getUsers};
