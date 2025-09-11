@@ -3,7 +3,6 @@ const router = express.Router();
 import { authUser, deleteUser, getUserProfiles, getUsers, registerUser, updateProfile } from '../controller/userController.js';
 import { admin, protect } from '../middleware/authMiddleware.js';
 
-// Route for login and register (Public)
 router.post('/login', authUser);
 router.post('/register', registerUser);
 router.get('/profile',protect, getUserProfiles);
