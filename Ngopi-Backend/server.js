@@ -25,9 +25,7 @@ app.get('/', (req, res) => {
 });
 
 // Mount the imported routes
-// app.use('/api/products', productRoutes);
 app.use('/api/users', userRoutes);
-// app.use('/api/orders', orderRoutes);
 
 // Custom middleware for handling 404 Not Found errors
 app.use(notFound);
