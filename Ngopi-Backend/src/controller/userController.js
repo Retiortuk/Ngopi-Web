@@ -1,7 +1,6 @@
 import asyncHandler from 'express-async-handler';
 import User from '../models/userModel.js';
 import generateToken from '../utils/generateToken.js';
-import e from 'express';
 
 // POST LOGIN
 const authUser = asyncHandler(async(req, res)=> {
@@ -25,7 +24,7 @@ const authUser = asyncHandler(async(req, res)=> {
 
 // POST REGISTER
 const registerUser = asyncHandler(async (req, res)=> {
-    const {name, email, password} = req.body // the request
+    const {name, email, password, isAdmin} = req.body // the request
     const userExist = await User.findOne({email}); // user exist if user got email same as in db
 
     if(userExist) { // if userExist true then throw this Error
@@ -37,6 +36,7 @@ const registerUser = asyncHandler(async (req, res)=> {
         name,
         email,
         password,
+        isAdmin,
     });
 
     if(user) {
