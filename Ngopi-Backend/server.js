@@ -4,8 +4,10 @@ import cors from 'cors';
 import connectDB from './src/config/db.js';
 import { notFound, errorHandler } from './src/middleware/errorMiddleware.js';
 import userRoutes from './src/routes/userRoutes.js';
-import productRoutes from'./src/routes/productRoutes.js';
-import orderRoutes from './src/routes/orderRoutes.js'
+import productRoutes from './src/routes/productRoutes.js';
+import orderRoutes from './src/routes/orderRoutes.js';
+import uploadRoutes from './src/routes/uploadRoutes.js';
+import path from 'path';
 // Load environment variables from .env file
 dotenv.config();
 
@@ -26,9 +28,12 @@ app.get('/', (req, res) => {
 });
 
 // Mount the imported routes
+const __dirname = path.resolve();
+app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
 app.use('/api/users', userRoutes);
 app.use('/api/product', productRoutes);
 app.use('/api/orders', orderRoutes);
+app.use('/api/upload', uploadRoutes);
 // Custom middleware for handling 404 Not Found errors
 app.use(notFound);
 

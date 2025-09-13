@@ -7,20 +7,27 @@ const getProducts = asynchandler(async(req, res)=> {
     res.json(products);
 });
 
+// GET PRODUCT FEATURED
+const getFeaturedProducts = asynchandler(async(req,res)=> {
+    const product = await Product.find({isFeatured: true});
+    res.json(product);
+})
+
 // POST Product
 const postProduct = asynchandler(async(req,res)=> {
-    const {name, price, image} = req.body;
+    const {name, price, image, isFeatured} = req.body;
 
     // gak boleh kosong
     if(!name || !price || !image){
         res.status(400);
-        throw new Error('Nama, Harga, Gambar Item Tidak boleh kosong');
+        throw new Error('Nama, Harga, Gambar Item, Featured Tidak boleh kosong');
     } 
 
     const product = new Product({
         name,
         price,
         image,
+        isFeatured,
     });
 
     const createdProduct = await product.save();
@@ -46,13 +53,15 @@ const updateProduct = asynchandler(async(req,res)=> {
     if(product){
         product.name = req.body.name || product.name;
         product.price = req.body.price || product.price;
-        product.image = req.body.image || product.image
+        product.image = req.body.image || product.image;
+        product.isFeatured = req.body.isFeatured || product.isFeatured;
 
         const updatedProduct = await product.save();
         res.json({
             name: updatedProduct.name,
             price: updatedProduct.price,
             image: updatedProduct.image,
+            isFeatured: updatedProduct.isFeatured,
         });
     } else {
         res.status(404);
@@ -60,4 +69,4 @@ const updateProduct = asynchandler(async(req,res)=> {
     }
 });
 
-export {getProducts, postProduct, deleteProduct, updateProduct};
+export {getProducts, postProduct, deleteProduct, updateProduct, getFeaturedProducts};
