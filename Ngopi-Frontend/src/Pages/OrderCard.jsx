@@ -32,7 +32,7 @@ function OrderCard ({ order }) {
             </div>
             <div className="card-body">
                 {order.items.map(item => (
-                    <div key={item.id} className="mb-2">
+                    <div key={item._id} className="mb-2">
                         <OrderCardItem item={item} />
                     </div>
                 ))}

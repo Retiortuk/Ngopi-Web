@@ -62,16 +62,16 @@ function CheckOutPage() {
                                         <form>
                                             <div className="mb-3">
                                                 <h5>
-                                                    <label for="name" className="form-label">Orderer's Name</label>
+                                                    <label htmlFor="name" className="form-label">Orderer's Name</label>
                                                 </h5>
-                                                <input type="name" class="form-control" id="name" required />
+                                                <input type="name" className="form-control" id="name" required />
                                                 <div className="form-text">This is Your Name for Your Coffee or Item.</div>
                                             </div>
                                             <div className="mb-3">
                                                 <h5>
-                                                    <label for="phone" className="form-label">Phone Number</label>
+                                                    <label htmlFor="phone" className="form-label">Phone Number</label>
                                                 </h5>
-                                                <input type="phone" class="form-control" id="phone" required />
+                                                <input type="phone" className="form-control" id="phone" required />
                                             </div>
                                         </form>
 

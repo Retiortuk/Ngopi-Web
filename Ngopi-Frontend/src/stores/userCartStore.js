@@ -10,11 +10,11 @@ export const userCartStore = create((set) => ({
 
     addToCart: (product) => {
         set((state) => {
-            const existingProduct =  state.cart.find((item) => item.id === product.id);
+            const existingProduct =  state.cart.find((item) => item._id === product._id);
             let updatedCart
 
             if(existingProduct) {
-                updatedCart = state.cart.map((item)=> item.id === product.id ? {...item, quantity: (item.quantity || 1) + 1} : item);
+                updatedCart = state.cart.map((item)=> item._id === product._id ? {...item, quantity: (item.quantity || 1) + 1} : item);
             } else {
                 updatedCart = [...state.cart, {...product, quantity : 1}];
             }
@@ -25,7 +25,7 @@ export const userCartStore = create((set) => ({
 
     removeFromCart: (product) => {
         set((state) => {
-            const existingProduct = state.cart.find((item) => item.id === product.id);
+            const existingProduct = state.cart.find((item) => item._id === product._id);
             let updatedCart;
 
             if(!existingProduct) { //jika memang cart sudah kosong
@@ -33,9 +33,9 @@ export const userCartStore = create((set) => ({
             }
 
             if(existingProduct.quantity === 1) {
-                updatedCart =  state.cart.filter((item) => item.id !== product.id);
+                updatedCart =  state.cart.filter((item) => item._id !== product._id);
             } else {
-                updatedCart = state.cart.map((item) => item.id === product.id ? {...item, quantity: item.quantity - 1 }: item)
+                updatedCart = state.cart.map((item) => item._id === product._id ? {...item, quantity: item.quantity - 1 }: item)
             }
             localStorage.setItem('cart', JSON.stringify(updatedCart));
             return { cart: updatedCart};
@@ -44,7 +44,7 @@ export const userCartStore = create((set) => ({
     
     clearItemFromCart: (product) => {
         set((state)=> {
-            const updatedCart =  state.cart.filter((item) => item.id !== product.id);
+            const updatedCart =  state.cart.filter((item) => item._id !== product._id);
             localStorage.setItem('cart', JSON.stringify(updatedCart));
             return {cart: updatedCart}
         })
