@@ -32,7 +32,8 @@ function Footer() {
                 </div>
                 <p>© 2026 Ngopi. All rights reserved.</p>
                 <div className="d-sm-flex d-none footer-credits justify-content-center align-items-center gap-3">
-                        <p>All Product Images By Janji Jiwa Kopi</p>
+                        <p>Some Product Images By Janji Jiwa Kopi©</p>
+                        <p>Some Product Images By Kopi Kenangan©</p>
                         <p>All Illustration Images Available in Freepik</p>
                 </div>
             </div>

@@ -36,7 +36,7 @@ function CheckOutItem({item}) {
 
                         {/* NAMA ITEM DAN HARGA */}
                         <div className="ms-3 flex-grow-1">
-                            <h5 className="mb-1 fs-6 fs-md-5">{item.name} ({item.quantity})</h5>
+                            <h5 className="mb-1 fs-6 fs-md-5">{item.name} ( {item.quantity} )</h5>
                             <p className="small mb-0 text-muted fw-semibold fs-7">Rp{new Intl.NumberFormat('id-ID').format(item.price)}</p>
                         </div>
 
