@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import ProductCard from "./ProductCard.jsx";
 import apiClient from "../api/axiosConfig.js";
 import toast from "react-hot-toast";
+import ProductCardSkeleton from "./ProductCardSkeleton.jsx";
 
 function MenuSection() {
     const [loading, setLoading] = useState(true);
@@ -19,7 +20,9 @@ function MenuSection() {
                 setLoading(false);
             }
         };
-        fetchProducts();
+        setTimeout(()=> {
+            fetchProducts();
+        }, 1500)
     },[])
 
     return(
@@ -32,17 +35,23 @@ function MenuSection() {
             </div>
 
             <div className="container">
-                {loading ? (
-                    <p className="text-center">Loading Menus.....</p>
-                ): (
-                    <div className="row g-4 justify-content-center">
-                        {products.map(product => (
-                            <div className="col-6 col-md-6 col-lg-2" key={product._id}>
-                                <ProductCard product={product} />
+                <div className="row g-4 justify-content-center">
+                    {loading ? (
+                        Array.from({length: 6}).map((_, index)=> (
+                            <div className="col-6 col-md-6 col-lg-2" key={index}>
+                                <ProductCardSkeleton />
                             </div>
-                        ))}
-                    </div>
-                )}
+                        ))
+                    ): (
+                        <div className="row g-4 justify-content-center">
+                            {products.map(product => (
+                                <div className="col-6 col-md-6 col-lg-2" key={product._id}>
+                                    <ProductCard product={product} />
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
             </div>
         </section>
     );

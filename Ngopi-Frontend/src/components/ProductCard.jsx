@@ -49,10 +49,8 @@ function ProductCard({ product }) {
     return (
         <div className="card h-100">
             <img src={imageUrl} className="card-img-top" alt={product.name} />
-            {/* --- PERUBAHAN 2: Jadikan card-body sebagai flex container --- */}
             <div className="card-body d-flex flex-column">
                 <h5 className="card-title">{product.name}</h5>
-                {/* --- PERUBAHAN 3: Dorong bagian ini ke bawah --- */}
                 <div className="price-cartAdd d-flex justify-content-between align-items-center mt-auto">
                     <p className="card-text price fw-bold mb-0">Rp{new Intl.NumberFormat('id-ID').format(product.price)}</p>
                     {quantityInCart === 0 ? (

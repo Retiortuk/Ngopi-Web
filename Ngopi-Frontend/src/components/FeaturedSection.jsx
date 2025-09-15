@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ProductCard from "./ProductCard.jsx";
 import apiClient from "../api/axiosConfig.js";
+import ProductCardSkeleton from "./ProductCardSkeleton.jsx";
 
 function FeaturedSection() {
     const [products, setProduct] = useState([]);
@@ -17,7 +18,9 @@ function FeaturedSection() {
                 setLoading(false)
             }
         };
-        fetchProducts();
+        setTimeout(()=> {
+            fetchProducts();
+        }, 1500);
     },[])
 
     return (
@@ -31,17 +34,23 @@ function FeaturedSection() {
                 
 
                 <div className="container">
-                    {loading ? (
-                        <p className="text-center">Loading Featured.....</p>
-                    ): (
-                        <div className="row g-4 justify-content-center">
-                            {products.map(product => (
-                                <div className="col-6 col-md-6 col-lg-2" key={product._id}>
-                                    <ProductCard product={product} />
+                    <div className="row g-4 justify-content-center">
+                        {loading ? (
+                            Array.from({length: 6}).map((_, index)=> (
+                                <div className="col-6 col-md-6 col-lg-2" key={index}>
+                                    <ProductCardSkeleton />
                                 </div>
-                            ))}
-                        </div>
-                    )}
+                            ))
+                        ): (
+                            <div className="row g-4 justify-content-center">
+                                {products.map(product => (
+                                    <div className="col-6 col-md-6 col-lg-2" key={product._id}>
+                                        <ProductCard product={product} />
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
                 </div>
         </section>
     );
