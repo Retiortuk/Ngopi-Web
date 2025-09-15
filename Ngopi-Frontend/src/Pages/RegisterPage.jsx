@@ -1,9 +1,36 @@
 import React from "react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext.jsx";
+import toast from "react-hot-toast";
 
 function RegisterPage() {
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const {register} = useAuth();
+    const navigate = useNavigate();
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        // Cek Kalo Masih kosong gk boleh daftar
+        if (!name || !email || !password) {
+            toast.error('You Must Input all The Fields');
+            return;
+        }
+
+        try {
+            await register(name, email, password);
+            toast.success("You're Registered! Login to Continue!");
+            navigate('/login');
+        } catch (error) {
+            console.error('Failed To Register', error);
+            const errorMessage = error.response?.data?.message || 'Registered Failed, Please Try Again!';
+            toast.error(errorMessage);
+        }
+    };
     return(
         <div className="d-flex vh-100 align-items-center justify-content-center bg-light" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
             
@@ -13,7 +40,7 @@ function RegisterPage() {
                         Ngopi.
                     </Link>
                 </div>
-                <form>
+                <form onSubmit={handleSubmit}>
 
                     {/* NAMA */}
                     <div className="mb-3">
@@ -21,9 +48,11 @@ function RegisterPage() {
                             Your Name
                         </label>
                         <input
-                            type="name" 
+                            type="text" 
                             id="name"
                             className="form-control form-control-sm"
+                            value={name}
+                            onChange={(e)=> setName(e.target.value)}
                             placeholder=""
                             required
                             />
@@ -38,6 +67,8 @@ function RegisterPage() {
                             type="email" 
                             id="email"
                             className="form-control form-control-sm"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
                             placeholder=""
                             required
                         />
@@ -53,6 +84,8 @@ function RegisterPage() {
                                 type={showPassword ? 'text' : 'password'} 
                                 id="password"
                                 className="form-control form-control-sm fst-italic"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
                                 placeholder=""
                                 required
                             />

@@ -2,7 +2,6 @@ import './App.css'
 import React, {useEffect, useState} from 'react';
 import Navbar from './components/Navbar.jsx';
 import { Outlet, useLocation } from 'react-router-dom';
-import { Toaster } from 'react-hot-toast';
 import ScrollHandler from './utils/ScrollHandler.jsx';
 
 
@@ -14,7 +13,7 @@ function App() {
     const observerOptions = {
       root: null,
       rootMargin: '-170px 0px -50% 0px',
-      treeshold: 0,
+      treshold: 0,
     }
 
     const observer = new IntersectionObserver(
@@ -41,16 +40,6 @@ function App() {
   return (
     <>
       <ScrollHandler setActiveSection={setActiveSection}/>
-      <Toaster
-        position='bottom-center'
-        reverseOrder={false}
-        containerStyle={{
-          marginBottom: '5px'
-        }}
-        toastOptions={{
-          duration: 4000,
-        }}
-      />
       <Navbar activeSection={activeSection} />
       <main>
         <Outlet />

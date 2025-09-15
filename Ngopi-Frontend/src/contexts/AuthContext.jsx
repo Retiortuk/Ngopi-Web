@@ -1,7 +1,7 @@
 import React, {useContext, createContext, useState, useEffect} from "react";
 import apiClient from "../api/axiosConfig.js";
 
-const AuthContext = useContext(null);
+const AuthContext = createContext({});
 
 export const AuthProvider = ({children}) => {
     const [user, setUser] = useState(null);
@@ -37,13 +37,7 @@ export const AuthProvider = ({children}) => {
 
     // Logika Register uy
     const register = async(name, email, password) => {
-        const {data} = await apiClient.post('/users/register', {name, email, password});
-        if(data) {
-            localStorage.setItem('userInfo', JSON.stringify(data));
-            setUser(data);
-            apiClient.defaults.headers.common['Authorization'] = `Bearer ${data.token}`;
-        }
-        return data;
+        await apiClient.post('/users/register', {name, email, password});
     };
 
     // Logika Buat Logout
