@@ -1,9 +1,35 @@
 import React from "react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext.jsx";
+import toast from "react-hot-toast";
 
 function LoginPage() {
     const [showPassword, setShowPassword] = useState(false);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const {login} = useAuth();
+    const navigate = useNavigate();
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (!email || !password) {
+            toast.error('You Must Input All The Fields');
+            return ;
+        }
+        try {
+            const loggedInUser = await login(email, password);
+            toast.success(`Welcome To Ngopi! ${loggedInUser.name}`);
+            navigate('/');
+        } catch(error) {
+            console.error('Failed To Login', error);
+            const errorMessage = error.response?.data?.message || 'Something Wrong Cant Log You in';
+            toast.error(errorMessage);
+        }
+    };
+
+
     return(
         <div className="d-flex vh-100 align-items-center justify-content-center bg-light" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
             
@@ -13,7 +39,7 @@ function LoginPage() {
                         Ngopi.
                     </Link>
                 </div>
-                <form>
+                <form onSubmit={handleSubmit}>
                     {/* EMAIL */}
                     <div className="mb-3">
                         <label htmlFor="email" className="form-label">
@@ -23,6 +49,8 @@ function LoginPage() {
                             type="email" 
                             id="email"
                             className="form-control form-control-sm"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
                             placeholder=""
                             required
                         />
@@ -38,6 +66,8 @@ function LoginPage() {
                                 type={showPassword ? 'text' : 'password'} 
                                 id="password"
                                 className="form-control form-control-sm"
+                                value={password}
+                                onChange={(e)=> setPassword(e.target.value)}
                                 placeholder=""
                                 required
                             />
