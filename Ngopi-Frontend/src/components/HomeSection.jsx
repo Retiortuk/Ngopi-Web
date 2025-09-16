@@ -1,15 +1,26 @@
 import React from "react";
 import imgHome from '../images/coffee.png';
+import { useAuth } from "../contexts/AuthContext.jsx";
 
 function HomeSection() {
+    const {user, isAuthenticated} = useAuth();
     return (
         <section id="home-sect" className="py-1">
                 <div className="row home-section">
                     
                     {/* <!-- Welcoming User --> */}
                     <div className="col-12 mb-4" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif'}}>
-                        <h1 className="text-center mt-5">Welcome to Ngopi.</h1>
-                        <p className="text-center">Your favorite coffee and toast shop</p>
+                        {isAuthenticated ? (
+                            <>
+                                <h2 className="text-center mt-5">Hi, {user.name} Let's Ngopi</h2>
+                                <p className="text-center"> Welcome to Ngopi. Your favorite coffee and toast shop</p>
+                            </>
+                        ): (
+                            <>
+                                <h2 className="text-center mt-5">Welcome to Ngopi.</h2>
+                                <p className="text-center">Your favorite coffee and toast shop</p>
+                            </>
+                        )}
                     </div>
     
                     {/* <!-- IMAGE-HOME and DESCRIPTION-PROFILE --> */}
