@@ -20,6 +20,10 @@ function RegisterPage() {
             toast.error('You Must Input all The Fields');
             return;
         }
+        if (password.length < 6) {
+            toast.error('Password Needs At Least 6 Characters!');
+            return;
+        }
 
         try {
             await register(name, email, password);

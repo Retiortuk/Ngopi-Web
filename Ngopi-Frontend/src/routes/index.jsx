@@ -6,6 +6,8 @@ import RegisterPage from "../Pages/RegisterPage.jsx";
 import CartPage from "../Pages/CartPage.jsx";
 import CheckOutPage from "../Pages/CheckOutPage.jsx";
 import OrdersPage from "../Pages/OrdersPage.jsx";
+import HistoryPage from "../Pages/HistoryPage.jsx";
+
 
 
 const router = createBrowserRouter([
@@ -28,6 +30,10 @@ const router = createBrowserRouter([
             {
                 path: 'orders',
                 element: <OrdersPage />
+            },
+            {
+                path: 'history',
+                element: <HistoryPage />
             }
 
         ],

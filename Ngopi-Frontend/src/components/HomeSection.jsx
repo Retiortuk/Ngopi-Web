@@ -4,6 +4,16 @@ import { useAuth } from "../contexts/AuthContext.jsx";
 
 function HomeSection() {
     const {user, isAuthenticated} = useAuth();
+
+    const getDisplayName = () => {
+        if (!user || !user.name) {
+            return '';
+        }
+        const firstName = user.name.split(' ')[0];
+        return firstName.charAt(0).toUpperCase() + firstName.slice(1);
+    };
+    const displayName = getDisplayName();
+
     return (
         <section id="home-sect" className="py-1">
                 <div className="row home-section">
@@ -12,7 +22,7 @@ function HomeSection() {
                     <div className="col-12 mb-4" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif'}}>
                         {isAuthenticated ? (
                             <>
-                                <h2 className="text-center mt-5">Hi, {user.name} Let's Ngopi</h2>
+                                <h2 className="text-center mt-5">Hi, {displayName} Let's Ngopi</h2>
                                 <p className="text-center"> Welcome to Ngopi. Your favorite coffee and toast shop</p>
                             </>
                         ): (
