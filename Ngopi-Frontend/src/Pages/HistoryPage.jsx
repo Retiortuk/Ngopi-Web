@@ -4,6 +4,7 @@ import HistoryCard from "./HistoryCard.jsx";
 import kopiSusuImg from "../images/kopi-susu.webp";
 import spicyBulgogiImg from "../images/spicy-bulgogi.webp";
 import { Link } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext.jsx";
 
 const mockOrders = [
     {
@@ -48,6 +49,7 @@ const mockOrders = [
 function HistoryPage() {
     const [orders, setOrders] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const {isAuthenticated} = useAuth();
 
     useEffect(()=> {
         setTimeout(()=> {
@@ -63,22 +65,30 @@ function HistoryPage() {
         <div className="container py-4">
             <div className="row">
                 <div className="col-12">
-                    <h4 className="mb-3 mt-lg-4">Your History ({orders.length})</h4>
+                    {/* History Only for Registered User */}
+                    {isAuthenticated ? (
+                        <>
+                            <h4 className="mb-3 mt-lg-4">Your History ({orders.length})</h4>
 
-                    {orders.length === 0 ? (
+                            {orders.length === 0 ? (
+                                <div className="alert alert-secondary mt-3">
+                                    No History So far, <Link to='/' className="text-dark">Let's Ngopi!</Link>
+                                </div>
+                            ): (
+                                orders.map((order)=> (
+                                    <HistoryCard key={order._id} order={order} />
+                                ))
+                            )}
+                        </>
+                    ) : (
                         <div className="alert alert-secondary mt-3">
-                            No Order So far, <Link to='/' className="text-dark">Let's Ngopi!</Link>
+                            Login to See Your History, <Link to='/login' className="text-dark">Let's Login!</Link>
                         </div>
-                    ): (
-                        orders.map((order)=> (
-                            <HistoryCard key={order._id} order={order} />
-                        ))
                     )}
-
                     <div className="d-none d-lg-block">
-                        <Link to="/" className="text-dark text-decoration-none d-inline-block">
-                            &larr; Back To Home
-                        </Link>
+                            <Link to="/" className="text-dark text-decoration-none d-inline-block">
+                                &larr; Back To Home
+                            </Link>
                     </div>
                 </div>
 
