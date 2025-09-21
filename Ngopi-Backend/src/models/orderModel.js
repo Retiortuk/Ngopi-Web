@@ -25,16 +25,15 @@ const orderSchema = mongoose.Schema({
         time: {type: String, required: true}
     },
     paymentMethod: {type: String, required: true},
-    // Nanti diisi oleh Midtrans setelah pembayaran berhasil
-    // paymentResult: {
-    //   id: { type: String },
-    //   status: { type: String },
-    //   update_time: { type: String },
-    //   email_address: { type: String },
-    // },
+    paymentResult: {
+        transaction_id: { type: String },
+        payment_type: { type: String }, 
+        status_message: { type: String },
+        transaction_time: { type: String },
+    },
     taxPrice: {type: Number, required: true, default: 0.0},
     totalPrice: {type: Number, required: true, default: 0.0},
-    status: {type: String, required: true, default: 'Waiting Store To Confirm'},
+    status: {type: String, required: true, default: 'Waiting For Payment'},
 },
     {timestamps: true}
 )

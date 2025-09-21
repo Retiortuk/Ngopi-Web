@@ -4,6 +4,8 @@ import asyncHandler from 'express-async-handler';
 
 export const protect = asyncHandler(async (req, res, next)=> {
     let token;
+    console.log('--- Middleware Protect Dipanggil ---');
+    console.log('Header Authorization:', req.headers.authorization);
 
     if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
         try {
@@ -13,19 +15,12 @@ export const protect = asyncHandler(async (req, res, next)=> {
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
             // Take the user data from token wihtout password saved it to req.user
             req.user = await User.findById(decoded.id).select('-password');
-            // next when it's done
-            next();
         } catch (error) {
             console.log(error)
             res.status(401);
-            throw new Error('Not Authorized, Token Not Valid');
         }
     }
-    
-    if(!token) {
-        res.status(401);
-        throw new Error('Not Authorized, No Token');
-    }
+    next();
 });
 
 export const admin = (req, res, next) => {
