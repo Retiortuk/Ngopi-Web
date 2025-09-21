@@ -145,17 +145,17 @@ function Navbar({ activeSection }) {
                 <div className="row  nav-2 align-items-center text-center">
                     <div className="col d-flex align-items-center justify-content-center">
                         <ul className="nav gap-1 gap-md-4 pt-3 justify-content-center flex-wrap">
-                            <li className="nav-item">
+                            <li className="nav-item d-none d-sm-block">
                                 <Link className={`${styles.navLink} nav-menu-item ${isOnHomePage && activeSection === 'home-sect' ? styles.active : ''}`} to="/#home-sect">
                                     Home
                                 </Link>
                             </li>
-                            <li className="nav-item">
+                            <li className="nav-item d-none d-sm-block">
                                 <Link className={`${styles.navLink} nav-menu-item ${isOnHomePage && activeSection === 'featured-sect' ? styles.active : ''}`} to="/#featured-sect">
                                     Featured
                                 </Link>
                             </li>
-                            <li className="nav-item">
+                            <li className="nav-item d-none d-sm-block">
                                 <Link className={`${styles.navLink} nav-menu-item ${isOnHomePage && activeSection === 'menu-sect' ? styles.active : ''}`} to="/#menu-sect">
                                     Menu
                                 </Link>

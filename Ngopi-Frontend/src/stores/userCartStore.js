@@ -48,6 +48,13 @@ export const userCartStore = create((set) => ({
             localStorage.setItem('cart', JSON.stringify(updatedCart));
             return {cart: updatedCart}
         })
+    },
+
+    clearCart: () => {
+        set(()=> {
+            localStorage.removeItem('cart');
+            return {cart: []};
+        })
     }
 }));
 

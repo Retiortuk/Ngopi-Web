@@ -23,7 +23,7 @@ function HomeSection() {
                         {isAuthenticated ? (
                             <>
                                 <h2 className="text-center mt-5">Hi, {displayName} Let's Ngopi</h2>
-                                <p className="text-center"> Welcome to Ngopi. Your favorite coffee and toast shop</p>
+                                <p className="text-center"> Welcome to Ngopi.</p>
                             </>
                         ): (
                             <>

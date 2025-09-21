@@ -4,54 +4,43 @@ import OrderCard from "./OrderCard.jsx";
 import kopiSusuImg from "../images/kopi-susu.webp";
 import spicyBulgogiImg from "../images/spicy-bulgogi.webp";
 import { Link } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext.jsx";
+import apiClient from "../api/axiosConfig.js";
 
-const mockOrders = [
-    {
-        _id: "65ecabf2a1d3f9b8c7a4b123",
-        createdAt: "2025-09-08T10:00:00Z",
-        totalAmount: 90000,
-        status: "Preparing",
-        items: [
-            { 
-                id: 'f2', 
-                title: 'Milk Coffee', 
-                price: 30000, 
-                quantity: 2, 
-                image: kopiSusuImg,
-                note: ''
-            
-            },
-            { 
-                id: 'f2', 
-                title: 'Arabica Coffee', 
-                price: 30000, 
-                quantity: 1, 
-                image: kopiSusuImg,
-            
-            }
-        ]
-    },
-    {
-        _id: "65ecabf2a1d3f9b8c7a4b456",
-        createdAt: "2025-09-08T10:05:00Z",
-        totalAmount: 30000,
-        status: "Waiting to Confirm By Store",
-        items: [
-        { id: 'f4', title: 'Spicy Bulgogi Toast', price: 30000, quantity: 1, image: spicyBulgogiImg }
-        ]
-    }
-];
 
 function OrdersPage() {
     const [orders, setOrders] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const {isAuthenticated, user} =  useAuth();
+    
 
     useEffect(()=> {
-        setTimeout(()=> {
-            setOrders(mockOrders);
-            setIsLoading(false);
-        }, 1000)
-    },[]);
+        const fetchOrders = async ()=> {
+            try {
+                let response;
+                if(isAuthenticated) {
+                    console.log('Taking Orders Data From Database...');
+                    response = await apiClient.get('/orders/myOrder');
+                    setOrders(response.data)
+                } else {
+                    const guestOrderIds = JSON.parse(localStorage.getItem('guestOrderIds')) || [];
+                    if(guestOrderIds.length > 0) {
+                        response = await apiClient.post('/orders/guest', { orderIds: guestOrderIds });
+                        setOrders(response.data);
+                    } else {
+                        setOrders([]);
+                    }
+                }
+            } catch (error) {
+                console.error("Failed To Fetch Orders Data:", error);
+                toast.error("Cannot Fetch Orders Data.");
+                setOrders([]); 
+            } finally {
+                setIsLoading(false);
+            }
+        }
+        fetchOrders();
+    },[isAuthenticated]);
 
     if(isLoading) {
         return <div className="container py-4 text-center">Loading Your Orders...</div>;

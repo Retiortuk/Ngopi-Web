@@ -1,11 +1,26 @@
 import React, {useContext, createContext, useState, useEffect} from "react";
 import apiClient from "../api/axiosConfig.js";
 
-const AuthContext = createContext({});
+const AuthContext = createContext({
+    user: null,
+    isAuthenticated: false,
+    loading: true,
+    login: () => Promise.reject(),
+    register: () => Promise.reject(),
+    logout: () => {},
+});
+
 
 export const AuthProvider = ({children}) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+
+    // Logika Buat Logout
+    const logout = () => {
+        localStorage.removeItem('userInfo');
+        setUser(null);
+        delete apiClient.defaults.headers.common['Authorization'];
+    };
 
     //Cek ke Local Storage ada apa kagak UserInfo?
     useEffect(()=> {
@@ -38,13 +53,6 @@ export const AuthProvider = ({children}) => {
     // Logika Register uy
     const register = async(name, email, password) => {
         await apiClient.post('/users/register', {name, email, password});
-    };
-
-    // Logika Buat Logout
-    const logout = () => {
-        localStorage.removeItem('userInfo');
-        setUser(null);
-        delete apiClient.defaults.headers.common['Authorization'];
     };
 
     const value = {

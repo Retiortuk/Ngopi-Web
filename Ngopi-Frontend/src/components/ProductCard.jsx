@@ -1,5 +1,6 @@
 import React from "react";
 import { userCartStore } from "../stores/userCartStore.js";
+import styles from'./ProductCard.module.css';
 import toast from "react-hot-toast";
 
 function ProductCard({ product }) {
@@ -56,7 +57,7 @@ function ProductCard({ product }) {
                     {quantityInCart === 0 ? (
                         <button onClick={handleAddToCart} className="btn btn-dark btn-sm">+</button>
                     ) : (
-                        <div className="d-flex align-items-center gap-2">
+                        <div className={`d-flex align-items-center gap-1 gap-sm-2 ${styles.quantityControls}`}>
                             <button className="btn btn-danger btn-sm" onClick={handleRemoveFromCart}>-</button>
                             <span className="fw-bold">{quantityInCart}</span>
                             <button className="btn btn-dark btn-sm" onClick={handleAddToCart}>+</button>

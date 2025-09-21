@@ -1,35 +1,158 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { userCartStore } from "../stores/userCartStore.js";
+import {useAuth} from "../contexts/AuthContext.jsx";
 import { OrderSummary } from "./CartPage.jsx";
-import { generatePickupTime } from "../utils/timeHelper.js";
+import { generatePickupTimes } from "../utils/timeHelper.js";
 import styles from "./CartPage.module.css";
 import radioStyles from "./CheckOutPage.module.css"
 import CheckOutItem from "./CheckOutItem.jsx";
-import logoQRIS from "../images/Payment/QRIS_logo.svg";
-import logoBNI from "../images/Payment/BNI_logo.svg";
-import logoBCA from "../images/Payment/BCA_logo.svg";
-import logoMandiri from "../images/Payment/Bank_Mandiri_logo.svg";
+import logoQRIS from "../images/Payment/Midtrans.png";
+import toast from "react-hot-toast";
+import apiClient from "../api/axiosConfig.js";
 
+
+const paymentMethods = [
+    { id: 'cash', name: 'Pay at Cashier', logoSrc: null },
+    {id: 'online', name: 'Online Payment', logoSrc: logoQRIS },
+];
 
 function CheckOutPage() {
-        const pickupTimes = generatePickupTime();
-        const {cart} = userCartStore();
+        const pickupTimes = generatePickupTimes();
+        const {cart, clearCart} = userCartStore();
+        const {user, isAuthenticated} = useAuth();
+        const navigate = useNavigate();
+
+        // State Untuk Form
+        const [customerName, setCustomerName] = useState(user?.name || '');
+        const [customerPhone, setCustomerPhone] = useState('');
+        const [notes, setNotes] = useState({});
         const [selectedPayment, setSelectedPayment] = useState('')
-        const [selectedPickupTimes, setSelectedPickupTimes] = useState('')
-        const paymentMethods = [
-            {id: 'qris', name: 'QRIS', logoSrc: logoQRIS },
-            { id: 'bni', name: 'BNI Virtual Account', logoSrc: logoBNI },
-            { id: 'bca', name: 'BCA Virtual Account', logoSrc: logoBCA },
-            { id: 'mandiri', name: 'Mandiri Virtual Account', logoSrc: logoMandiri },
-            { id: 'store', name: 'Pay at Cashier', logoSrc: null },
-        ];
+        const [selectedPickupTimes, setSelectedPickupTimes] = useState('Now');
+        const [isLoading, setIsLoading] = useState(false);
 
         // PPN Dan Total
         let taxRate = 10;
         const subtotal = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
         const taxCount = subtotal * (taxRate/100);
         const totalFinall = subtotal + taxCount
+
+        const saveGuestOrderId = (orderId) => {
+            const guestOrderIds = JSON.parse(localStorage.getItem('guestOrderIds')) || [];
+            guestOrderIds.push(orderId);
+            localStorage.setItem('guestOrderIds', JSON.stringify(guestOrderIds));
+        };
+
+        const handleNoteChange = (productId, note) => {
+            setNotes(prevNotes => ({
+                ...prevNotes,
+                [productId]: note,
+            }));
+        };
+
+        const handleMidtransOrder = async (orderData) => {
+            setIsLoading(true);
+            try {
+                const {data: responseData} = await apiClient.post('/orders/online', orderData); 
+                const midtransToken = responseData.midtransToken;
+                const createdOrder = responseData.order;
+    
+                    window.snap.pay(midtransToken, {
+                        onSuccess: function(result) {
+                            toast.success("Payment Successfully!")
+                            if(!isAuthenticated) {saveGuestOrderId(createdOrder._id)}
+                            clearCart();
+                            navigate('/orders');
+                        },
+                        onPending: function(result) {
+                            toast("Waiting For Your Payment");
+                            if(!isAuthenticated) {saveGuestOrderId(createdOrder._id)}
+                            clearCart();
+                            navigate(`/orders`);
+                        },
+                        onError: function(result) {
+                            toast.error("Payment Failed")
+                        },
+                        onClose: function() {
+                            toast.error("You Close The Payment Popup")
+                            if(isAuthenticated) {
+                                apiClient.put(`/orders/${createdOrder._id}/cancel`)
+                                apiClient.delete(`/orders/delete-order/${createdOrder._id}`)
+                            } else {
+                                apiClient.put(`/orders/${createdOrder._id}/guest-cancel`)
+                                apiClient.delete(`/orders/delete-order-guest/${createdOrder._id}`)
+                            }
+                        }
+                    });
+            } catch (error) {
+                console.error('Failed To Process The Order:', error);
+                const errorMessage = error.response?.data?.message || "Failed To Proccess Your Order!";
+                toast.error(errorMessage);
+            } finally {
+                setIsLoading(false)
+            }
+        };
+
+        const handleCashOrder = async (orderData) => {
+            try {
+                const {data: responseData} = await apiClient.post('/orders/cash-order', orderData);
+                toast.success("Your Order Has Been Sent!");
+                if(!isAuthenticated) {saveGuestOrderId(responseData._id)}
+                clearCart();
+                navigate(`/orders`);
+            } catch (error) {
+                console.error('Failed To Process The Order:', error);
+                const errorMessage = error.response?.data?.message || "Failed To Proccess Your Order!";
+                toast.error(errorMessage);
+                throw error; 
+            }
+        }
+
+        const handleOrderSubmit = async () => {
+            // Validasi User :)
+            if(!customerName || !customerPhone) {
+                return toast.error('Name And Phone Number Required!');
+            }
+            if(!selectedPickupTimes) {
+                return toast.error('Pickup The Available Times!')
+            }
+            if(!selectedPayment) {
+                return toast.error('Choose Your Payment!')
+
+            }
+
+            setIsLoading(true);
+            
+            const orderData = {
+                customerDetails: {name: customerName, phone: customerPhone},
+                orderItems: cart.map(item=> ({
+                    name: item.name,
+                    quantity: item.quantity,
+                    image: item.image,
+                    price: item.price,
+                    product: item._id,
+                    note: notes[item._id] || ''
+                })),
+                pickupDetails: { type: 'Pickup', time: selectedPickupTimes},
+                paymentMethod: selectedPayment,
+                taxPrice: taxCount,
+                totalPrice: totalFinall
+            };
+
+            try {
+                if(selectedPayment === 'online') {
+                    await handleMidtransOrder(orderData);
+                } else if (selectedPayment === 'cash') {
+                    await handleCashOrder(orderData);
+                }
+            } catch (error) {
+                console.error('Failed to Create Your Order:', error);
+                const errorMessage = error.response?.data?.message || "Failed to Proccess Your Order!";
+                toast.error(errorMessage);
+            } finally {
+                setIsLoading(false)
+            }
+        }
     
         return  (
             <div className="container py-4" style={{fontFamily: 'Plus Jakarta Sans, sans-serif'}}>
@@ -45,104 +168,108 @@ function CheckOutPage() {
                                 </div>
                         ): (
                             cart.map((item)=> (
-                                // CART ITEMS START ---------
-                                <CheckOutItem key={item.id} item={item} />
-                                // CART ITEMS END ------
+                                <>
+                                    {/* // CART ITEMS START --------- */}
+                                    <CheckOutItem key={item.id} item={item} noteValue={notes[item._id] || ''} onNoteChange={handleNoteChange} />
+                                    {/* // CART ITEMS END ------ */}
+
+                                    <h4 className="mb-md-1 mt-4">Orders Detail</h4>
+                                    <div className="card shadow-sm border-0 mt-4">
+                                        <div className="card-body">
+                                            
+                                            <div className="align-items-center">
+                                                <div className="form-customer">
+                                                    
+                                                    <form>
+                                                        <div className="mb-3">
+                                                            <h5>
+                                                                <label htmlFor="name" className="form-label">Orderer's Name</label>
+                                                            </h5>
+                                                            <input type="text" className="form-control" id="name" value={customerName} onChange={(e)=> setCustomerName(e.target.value)} required />
+                                                            <div className="form-text">This is Your Name for Your Coffee or Item.</div>
+                                                        </div>
+                                                        <div className="mb-3">
+                                                            <h5>
+                                                                <label htmlFor="phone" className="form-label">Phone Number</label>
+                                                            </h5>
+                                                            <input type="tel" className="form-control" id="phone" value={customerPhone} onChange={(e)=> setCustomerPhone(e.target.value)} required />
+                                                        </div>
+                                                    </form>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    {/* // ------------------------------------------- */}
+
+                                    {/* // PICKUP TIMES------------------------------ */}
+                                    <div className="card shadow-sm border-0 mt-4">
+                                        <div className="card-body">
+                                            <h5 className="card-title mb-4">Pickup Times</h5>
+                                            {pickupTimes.map((pickup) => (
+                                            <div key={pickup.times} className="form-check mb-5">
+                                                <input 
+                                                    className={`form-check-input ${radioStyles.formCheckInputDark}`}
+                                                    type="radio" 
+                                                    name="pickupTimes" 
+                                                    id={`pickup-${pickup.times}`}
+                                                    checked={selectedPickupTimes === pickup.times}
+                                                    onChange={() => setSelectedPickupTimes(pickup.times)}
+                                                    disabled={pickup.disabled}
+                                                    value={selectedPickupTimes}
+                                                    required
+                                                />
+                                                <label className="form-check-label w-100" htmlFor={`pickup-${pickup.times}`}>
+                                                    <div className="d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            <span>{pickup.times}</span>
+                                                            {pickup.times === 'Now' &&(
+                                                                <small className="form-text text-muted d-block mt-1">
+                                                                    {pickup.description}
+                                                                </small>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                        ))}
+                                        </div>
+                                    </div>
+                                    {/* // ------------------------------------------- */}
+
+                                    {/* // PAYMENT METHOD------------------------------ */}
+                                    <div className="card shadow-sm border-0 mt-4">
+                                        <div className="card-body">
+                                            <h5 className="card-title mb-4">Payment Method</h5>
+                                            {paymentMethods.map((method) => (
+                                            <div key={method.id} className="form-check mb-5">
+                                                <input 
+                                                    className={`form-check-input ${radioStyles.formCheckInputDark}`}
+                                                    type="radio" 
+                                                    name="paymentMethod" 
+                                                    id={`payment-${method.id}`}
+                                                    checked={selectedPayment === method.id}
+                                                    onChange={() => setSelectedPayment(method.id)}
+                                                    required
+                                                />
+                                                <label className="form-check-label w-100" htmlFor={`payment-${method.id}`}>
+                                                    <div className="d-flex justify-content-between align-items-center">
+                                                        <span>{method.name}</span>
+                                                        {method.logoSrc && (
+                                                            <img src={method.logoSrc} alt={`${method.name} logo`} style={{ height: '24px' }} />
+                                                        )}
+                                                    </div>
+                                                </label>
+                                            </div>
+                                        ))}
+                                        </div>
+                                    </div>
+                                </>
                             ))
                         )}
 
-                        <h4 className="mb-md-1 mt-4">Orders Detail</h4>
                         {/* DATA CUSTOMER------------------------------ */}
-                        <div className="card shadow-sm border-0 mt-4">
-                            <div className="card-body">
-                                
-                                <div className="align-items-center">
-                                    <div className="form-customer">
-                                        
-                                        <form>
-                                            <div className="mb-3">
-                                                <h5>
-                                                    <label htmlFor="name" className="form-label">Orderer's Name</label>
-                                                </h5>
-                                                <input type="name" className="form-control" id="name" required />
-                                                <div className="form-text">This is Your Name for Your Coffee or Item.</div>
-                                            </div>
-                                            <div className="mb-3">
-                                                <h5>
-                                                    <label htmlFor="phone" className="form-label">Phone Number</label>
-                                                </h5>
-                                                <input type="phone" className="form-control" id="phone" required />
-                                            </div>
-                                        </form>
-
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                        {/*------------------------------------------- */}
-
-                        {/* PICKUP TIMES------------------------------ */}
-                        <div className="card shadow-sm border-0 mt-4">
-                            <div className="card-body">
-                                <h5 className="card-title mb-4">Pickup Times</h5>
-                                {pickupTimes.map((pickup) => (
-                                <div key={pickup.times} className="form-check mb-5">
-                                    <input 
-                                        className={`form-check-input ${radioStyles.formCheckInputDark}`}
-                                        type="radio" 
-                                        name="pickupTimes" 
-                                        id={`pickup-${pickup.times}`}
-                                        checked={selectedPickupTimes === pickup.times}
-                                        onChange={() => setSelectedPickupTimes(pickup.times)}
-                                        disabled={pickup.disabled}
-                                        required
-                                    />
-                                    <label className="form-check-label w-100" htmlFor={`pickup-${pickup.times}`}>
-                                        <div className="d-flex justify-content-between align-items-center">
-                                            <div>
-                                                <span>{pickup.times}</span>
-                                                {pickup.times === 'Now' &&(
-                                                    <small className="form-text text-muted d-block mt-1">
-                                                        {pickup.description}
-                                                    </small>
-                                                )}
-                                            </div>
-                                        </div>
-                                    </label>
-                                </div>
-                            ))}
-                            </div>
-                        </div>
-                        {/*------------------------------------------- */}
-
-                        {/* PAYMENT METHOD------------------------------ */}
-                        <div className="card shadow-sm border-0 mt-4">
-                            <div className="card-body">
-                                <h5 className="card-title mb-4">Payment Method</h5>
-                                {paymentMethods.map((method) => (
-                                <div key={method.id} className="form-check mb-5">
-                                    <input 
-                                        className={`form-check-input ${radioStyles.formCheckInputDark}`}
-                                        type="radio" 
-                                        name="paymentMethod" 
-                                        id={`payment-${method.id}`}
-                                        checked={selectedPayment === method.id}
-                                        onChange={() => setSelectedPayment(method.id)}
-                                        required
-                                    />
-                                    <label className="form-check-label w-100" htmlFor={`payment-${method.id}`}>
-                                        <div className="d-flex justify-content-between align-items-center">
-                                            <span>{method.name}</span>
-                                            {method.logoSrc && (
-                                                <img src={method.logoSrc} alt={`${method.name} logo`} style={{ height: '24px' }} />
-                                            )}
-                                        </div>
-                                    </label>
-                                </div>
-                            ))}
-                            </div>
-                        </div>
                         {/*------------------------------------------- */}
                         <div className="d-none d-lg-block">
                             <Link to="/cart" className="text-dark text-decoration-none mt-4 d-inline-block">
@@ -156,13 +283,13 @@ function CheckOutPage() {
                             {/* SUMMARY ONLY IN DESKTOP*/}
                             <div className="col-lg-4 d-none d-lg-block mt-4">
                                 <div className="position-sticky" style={{ top: '120px' }}>
-                                    <OrderSummary subtotal={subtotal} totalFinall={totalFinall} taxCount={taxCount} taxRate={taxRate} />
+                                    <OrderSummary subtotal={subtotal} totalFinall={totalFinall} taxCount={taxCount} taxRate={taxRate} onOrder={handleOrderSubmit} isLoading={isLoading} />
                                 </div>
                             </div>
                             {/* ONLY IN MOBILE */}
                             <div className="d-lg-none">
                                 <div className="card shadow-lg border-0 position-fixed bottom-0 start-0 end-0" style={{zIndex: 1030}}>
-                                    <OrderSummary subtotal={subtotal} totalFinall={totalFinall} taxCount={taxCount} taxRate={taxRate} showBackLink={true} />
+                                    <OrderSummary subtotal={subtotal} totalFinall={totalFinall} taxCount={taxCount} taxRate={taxRate} showBackLink={true} onOrder={handleOrderSubmit} isLoading={isLoading} />
                                 </div>
                             </div>
                         </>

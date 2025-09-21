@@ -17,7 +17,10 @@ function OrderCard ({ order }) {
         if(lowerCaseStatus.includes('cancelled') || lowerCaseStatus.includes('failed') || lowerCaseStatus.includes('expired')) {
             return 'fw-bold text-danger';
         }
-        return 'fw-bold text-dark'
+        if(lowerCaseStatus.includes('finished')) {
+            return 'text-dark-emphasis'
+        }
+        return 'fw-bold text-danger-emphasis'
 
     }
 
@@ -28,12 +31,12 @@ function OrderCard ({ order }) {
                     <h6 className="mb-0">Order ID: #{order._id.slice(-6).toUpperCase()}</h6>
                     <small className="text-muted">{formattedDate}</small>
                 </div>
-                <span className="fw-bold">Rp{new Intl.NumberFormat('id-ID').format(order.totalAmount)}</span>
+                <span className="fw-bold">Rp{new Intl.NumberFormat('id-ID').format(order.totalPrice)}</span>
             </div>
             <div className="card-body">
-                {order.items.map(item => (
+                {order.orderItems.map((item) => (
                     <div key={item._id} className="mb-2">
-                        <OrderCardItem item={item} />
+                        <OrderCardItem  item={item} />
                     </div>
                 ))}
             </div>

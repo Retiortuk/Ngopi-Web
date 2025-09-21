@@ -1,4 +1,4 @@
-export function generatePickupTime() {
+export function generatePickupTimes() {
     // Inisialisasi Waktu Sekarang (local)
     const now =  new Date();
     // Slot Waktu yang tersedia akan masuk kesini
@@ -14,7 +14,7 @@ export function generatePickupTime() {
 
     // Check if now > endTime(Toko tutup)
     if (now > endTime) {
-        return({times: 'Our Store Closed', disabled: true})
+        return[{times: 'Our Store Closed', disabled: true}]
     }
 
     // Waktu Sekarang dalam range startTime - endTime
