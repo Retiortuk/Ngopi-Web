@@ -21,7 +21,11 @@ function LoginPage() {
         try {
             const loggedInUser = await login(email, password);
             toast.success(`Welcome To Ngopi! ${loggedInUser.name}`);
-            navigate('/');
+            if (loggedInUser.isAdmin) {
+                navigate('/admin/dashboard')
+            } else {
+                navigate('/');
+            }
         } catch(error) {
             console.error('Failed To Login', error);
             const errorMessage = error.response?.data?.message || 'Something Wrong Cant Log You in';

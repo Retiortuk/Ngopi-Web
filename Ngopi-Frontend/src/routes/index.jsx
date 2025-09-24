@@ -7,6 +7,8 @@ import CartPage from "../Pages/CartPage.jsx";
 import CheckOutPage from "../Pages/CheckOutPage.jsx";
 import OrdersPage from "../Pages/OrdersPage.jsx";
 import HistoryPage from "../Pages/HistoryPage.jsx";
+import AdminDashboard from "../Pages/Admin/AdminDashboard.jsx";
+import AdminRoute from "../Pages/Admin/AdminRoute.jsx";
 
 
 
@@ -37,6 +39,16 @@ const router = createBrowserRouter([
             }
 
         ],
+    },
+    {
+        path: '/admin',
+        element: <AdminRoute />,
+        children: [
+            {
+                path: 'dashboard',
+                element: <AdminDashboard />
+            }
+        ]
     },
     {
         path: '/login',
