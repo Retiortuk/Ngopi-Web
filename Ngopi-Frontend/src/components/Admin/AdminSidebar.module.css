@@ -1,0 +1,34 @@
+.sidebar {
+    width: 260px;
+    flex-shrink: 0;
+}
+
+.navLink {
+    color: #6c757d; /* Warna abu-abu untuk link tidak aktif */
+    font-weight: 500;
+    padding: 0.75rem 1.5rem;
+    border-left: 4px solid transparent;
+    transition: all 0.2s ease-in-out;
+}
+
+.navLink:hover {
+    color: #212529; /* Warna hitam saat di-hover */
+    background-color: #f8f9fa;
+}
+
+.navLink.active {
+    color: #212529; /* Warna hitam untuk link aktif */
+    background-color: #e9ecef;
+    border-left: 4px solid #212529;
+}
+
+.signOutButton {
+    color: #6c757d;
+    text-align: left;
+    padding-left: 1.5rem;
+}
+
+.signOutButton:hover {
+    color: #dc3545; /* Merah saat di-hover */
+    background-color: #f8f9fa;
+}

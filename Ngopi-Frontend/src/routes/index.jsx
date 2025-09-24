@@ -9,6 +9,7 @@ import OrdersPage from "../Pages/OrdersPage.jsx";
 import HistoryPage from "../Pages/HistoryPage.jsx";
 import AdminDashboard from "../Pages/Admin/AdminDashboard.jsx";
 import AdminRoute from "../Pages/Admin/AdminRoute.jsx";
+import AdminLayout from "../components/Admin/AdminLayout.jsx";
 
 
 
@@ -45,8 +46,10 @@ const router = createBrowserRouter([
         element: <AdminRoute />,
         children: [
             {
-                path: 'dashboard',
-                element: <AdminDashboard />
+                element: <AdminLayout />,
+                children: [
+                    {path: 'dashboard', element: <AdminDashboard />}
+                ]
             }
         ]
     },
