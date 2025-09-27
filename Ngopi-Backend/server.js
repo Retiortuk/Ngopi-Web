@@ -16,7 +16,7 @@ connectDB();
 
 const app = express();
 
-// Enable CORS (Cross-Origin Resource Sharing)
+// Enable CORS biar bisa gitulah
 app.use(cors());
 
 // Allow the app to accept JSON data in the body of requests

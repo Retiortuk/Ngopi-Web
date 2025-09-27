@@ -1,5 +1,6 @@
 import asynchandler from 'express-async-handler';
 import Order from '../models/orderModel.js';
+import Product from '../models/productModel.js'
 import midtransClient from 'midtrans-client';
 
 
@@ -286,6 +287,81 @@ const getAllOrders = asynchandler(async(req,res)=> {
     res.json(order);
 });
 
+// GET Dashboard Information
+const getDashboardInfo = asynchandler(async(req, res)=> {
+    // earnings:
+    const earningsSummary = await Order.aggregate([
+        {
+            $match : {
+                status: {$nin: ['Waiting For Payment', 'Cancelled']}
+            }
+        },
+        {
+            $group: {
+                _id: null,
+                totalEarnings: { $sum: '$totalPrice'}
+            }
+        }
+    ]);
+    // total orders:
+    const totalOrders = await Order.countDocuments({});
+    // total Stok:
+    const totalProducts = await Product.countDocuments({});
+
+    const totalEarnings =  earningsSummary.length > 0 ? earningsSummary[0].totalEarnings : 0;
+
+    res.json({
+        totalEarnings,
+        totalOrders,
+        totalProducts,
+    });
+});
+
+// GET Active Orders  pickupTime: < 30 Menit
+const getActiveOrders = asynchandler(async(req,res)=> {
+    const now = new Date();
+    const thirtyMinuteFromNow = new Date(now.getTime() + 30 * 60 * 1000);
+
+    const relevantOrders =  await Order.find({
+        status: { $in : ['Waiting To Be Confirmed', 'Pereparing']}
+    });
+
+    const activeOrders =  relevantOrders.filter(order=> {
+        if(order.pickupDetails.time === 'Now') {
+            return true;
+        }
+
+        const [hours, minutes] = order.pickupDetails.time.split(':');
+        const pickupDate = new Date();
+        pickupDate.setHours(hours, minutes, 0, 0);
+        return pickupDate > now && pickupDate <= thirtyMinuteFromNow;
+    });
+
+    res.json(activeOrders);
+});
+
+// GET future Orders pickuptimes > 30 menit lagi
+const getFutureOrders = asynchandler(async(req, res)=> {
+    const now = new Date();
+    const thirtyMinuteFromNow = new Date(now.getTime() + 30 * 60 * 1000);
+
+    const relevantOrders = await Order.find({
+        status: {$in: ['Waiting To Be Confirmed', 'Preparing']}
+    });
+
+    const futureOrders = relevantOrders.filter(order=> {
+        if(order.pickupDetails.time === 'Now') {
+            return false;
+        };
+
+        const [hours, minutes] = order.pickupDetails.time.split(':');
+        const pickupDate = new Date();
+        pickupDate.setHours(hours, minutes, 0, 0);
+        return pickupDate > thirtyMinuteFromNow;
+    });
+    res.json(futureOrders);
+});
+
 // UPDATE ORDER STATUS
 const updateOrderStatus = asynchandler(async(req,res)=> {
     const order = await Order.findById(req.params.id);
@@ -306,4 +382,4 @@ const updateOrderStatus = asynchandler(async(req,res)=> {
 });
 
 
-export{cashOrder, getGuestOrders, deleteOrders, deleteOrdersGuest, guestCancelOrder, cancelOrder, handleMidtransWebhook, createMidtransOrder, getOrderById, getMyOrders, getAllOrders, updateOrderStatus}
+export{cashOrder, getGuestOrders, getDashboardInfo, getActiveOrders, getFutureOrders, deleteOrders, deleteOrdersGuest, guestCancelOrder, cancelOrder, handleMidtransWebhook, createMidtransOrder, getOrderById, getMyOrders, getAllOrders, updateOrderStatus}
