@@ -4,6 +4,7 @@ import AppRouter from './routes/index.jsx'
 import { AuthProvider } from './contexts/AuthContext.jsx'
 import {Toaster} from 'react-hot-toast'
 import './index.css'
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

@@ -3,6 +3,7 @@ import { useAuth } from "../../contexts/AuthContext.jsx";
 import { useNavigate, NavLink } from "react-router-dom";
 import styles from './AdminSidebar.module.css';
 import toast from "react-hot-toast";
+import Offcanvas from 'react-bootstrap/Offcanvas';
 
 const navLinks = [
     { path: '/admin/dashboard', icon: 'bi-house-door-fill', label: 'Dashboard' },
@@ -12,25 +13,27 @@ const navLinks = [
     { path: '/admin/future-orders', icon: 'bi-calendar-check-fill', label: 'Future Orders' },
 ];
 
-function AdminSidebar() {
-    const {logout} = useAuth();
+const SidebarContent = ({ onLinkClick }) => {
+    const { logout } = useAuth();
     const navigate = useNavigate();
 
     const handleLogOut = () => {
+        if (onLinkClick) onLinkClick(); 
         logout();
-        toast.success('Sucessfully Logout');
-        navigate('/login')
+        toast.success('Berhasil logout');
+        navigate('/login');
     };
 
-    return(
-        <aside className={`bg-white shadow-sm d-flex flex-column ${styles.sidebar}`}>
-            <div className="py-4">
+    return (
+        <>
+            <div className="py-4 flex-grow-1">
                 <nav className="nav flex-column">
                     {navLinks.map((link) => (
                         <NavLink
                             key={link.path}
                             to={link.path} 
-                            className={({ isActive })=> `nav-link d-flex align-items-center gap-3 ${styles.navLink} ${isActive ? styles.active : ''}`}
+                            onClick={onLinkClick} 
+                            className={({ isActive })=> `d-flex text-decoration-none align-items-center gap-3 ${styles.navLink} ${isActive ? styles.active : ''}`}
                         >
                             <i className={`bi ${link.icon} fs-5`}></i>
                             <span>{link.label}</span>
@@ -38,13 +41,33 @@ function AdminSidebar() {
                     ))}
                 </nav>
             </div>
-            <div className="mt-auto p-3">
+            <div className="p-3">
                 <button onClick={handleLogOut} className={`btn w-100 ${styles.signOutButton}`}>
                     Sign Out
                 </button>
             </div>
-        </aside>
+        </>
+    );
+};
+
+function AdminSidebar({ show, handleClose }) {
+    return (
+        <>
+            <aside className={`bg-white shadow-sm d-none d-lg-flex flex-column ${styles.sidebar}`}>
+                <SidebarContent />
+            </aside>
+
+            <Offcanvas show={show} onHide={handleClose} className="d-lg-none">
+                <Offcanvas.Header closeButton>
+                    <Offcanvas.Title>Menu</Offcanvas.Title>
+                </Offcanvas.Header>
+                <Offcanvas.Body className="d-flex flex-column p-0">
+                    <SidebarContent onLinkClick={handleClose} />
+                </Offcanvas.Body>
+            </Offcanvas>
+        </>
     );
 }
+
 
 export default AdminSidebar;
