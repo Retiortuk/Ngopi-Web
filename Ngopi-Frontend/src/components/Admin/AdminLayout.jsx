@@ -1,5 +1,5 @@
 import React from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, Link } from "react-router-dom";
 import { useState } from "react";
 import styles from './AdminLayout.module.css';
 import AdminSidebar from "./AdminSidebar";
@@ -18,20 +18,24 @@ function AdminLayout() {
             />
             
             <div className={styles.mainContent}>
-                <header className="bg-light shadow-sm p-3 d-flex justify-content-between align-items-center">
+                <header className={`bg-light shadow-sm p-3 d-flex justify-content-between align-items-center ${styles.header}`}>
                     
                     <button className="btn d-lg-none" type="button" onClick={handleToggleSidebar}>
                         <i className="bi bi-list fs-4"></i>
                     </button>
 
-                    <h2 className="h4 mb-0 ms-2 ms-lg-0" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>Ngopi.</h2>
+                    <Link to='/' className="text-dark text-decoration-none">
+                        <h2 className="h4 mb-0 ms-2 ms-lg-0" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>Ngopi.</h2>
+                    </Link>
                     
                     <button className="btn btn-link text-dark">
                         <i className="bi bi-bell-fill fs-5"></i>
                     </button>
                 </header>
-                <main className="p-4">
-                    <Outlet />
+                <main className={styles.contentArea} style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
+                    <div className="p-4">
+                        <Outlet />
+                    </div>
                 </main>
             </div>
         </div>

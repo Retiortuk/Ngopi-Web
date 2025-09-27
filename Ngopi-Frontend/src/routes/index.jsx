@@ -10,6 +10,7 @@ import HistoryPage from "../Pages/HistoryPage.jsx";
 import AdminDashboard from "../Pages/Admin/AdminDashboard.jsx";
 import AdminRoute from "../Pages/Admin/AdminRoute.jsx";
 import AdminLayout from "../components/Admin/AdminLayout.jsx";
+import ManageStock from "../Pages/Admin/ManageStock.jsx";
 
 
 
@@ -48,7 +49,8 @@ const router = createBrowserRouter([
             {
                 element: <AdminLayout />,
                 children: [
-                    {path: 'dashboard', element: <AdminDashboard />}
+                    {path: 'dashboard', element: <AdminDashboard />},
+                    {path: 'manage-stock', element: <ManageStock />}
                 ]
             }
         ]

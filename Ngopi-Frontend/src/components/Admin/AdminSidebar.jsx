@@ -26,26 +26,26 @@ const SidebarContent = ({ onLinkClick }) => {
 
     return (
         <>
-            <div className="py-4 flex-grow-1">
-                <nav className="nav flex-column">
-                    {navLinks.map((link) => (
-                        <NavLink
-                            key={link.path}
-                            to={link.path} 
-                            onClick={onLinkClick} 
-                            className={({ isActive })=> `d-flex text-decoration-none align-items-center gap-3 ${styles.navLink} ${isActive ? styles.active : ''}`}
-                        >
-                            <i className={`bi ${link.icon} fs-5`}></i>
-                            <span>{link.label}</span>
-                        </NavLink>
-                    ))}
-                </nav>
-            </div>
-            <div className="p-3">
-                <button onClick={handleLogOut} className={`btn w-100 ${styles.signOutButton}`}>
-                    Sign Out
-                </button>
-            </div>
+                <div className="py-4 flex-grow-1" style={{fontFamily: 'Plus Jakarta Sans, sans-serif'}}>
+                    <nav className="nav flex-column">
+                        {navLinks.map((link) => (
+                            <NavLink
+                                key={link.path}
+                                to={link.path} 
+                                onClick={onLinkClick} 
+                                className={({ isActive })=> `d-flex text-decoration-none align-items-center gap-3 ${styles.navLink} ${isActive ? styles.active : ''}`}
+                            >
+                                <i className={`bi ${link.icon} fs-5`}></i>
+                                <span>{link.label}</span>
+                            </NavLink>
+                        ))}
+                    </nav>
+                </div>
+                <div className="p-3" style={{fontFamily: 'Plus Jakarta Sans, sans-serif'}} >
+                    <button onClick={handleLogOut} className={`btn w-100 ${styles.signOutButton}`}>
+                        Sign Out
+                    </button>
+                </div>
         </>
     );
 };

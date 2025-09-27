@@ -1,9 +1,63 @@
+
 .adminLayout {
-    display: flex;
-    min-height: 100vh;
+  display: flex;
+  height: 100vh; 
+  overflow: hidden; 
 }
 
-.mainContent {
-    flex-grow: 1;
-    background-color: #f8f9fa;
+.sidebar {
+  width: 260px; 
+  height: 100vh; 
+  position: sticky; 
+  top: 0;
+  align-self: flex-start; 
+  overflow: hidden; 
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
 }
+
+
+.mainContent {
+  flex: 1 1 auto; 
+  display: flex;
+  flex-direction: column;
+  height: 100vh; 
+  overflow: hidden; 
+  background-color: #f8f9fa;
+}
+
+
+.header {
+  background-color: #ffffff;
+  padding: 1rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  z-index: 1020;
+  flex-shrink: 0; 
+  
+}
+
+
+.contentArea {
+  flex: 1 1 auto;     
+  overflow-y: auto;   
+  -webkit-overflow-scrolling: touch;
+  background-color: #f8f9fa;
+  padding: 0;
+}
+
+
+.contentArea > .p-4 {
+  padding: 1rem; 
+}
+
+
+@media (max-width: 991.98px) {
+  .sidebar {
+    display: none;
+    width: 0;
+  }
+  .mainContent {
+    height: 100vh;
+  }
+}
+

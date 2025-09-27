@@ -66,24 +66,6 @@ function ProductCard({ product }) {
                 </div>
             </div>
         </div>
-        // <div className="card">
-        //     <img src={imageUrl} className="card-img-top" alt={product.name} />
-        //     <div className="card-body">
-        //         <h5 className="card-title">{product.name}</h5>
-        //         <div className="price-cartAdd d-flex justify-content-between align-items-center">
-        //         <p className="card-text price fw-bold">Rp{new Intl.NumberFormat('id-ID').format(product.price)}</p>
-        //         {quantityInCart === 0 ? (
-        //             <button onClick={handleAddToCart} className="btn btn-dark btn-sm">+</button>
-        //         ): (
-        //             <div className="d-flex align-items-center gap-2">
-        //                 <button className="btn btn-danger btn-sm" onClick={handleRemoveFromCart}>-</button>
-        //                 <span className="fw-bold">{quantityInCart}</span>
-        //                 <button className="btn btn-dark btn-sm" onClick={handleAddToCart}>+</button>
-        //             </div>
-        //         )}
-        //         </div>
-        //     </div>
-        // </div>
     );
 }
 

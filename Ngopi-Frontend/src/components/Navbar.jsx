@@ -84,8 +84,13 @@ function Navbar({ activeSection }) {
                                     </button>
 
                                     <ul className={`dropdown-menu dropdown-menu-end ${styles.userDropDown} ${isDesktopDropdownOpen ? 'show' : ''}`}>
-                                        {isAuthenticated ? (
-                                            <li><button className="dropdown-item" onClick={handleLogOut}>Logout</button></li>
+                                        {isAuthenticated ? ( 
+                                            <>
+                                                {user.isAdmin && (
+                                                    <li><Link className="dropdown-item" to='/admin/dashboard' >Admin Page</Link></li>
+                                                )}
+                                                <li><button className="dropdown-item" onClick={handleLogOut}>Logout</button></li>
+                                            </>    
                                         ) : (
                                             <li><Link className="dropdown-item" to='/login' onClick={() => setIsDesktopDropdownOpen(false)}>Login</Link></li>
                                         )}
