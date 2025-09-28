@@ -1,3 +1,11 @@
+.outOfStock img {
+    filter: grayscale(100%) opacity(0.5); 
+}
+
+.outOfStock .card-body {
+    opacity: 0.6; 
+}
+
 @media (max-width: 767.98px) {
     .quantityControls button {
         /* Ini adalah variabel Bootstrap untuk padding atas/bawah, padding kiri/kanan, dan ukuran font */

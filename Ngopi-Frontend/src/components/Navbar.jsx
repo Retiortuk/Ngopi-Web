@@ -123,7 +123,12 @@ function Navbar({ activeSection }) {
                         </button>
                         <ul className={`dropdown-menu ${isMobileDropdownOpen ? 'show' : ''}`}>
                             {isAuthenticated ? (
-                                <li><button className="dropdown-item" onClick={handleLogOut}>Logout</button></li>
+                                <>
+                                    {user.isAdmin && (
+                                        <li><Link className="dropdown-item" to='/admin/dashboard' >Admin Page</Link></li>
+                                    )}
+                                    <li><button className="dropdown-item" onClick={handleLogOut}>Logout</button></li>
+                                </>    
                             ): (
                                 <li><Link className="dropdown-item" to='/login' onClick={() => setIsMobileDropdownOpen(false)}>Login</Link></li>
                             )}

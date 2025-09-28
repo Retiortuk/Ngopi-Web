@@ -6,3 +6,11 @@
 .outOfStock .card-body {
     opacity: 0.6; 
 }
+
+@media (max-width: 767.98px) {
+    .editDropdown button {
+        --bs-btn-padding-y: .2rem;
+        --bs-btn-padding-x: .4rem;
+        --bs-btn-font-size: .75rem;
+    }
+}
