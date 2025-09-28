@@ -48,21 +48,18 @@ const deleteProduct = asynchandler(async(req,res)=> {
 
 // UPDATE Product
 const updateProduct = asynchandler(async(req,res)=> {
+    const { name, price, image, isFeatured, isAvailable } = req.body;
     const product = await Product.findById(req.params.id);
     
     if(product){
-        product.name = req.body.name || product.name;
-        product.price = req.body.price || product.price;
-        product.image = req.body.image || product.image;
-        product.isFeatured = req.body.isFeatured || product.isFeatured;
+        product.name = name || product.name;
+        product.price = price ?? product.price;
+        product.image = image || product.image;
+        product.isFeatured = isFeatured ?? product.isFeatured;
+        product.isAvailable = isAvailable ?? product.isAvailable;
 
         const updatedProduct = await product.save();
-        res.json({
-            name: updatedProduct.name,
-            price: updatedProduct.price,
-            image: updatedProduct.image,
-            isFeatured: updatedProduct.isFeatured,
-        });
+        res.json(updatedProduct);
     } else {
         res.status(404);
         throw new Error('Produk Tidak Ditemukan');
