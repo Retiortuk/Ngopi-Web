@@ -1,0 +1,8 @@
+
+.outOfStock img {
+    filter: grayscale(100%) opacity(0.5); 
+}
+
+.outOfStock .card-body {
+    opacity: 0.6; 
+}
