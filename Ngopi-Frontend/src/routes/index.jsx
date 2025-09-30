@@ -12,6 +12,7 @@ import AdminRoute from "../Pages/Admin/AdminRoute.jsx";
 import AdminLayout from "../components/Admin/AdminLayout.jsx";
 import ManageStock from "../Pages/Admin/ManageStock.jsx";
 import ManualOrder from "../Pages/Admin/ManualOrder.jsx";
+import CheckOutAdmin from "../Pages/Admin/CheckOutAdmin.jsx";
 
 
 
@@ -53,6 +54,7 @@ const router = createBrowserRouter([
                     {path: 'dashboard', element: <AdminDashboard />},
                     {path: 'manage-stock', element: <ManageStock />},
                     {path: 'manual-order', element: <ManualOrder />},
+                    {path: 'admin-checkout', element: <CheckOutAdmin />}
                 ]
             }
         ]

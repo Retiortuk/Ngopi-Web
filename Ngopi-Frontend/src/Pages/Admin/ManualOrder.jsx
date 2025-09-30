@@ -18,7 +18,7 @@ const FloatingCartContent = ({totalItems, subtotal}) => (
                             Subtotal: Rp{new Intl.NumberFormat('id-ID').format(subtotal)}
                         </p>
                     </div>
-                    <Link to="/admin/checkout" className="btn btn-dark d-flex align-items-center gap-2">
+                    <Link to="/admin/admin-checkout" className="btn btn-dark d-flex align-items-center gap-2">
                         <span>Checkout</span>
                         <i className="bi bi-arrow-right-short"></i>
                     </Link>
