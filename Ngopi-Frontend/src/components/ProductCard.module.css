@@ -6,12 +6,18 @@
     opacity: 0.6; 
 }
 
+.quantityControls button{
+    --bs-btn-font-size: .75rem;
+    --bs-btn-padding-y: .2rem;
+    --bs-btn-padding-x: .4rem;
+}
+
 @media (max-width: 767.98px) {
     .quantityControls button {
         /* Ini adalah variabel Bootstrap untuk padding atas/bawah, padding kiri/kanan, dan ukuran font */
         --bs-btn-padding-y: .2rem;
         --bs-btn-padding-x: .4rem;
-        --bs-btn-font-size: .75rem;
+        --bs-btn-font-size: .65rem;
     }
 
     .quantityControls span {

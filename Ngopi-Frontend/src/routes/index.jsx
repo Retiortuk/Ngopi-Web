@@ -11,6 +11,7 @@ import AdminDashboard from "../Pages/Admin/AdminDashboard.jsx";
 import AdminRoute from "../Pages/Admin/AdminRoute.jsx";
 import AdminLayout from "../components/Admin/AdminLayout.jsx";
 import ManageStock from "../Pages/Admin/ManageStock.jsx";
+import ManualOrder from "../Pages/Admin/ManualOrder.jsx";
 
 
 
@@ -50,7 +51,8 @@ const router = createBrowserRouter([
                 element: <AdminLayout />,
                 children: [
                     {path: 'dashboard', element: <AdminDashboard />},
-                    {path: 'manage-stock', element: <ManageStock />}
+                    {path: 'manage-stock', element: <ManageStock />},
+                    {path: 'manual-order', element: <ManualOrder />},
                 ]
             }
         ]
