@@ -8,7 +8,7 @@ const orderSchema = mongoose.Schema({
     },
     customerDetails: {
         name: {type: String, required: true},
-        phone: {type: String, required: true},
+        phone: {type: String},
     },
     orderItems: [
         {
