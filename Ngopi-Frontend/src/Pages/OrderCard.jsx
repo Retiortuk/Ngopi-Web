@@ -28,7 +28,8 @@ function OrderCard ({ order }) {
         <div className="card border-1 shadow-sm mb-4">
             <div className="card-body d-flex justify-content-between align-items-center">
                 <div>
-                    <h6 className="mb-0">Order ID: #{order._id.slice(-6).toUpperCase()}</h6>
+                    <h6 className="mb-3">Order ID: #{order._id.slice(-6).toUpperCase()}</h6>
+                    <h6 className="mb-0 text-muted">Orderer: {order.customerDetails.name}</h6>
                     <small className="text-muted">{formattedDate}</small>
                 </div>
                 <span className="fw-bold">Rp{new Intl.NumberFormat('id-ID').format(order.totalPrice)}</span>

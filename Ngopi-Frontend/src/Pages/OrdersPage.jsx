@@ -1,11 +1,10 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import OrderCard from "./OrderCard.jsx";
-import kopiSusuImg from "../images/kopi-susu.webp";
-import spicyBulgogiImg from "../images/spicy-bulgogi.webp";
 import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext.jsx";
 import apiClient from "../api/axiosConfig.js";
+import OrderCardSkeleton from "../components/OrderCardSkeleton.jsx";
 
 
 function OrdersPage() {
@@ -42,16 +41,19 @@ function OrdersPage() {
         fetchOrders();
     },[isAuthenticated]);
 
-    if(isLoading) {
-        return <div className="container py-4 text-center">Loading Your Orders...</div>;
-    }
+
     return(
         <div className="container py-4">
             <div className="row">
                 <div className="col-12">
                     <h4 className="mb-3 mt-lg-4">Your Order Tracking ({orders.length})</h4>
-
-                    {orders.length === 0 ? (
+                    {isLoading ? (
+                        <>
+                            <OrderCardSkeleton />
+                            <OrderCardSkeleton />
+                            <OrderCardSkeleton />
+                        </>
+                    ): orders.length === 0 ? (
                         <div className="alert alert-secondary mt-3">
                             No Order So far, <Link to='/' className="text-dark">Let's Ngopi!</Link>
                         </div>
@@ -60,7 +62,6 @@ function OrdersPage() {
                             <OrderCard key={order._id} order={order} />
                         ))
                     )}
-
                     <div className="d-none d-lg-block">
                         <Link to="/" className="text-dark text-decoration-none d-inline-block">
                             &larr; Back To Home

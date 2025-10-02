@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useCallback } from "react";
-import toast from "react-hot-toast";
-import OrderCard from "../OrderCard.jsx";
 import { useAuth } from "../../contexts/AuthContext.jsx";
+import OrderCard from "../OrderCard.jsx";
+import OrderCardSkeleton from "../../components/OrderCardSkeleton.jsx";
 import apiClient from "../../api/axiosConfig";
+import toast from "react-hot-toast";
 
 
 
@@ -26,7 +27,9 @@ function ActiveOrder () {
     }, []);
 
     useEffect(()=> {
-        fetchOrders();
+        setTimeout(()=> {
+            fetchOrders();
+        },1000);
     },[fetchOrders]);
 
     const ongoingOrders = orders.filter(
@@ -37,11 +40,6 @@ function ActiveOrder () {
         (order) => order.status === 'Ready To Pickup'
     );
     
-
-    if(isLoading) {
-        return <div className="container py-4 text-center">Loading Your Orders...</div>;
-    }
-
     return (
         <>
             <div className="d-flex justify-content-between align-items-center mb-4">
@@ -56,8 +54,12 @@ function ActiveOrder () {
                 <div className="col-lg-6">
                     <h4 className="mb-3">Ongoing Orders({ongoingOrders.length})</h4>
                     <p className="text-muted mb-4">Waiting To Be Confirmed & Preparing.</p>
-
-                    {ongoingOrders.length === 0 ? (
+                    {isLoading ? (
+                        <>
+                            <OrderCardSkeleton />
+                            <OrderCardSkeleton />
+                        </>
+                    ): ongoingOrders.length === 0 ? (
                         <div className="alert alert-secondary">
                             No Order So far
                         </div>
@@ -75,9 +77,14 @@ function ActiveOrder () {
                     <h4 className=" mb-3">Ready To Pickup({readyToPickup.length})</h4>
                     <p className="text-muted mb-4">Preparing Finished & Ready To Pickup.</p>
 
-                    {readyToPickup.length === 0 ? (
+                    {isLoading ? (
+                        <>
+                            <OrderCardSkeleton />
+                            <OrderCardSkeleton />
+                        </>
+                    ): readyToPickup.length === 0 ? (
                         <div className="alert alert-secondary">
-                            No Orders Ready!
+                            No Orders Ready
                         </div>
                     ): (
                         <div className="d-grid gap-3">
