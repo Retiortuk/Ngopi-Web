@@ -8,6 +8,8 @@ import productRoutes from './src/routes/productRoutes.js';
 import orderRoutes from './src/routes/orderRoutes.js';
 import uploadRoutes from './src/routes/uploadRoutes.js';
 import path from 'path';
+import http from 'http';
+import { Server } from 'socket.io';
 // Load environment variables from .env file
 dotenv.config();
 
@@ -15,6 +17,27 @@ dotenv.config();
 connectDB();
 
 const app = express();
+
+const httpServer = http.createServer(app);
+
+const io = new Server(httpServer, {
+    cors: {
+        origin: "http://localhost:5173",
+        methods: ["GET", "POST"]
+    }
+});
+
+app.use((req, res, next) => {
+    req.io = io;
+    next();
+});
+
+io.on('connection', (socket) => {
+    console.log('Pengguna baru terhubung:', socket.id);
+    socket.on('disconnect', () => {
+        console.log('Pengguna terputus:', socket.id);
+    });
+});
 
 // Enable CORS biar bisa gitulah
 app.use(cors());
@@ -43,9 +66,9 @@ app.use(errorHandler);
 const PORT = process.env.PORT || 5000;
 
 // This is the crucial part that starts the server and keeps it running
-app.listen(
+httpServer.listen(
     PORT,
     console.log(
-        `Server running in ${process.env.NODE_ENV} mode on port ${PORT}`
+        `Server & Socket.io running in ${process.env.NODE_ENV} mode on port ${PORT}`
     )
 );

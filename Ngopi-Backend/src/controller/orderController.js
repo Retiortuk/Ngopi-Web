@@ -194,6 +194,7 @@ const createMidtransOrder =  asynchandler(async(req, res)=> {
 
     const midtransToken =  await snap.createTransactionToken(parameter);
 
+    req.io.emit('newOrder', createOrder);
     res.status(201).json({
         order: createOrder,
         midtransToken: midtransToken
@@ -235,6 +236,7 @@ const cashOrder = asynchandler(async(req,res)=> {
         });
 
         const createOrder = await order.save();
+        req.io.emit('newOrder', createOrder);
         res.status(201).json(createOrder);
     }
 });
@@ -323,8 +325,8 @@ const getActiveOrders = asynchandler(async(req,res)=> {
     const thirtyMinuteFromNow = new Date(now.getTime() + 30 * 60 * 1000);
 
     const relevantOrders =  await Order.find({
-        status: { $in : ['Waiting To Be Confirmed', 'Pereparing']}
-    });
+        status: { $in : ['Waiting To Be Confirmed', 'Preparing', 'Ready To Pickup']}
+    }).sort({ createdAt: 'desc'});
 
     const activeOrders =  relevantOrders.filter(order=> {
         if(order.pickupDetails.time === 'Now') {
