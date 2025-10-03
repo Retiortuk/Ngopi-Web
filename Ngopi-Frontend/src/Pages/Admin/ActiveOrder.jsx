@@ -1,35 +1,20 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useAuth } from "../../contexts/AuthContext.jsx";
-import OrderCard from "../OrderCard.jsx";
+import OrderCardAdmin from "../../components/Admin/OrderCardAdmin.jsx";
 import OrderCardSkeleton from "../../components/OrderCardSkeleton.jsx";
 import apiClient from "../../api/axiosConfig";
 import toast from "react-hot-toast";
+import { useAdminOrderStore } from "../../stores/adminOrderStore.js";
 
 
 
 function ActiveOrder () {
-    const [orders, setOrders] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
     const {user} = useAuth();
 
-    const fetchOrders = useCallback(async()=> {
-        setIsLoading(true);
-        try {
-            const {data} = await apiClient.get('/orders/active-orders');
-            setOrders(data);
-            console.log('Succes Get The Data From DB');
-        } catch (error) {
-            console.error('Failed To Fetch Data:', error);
-            toast.error("Failed To Get Orders Data")
-        } finally {
-            setIsLoading(false);
-        }
-    }, []);
+    const {orders, isLoading, fetchOrders} = useAdminOrderStore();
 
     useEffect(()=> {
-        setTimeout(()=> {
-            fetchOrders();
-        },1000);
+        fetchOrders();
     },[fetchOrders]);
 
     const ongoingOrders = orders.filter(
@@ -42,13 +27,6 @@ function ActiveOrder () {
     
     return (
         <>
-            <div className="d-flex justify-content-between align-items-center mb-4">
-                <div>
-                    <h1 className="h2 mb-1">Active Orders</h1>
-                    <p className="text-muted mb-4">Take a Action on The Order ASAP.</p>
-                </div>
-            </div> 
-
             <div className="row g-4">
                 {/* Active Orders Includes Status: Waiting To be Confirmed, Preparing */}
                 <div className="col-lg-6">
@@ -66,7 +44,7 @@ function ActiveOrder () {
                     ): (
                         <div className="d-grid gap-3">
                             {ongoingOrders.map((order)=> (
-                                <OrderCard key={order._id} order={order} onUpdate={fetchOrders} />
+                                <OrderCardAdmin key={order._id} order={order} onUpdate={fetchOrders} />
                             ))}
                         </div>
                     )}
@@ -89,7 +67,7 @@ function ActiveOrder () {
                     ): (
                         <div className="d-grid gap-3">
                             {readyToPickup.map((order)=> (
-                                <OrderCard key={order._id} order={order} onUpdate={fetchOrders} />
+                                <OrderCardAdmin key={order._id} order={order} onUpdate={fetchOrders} />
                             ))}
                         </div>
                     )}

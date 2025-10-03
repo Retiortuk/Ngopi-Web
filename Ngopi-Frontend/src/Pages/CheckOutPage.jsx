@@ -182,7 +182,9 @@ function CheckOutPage() {
                                                 <div className="mb-3">
                                                     <label htmlFor="name" className="form-label fw-bold">Orderer's Name</label>
                                                     <input type="text" className="form-control" id="name" value={customerName} onChange={(e)=> setCustomerName(e.target.value)} required />
-                                                    <div className="form-text">This is Your Name for Your Coffee or Item.</div>
+                                                    <div className="form-text mb-3">This is Your Name for Your Coffee or Item.</div>
+                                                    <label htmlFor="phone" className="form-label fw-bold">Orderer's Phone</label>
+                                                    <input type="number" className="form-control" id="phone" value={customerPhone} onChange={(e)=> setCustomerPhone(e.target.value)} required />
                                                 </div>
                                             </form>
                                         </div>
