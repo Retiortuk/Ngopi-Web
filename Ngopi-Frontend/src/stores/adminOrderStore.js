@@ -18,6 +18,18 @@ export const useAdminOrderStore = create((set, get) => ({
         }
     },
 
+    fetchFutureOrders: async () => {
+        set({ isLoading: true });
+        try {
+            const { data } = await apiClient.get('/orders/future-orders');
+            set({ orders: data, isLoading: false });
+        } catch (error) {
+            console.error("Failed To Fetch:", error);
+            toast.error("Failed To Fetch Orders.");
+            set({ isLoading: false });
+        }
+    },
+
     addOrder: (newOrder) => {
         set((state) => ({
             orders: [newOrder, ...state.orders]

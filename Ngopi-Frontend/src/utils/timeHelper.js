@@ -10,7 +10,7 @@ export function generatePickupTimes() {
 
     // Close Toko
     const endTime = new Date();
-    endTime.setHours(21, 0, 0, 0);
+    endTime.setHours(23, 0, 0, 0);
 
     // Check if now > endTime(Toko tutup)
     if (now > endTime) {

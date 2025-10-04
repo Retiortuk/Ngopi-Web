@@ -14,6 +14,7 @@ import ManageStock from "../Pages/Admin/ManageStock.jsx";
 import ManualOrder from "../Pages/Admin/ManualOrder.jsx";
 import CheckOutAdmin from "../Pages/Admin/CheckOutAdmin.jsx";
 import ActiveOrder from "../Pages/Admin/ActiveOrder.jsx";
+import FutureOrder from "../Pages/Admin/FutureOrder.jsx";
 
 
 
@@ -56,7 +57,8 @@ const router = createBrowserRouter([
                     {path: 'manage-stock', element: <ManageStock />},
                     {path: 'manual-order', element: <ManualOrder />},
                     {path: 'admin-checkout', element: <CheckOutAdmin />},
-                    {path: 'active-orders', element: <ActiveOrder />}
+                    {path: 'active-orders', element: <ActiveOrder />},
+                    {path: 'future-orders', element: <FutureOrder />},
                 ]
             }
         ]

@@ -2,6 +2,7 @@ import React from "react";
 import OrderCardItem from "../../Pages/OrderCardItem.jsx";
 import apiClient from "../../api/axiosConfig.js";
 import toast from "react-hot-toast";
+import { useLocation } from "react-router-dom";
 
 const getStatusBadge = (status) => {
     const lowerCaseStatus = status.toLowerCase();
@@ -22,12 +23,19 @@ const getStatusBadge = (status) => {
 };
 
 function OrderCardAdmin ({ order, onUpdate }) {
+
+    
+    const isFuture = useLocation('/admin/future-orders');
+
     const formattedDate = new Intl.DateTimeFormat('en-EN', {
         dateStyle: 'long',
         timeStyle: 'short'
     }).format(new Date(order.createdAt));
 
     const handleUpdateStatus = async(newStatus)=> {
+        if(isFuture) {
+            console.log("test")
+        }
         try {
             await apiClient.put(`/orders/updateOrder/${order._id}`, {status: newStatus});
             toast.success(`Order #${order._id.slice(-4)} Updated!`);
@@ -37,7 +45,7 @@ function OrderCardAdmin ({ order, onUpdate }) {
             console.error('Something Wrong:', error);
         }
     };
-    // TODO APPLY THIS IN CHECKOUT PAGE FOR USER
+
     return (
         <div className="card border-1 shadow-sm mb-4">
             <div className="card-header bg-white d-flex justify-content-between align-items-center flex-wrap">
