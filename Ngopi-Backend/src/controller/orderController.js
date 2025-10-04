@@ -274,7 +274,7 @@ const getOrderById = asynchandler(async(req,res)=> {
 
 // GET ORDERS FOR USER
 const getMyOrders = asynchandler(async(req,res)=> {
-    const order = await Order.find({user: req.user._id});
+    const order = await Order.find({user: req.user._id}).sort({ createdAt: 'desc'});
     if(order) {
         res.json(order);
     } else {
@@ -319,13 +319,34 @@ const getDashboardInfo = asynchandler(async(req, res)=> {
     });
 });
 
+// GET History User Orders For Admin
+const getHistoryUsers = asynchandler(async(req,res)=> {
+    const history = await Order.find({
+        status: { $in: ['Finished', 'Cancelled']}
+    }).sort({createdAt: 'desc'})
+
+    const historyData = history;
+    res.json(historyData);
+});
+
+// GET History For User
+const getHistory = asynchandler(async(req,res)=> {
+    const history = await Order.find({
+        user: req.user._id,
+        status: {$in: ['Finished', 'Cancelled']}
+    }).sort({createdAt: 'desc'});
+
+    const historyData = history;
+    res.json(historyData);
+});
+
 // GET Active Orders  pickupTime: < 30 Menit
 const getActiveOrders = asynchandler(async(req,res)=> {
     const now = new Date();
     const thirtyMinuteFromNow = new Date(now.getTime() + 30 * 60 * 1000);
 
     const relevantOrders =  await Order.find({
-        status: { $in : ['Waiting To Be Confirmed', 'Preparing', 'Ready To Pickup']}
+        status: { $in : ['Waiting To Be Confirmed', 'Preparing', 'Ready To Pickup'], }
     }).sort({ createdAt: 'desc'});
 
     const activeOrders =  relevantOrders.filter(order=> {
@@ -403,4 +424,4 @@ const updateOrderPickup = asynchandler(async(req,res)=> {
 });
 
 
-export{cashOrder, getGuestOrders, getDashboardInfo, getActiveOrders, getFutureOrders, deleteOrders, deleteOrdersGuest, guestCancelOrder, cancelOrder, handleMidtransWebhook, createMidtransOrder, getOrderById, getMyOrders, getAllOrders, updateOrderStatus, updateOrderPickup}
+export{cashOrder, getGuestOrders, getDashboardInfo, getActiveOrders, getFutureOrders, deleteOrders, deleteOrdersGuest, guestCancelOrder, cancelOrder, handleMidtransWebhook, createMidtransOrder, getOrderById, getHistory, getHistoryUsers, getMyOrders, getAllOrders, updateOrderStatus, updateOrderPickup}
