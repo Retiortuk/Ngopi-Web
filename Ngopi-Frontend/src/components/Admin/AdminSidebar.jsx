@@ -11,6 +11,7 @@ const navLinks = [
     { path: '/admin/manual-order', icon: 'bi-plus-circle-fill', label: 'Manual Order' },
     { path: '/admin/active-orders', icon: 'bi-clock-history', label: 'Active Orders' },
     { path: '/admin/future-orders', icon: 'bi-calendar-check-fill', label: 'Future Orders' },
+    { path: '/admin/history', icon: 'bi-receipt', label: 'History Orders' },
 ];
 
 const SidebarContent = ({ onLinkClick }) => {
