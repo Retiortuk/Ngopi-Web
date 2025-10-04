@@ -1,6 +1,6 @@
 import express from 'express';
 const router = express.Router();
-import {cancelOrder, cashOrder, createMidtransOrder, deleteOrders, deleteOrdersGuest, getActiveOrders, getAllOrders, getDashboardInfo, getFutureOrders, getGuestOrders, getMyOrders, getOrderById, guestCancelOrder, handleMidtransWebhook, updateOrderStatus } from '../controller/orderController.js';
+import {cancelOrder, cashOrder, createMidtransOrder, deleteOrders, deleteOrdersGuest, getActiveOrders, getAllOrders, getDashboardInfo, getFutureOrders, getGuestOrders, getMyOrders, getOrderById, guestCancelOrder, handleMidtransWebhook, updateOrderPickup, updateOrderStatus } from '../controller/orderController.js';
 import { protect, admin } from '../middleware/authMiddleware.js';
 
 // POST Order
@@ -17,6 +17,7 @@ router.get('/future-orders', protect, admin, getFutureOrders);
 router.get('/active-orders', protect, admin, getActiveOrders)
 // PUT ORDERS
 router.put('/updateOrder/:id', protect, admin, updateOrderStatus);
+router.put('/updatePickupTime/:id', protect, admin, updateOrderPickup);
 router.put('/:id/cancel', protect, cancelOrder);
 router.put('/:id/guest-cancel', guestCancelOrder);
 // DELETE ORDERS

@@ -348,7 +348,7 @@ const getFutureOrders = asynchandler(async(req, res)=> {
     const thirtyMinuteFromNow = new Date(now.getTime() + 30 * 60 * 1000);
 
     const relevantOrders = await Order.find({
-        status: {$in: ['Waiting To Be Confirmed', 'Preparing']}
+        status: {$in: ['Waiting To Be Confirmed']}
     });
 
     const futureOrders = relevantOrders.filter(order=> {
@@ -383,5 +383,24 @@ const updateOrderStatus = asynchandler(async(req,res)=> {
     }
 });
 
+// UPDATE ORDER PICKUP TIMES
+const updateOrderPickup = asynchandler(async(req,res)=> {
+    const order = await Order.findById(req.params.id);
 
-export{cashOrder, getGuestOrders, getDashboardInfo, getActiveOrders, getFutureOrders, deleteOrders, deleteOrdersGuest, guestCancelOrder, cancelOrder, handleMidtransWebhook, createMidtransOrder, getOrderById, getMyOrders, getAllOrders, updateOrderStatus}
+    if(order) {
+        const {time} = req.body;
+        if(!time) {
+            res.status(400);
+            throw new Error('Pickup Time Tidak Boleh Kosong');
+        }
+        order.pickupDetails.time = time;
+        const updatedPickupDetails = await order.save();
+        res.json(updatedPickupDetails);
+    } else {
+        res.status(400);
+        throw new Error('Pesanan Tidak ada')
+    }
+});
+
+
+export{cashOrder, getGuestOrders, getDashboardInfo, getActiveOrders, getFutureOrders, deleteOrders, deleteOrdersGuest, guestCancelOrder, cancelOrder, handleMidtransWebhook, createMidtransOrder, getOrderById, getMyOrders, getAllOrders, updateOrderStatus, updateOrderPickup}
