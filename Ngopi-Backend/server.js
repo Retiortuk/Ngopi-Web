@@ -10,6 +10,7 @@ import uploadRoutes from './src/routes/uploadRoutes.js';
 import path from 'path';
 import http from 'http';
 import { Server } from 'socket.io';
+import initCronJobs from './src/utils/cornJobs.js';
 // Load environment variables from .env file
 dotenv.config();
 
@@ -68,7 +69,10 @@ const PORT = process.env.PORT || 5000;
 // This is the crucial part that starts the server and keeps it running
 httpServer.listen(
     PORT,
-    console.log(
-        `Server & Socket.io running in ${process.env.NODE_ENV} mode on port ${PORT}`
-    )
+    ()=> {
+        console.log(
+            `Server & Socket.io running in ${process.env.NODE_ENV} mode on port ${PORT}`
+        )
+        initCronJobs();
+    }
 );
