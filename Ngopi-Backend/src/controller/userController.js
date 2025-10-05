@@ -1,6 +1,7 @@
 import asyncHandler from 'express-async-handler';
 import User from '../models/userModel.js';
 import generateToken from '../utils/generateToken.js';
+import Order from '../models/orderModel.js';
 
 // POST LOGIN
 const authUser = asyncHandler(async(req, res)=> {
@@ -24,7 +25,7 @@ const authUser = asyncHandler(async(req, res)=> {
 
 // POST REGISTER
 const registerUser = asyncHandler(async (req, res)=> {
-    const {name, email, password, isAdmin} = req.body // the request
+    const {name, email, password, isAdmin, guestOrderIds} = req.body // the request
     const userExist = await User.findOne({email}); // user exist if user got email same as in db
 
     if(userExist) { // if userExist true then throw this Error
@@ -40,6 +41,15 @@ const registerUser = asyncHandler(async (req, res)=> {
     });
 
     if(user) {
+
+        if(guestOrderIds && guestOrderIds.length > 0) {
+            await Order.updateMany(
+                {_id: {$in: guestOrderIds}, user: null},
+                {$set: {user: user._id}}
+            );
+            console.log(`Berhasil memigrasikan ${guestOrderIds.length} pesanan tamu ke user ${user.email}`);
+        }
+
         res.status(201).json({
             _id: user._id,
             name: user.name,

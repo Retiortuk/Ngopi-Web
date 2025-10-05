@@ -260,7 +260,7 @@ const getGuestOrders = asynchandler(async (req, res) => {
 
 // GET ORDER FOR USER NOT REIGISTERED/LOGIN
 const getOrderById = asynchandler(async(req,res)=> {
-    const order = await Order.findById(req.params.id).populate(
+    const order = await Order.find(req.params.id).populate(
         'user',
         'name email'
     );
@@ -274,7 +274,9 @@ const getOrderById = asynchandler(async(req,res)=> {
 
 // GET ORDERS FOR USER
 const getMyOrders = asynchandler(async(req,res)=> {
-    const order = await Order.find({user: req.user._id}).sort({ createdAt: 'desc'});
+    const order = await Order.find({
+        user: req.user._id
+    }).sort({ createdAt: 'desc'});
     if(order) {
         res.json(order);
     } else {

@@ -5,7 +5,7 @@ import connectDB from './src/config/db.js';
 import { notFound, errorHandler } from './src/middleware/errorMiddleware.js';
 import userRoutes from './src/routes/userRoutes.js';
 import productRoutes from './src/routes/productRoutes.js';
-import orderRoutes from './src/routes/orderRoutes.js';
+import orderRoutes from './src/routes/orderRoutes.js'; 
 import uploadRoutes from './src/routes/uploadRoutes.js';
 import path from 'path';
 import http from 'http';

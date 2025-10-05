@@ -1,4 +1,4 @@
-import nodeCron from "node-cron";
+import cron from "node-cron";
 import Order from "../models/orderModel.js";
 
 const cancelExpiredOrders = async ()=> {
@@ -6,7 +6,7 @@ const cancelExpiredOrders = async ()=> {
 
     try {
         const pendingOrders = await Order.find({
-            status : { $in: ['Waiting To Be Confirmed', 'Preparing']}
+            status : { $in: ['Waiting To Be Confirmed', 'Waiting For Payment']}
         });
 
         for (const order of pendingOrders) {
@@ -21,8 +21,8 @@ const cancelExpiredOrders = async ()=> {
                 }
             } else {
                 try {
+                    const pickupDate = new Date(order.createdAt);
                     const [hours, minutes] = order.pickupDetails.time.split(':');
-                    const pickupDate = new Date();
                     pickupDate.setHours(parseInt(hours, 10), parseInt(minutes, 10), 0, 0);
 
                     if (now > pickupDate) {
