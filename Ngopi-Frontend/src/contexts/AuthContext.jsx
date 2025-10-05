@@ -51,8 +51,8 @@ export const AuthProvider = ({children}) => {
     };
 
     // Logika Register uy
-    const register = async(name, email, password) => {
-        await apiClient.post('/users/register', {name, email, password});
+    const register = async(name, email, password, guestOrderIds) => {
+        await apiClient.post('/users/register', {name, email, password, guestOrderIds});
     };
 
     const value = {

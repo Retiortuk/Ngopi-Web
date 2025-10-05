@@ -41,27 +41,34 @@ function OrdersPage() {
         fetchOrders();
     },[isAuthenticated]);
 
+    const activeStatuses = ['Waiting To Be Confirmed', 'Waiting For Payment', 'Preparing', 'Ready To Pickup'];
+    const activeOrders = orders.filter(order=> activeStatuses.includes(order.status));
 
     return(
         <div className="container py-4">
             <div className="row">
                 <div className="col-12">
-                    <h4 className="mb-3 mt-lg-4">Your Order Tracking ({orders.length})</h4>
+                    <h4 className="mb-3 mt-lg-4">Your Order Tracking ({activeOrders.length})</h4>
                     {isLoading ? (
                         <>
                             <OrderCardSkeleton />
                             <OrderCardSkeleton />
                             <OrderCardSkeleton />
                         </>
-                    ): orders.length === 0 ? (
+                    ): activeOrders.length === 0 ? (
                         <div className="alert alert-secondary mt-3">
-                            No Order So far, <Link to='/' className="text-dark">Let's Ngopi!</Link>
+                            No Active Order So far, <Link to='/' className="text-dark">Let's Ngopi!</Link>
                         </div>
-                    ): (
-                        orders.map((order)=> (
-                            <OrderCard key={order._id} order={order} />
-                        ))
+                    ): (   
+
+                        <div className="d-grid gap-3">
+                            {activeOrders.map((order)=> (
+                                <OrderCard key={order._id} order={order} />
+                            ))}
+                        </div>
+                        
                     )}
+
                     <div className="d-none d-lg-block">
                         <Link to="/" className="text-dark text-decoration-none d-inline-block">
                             &larr; Back To Home

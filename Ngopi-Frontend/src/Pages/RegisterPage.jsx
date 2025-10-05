@@ -26,7 +26,11 @@ function RegisterPage() {
         }
 
         try {
-            await register(name, email, password);
+            const guestOrderIds = JSON.parse(localStorage.getItem('guestOrderIds')) || [];
+            await register(name, email, password, guestOrderIds);
+            if(guestOrderIds.length > 0) {
+                localStorage.removeItem('guestOrderIds')
+            }
             toast.success("You're Registered! Login to Continue!");
             navigate('/login');
         } catch (error) {

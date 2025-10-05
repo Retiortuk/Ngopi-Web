@@ -1,6 +1,23 @@
 import React from "react";
 import OrderCardItem from "./OrderCardItem.jsx";
 
+const getStatusBadge = (status) => {
+    const lowerCaseStatus = status.toLowerCase();
+    switch (true) {
+        case lowerCaseStatus.includes('waiting to be confirmed'):
+            return 'bg-warning text-dark';
+        case lowerCaseStatus.includes('preparing'):
+            return 'bg-info text-dark';
+        case lowerCaseStatus.includes('ready to pickup'):
+            return 'bg-success';
+        case lowerCaseStatus.includes('finished'):
+            return 'bg-success';
+        case lowerCaseStatus.includes('cancelled'):
+            return 'bg-danger';
+        default:
+            return 'bg-secondary';
+    }
+};
 
 function OrderCard ({ order }) {
     const formattedDate = new Intl.DateTimeFormat('en-EN', {
@@ -31,6 +48,7 @@ function OrderCard ({ order }) {
                     <h6 className="mb-3">Order ID: #{order._id.slice(-6).toUpperCase()}</h6>
                     <h6 className="mb-0 text-muted">Orderer: {order.customerDetails.name}</h6>
                     <small className="text-muted">{formattedDate}</small>
+                    <small className="text-muted">, Pickup: {order.pickupDetails.time}</small>
                 </div>
                 <span className="fw-bold">Rp{new Intl.NumberFormat('id-ID').format(order.totalPrice)}</span>
             </div>
@@ -43,7 +61,7 @@ function OrderCard ({ order }) {
             </div>
             <div className="card-footer text-end">
                 <p className="mb-0 text-muted">
-                    Status: <span className= {getStatusColor(order.status)}>{order.status}</span>
+                    Status: <span className={`badge ${getStatusBadge(order.status)}`}>{order.status}</span>
                 </p>
             </div>
         </div>

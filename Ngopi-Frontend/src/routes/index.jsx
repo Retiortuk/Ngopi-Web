@@ -15,6 +15,7 @@ import ManualOrder from "../Pages/Admin/ManualOrder.jsx";
 import CheckOutAdmin from "../Pages/Admin/CheckOutAdmin.jsx";
 import ActiveOrder from "../Pages/Admin/ActiveOrder.jsx";
 import FutureOrder from "../Pages/Admin/FutureOrder.jsx";
+import HistoryOrder from "../Pages/Admin/HistoryOrder.jsx";
 
 
 
@@ -59,6 +60,7 @@ const router = createBrowserRouter([
                     {path: 'admin-checkout', element: <CheckOutAdmin />},
                     {path: 'active-orders', element: <ActiveOrder />},
                     {path: 'future-orders', element: <FutureOrder />},
+                    {path: 'history', element: <HistoryOrder />},
                 ]
             }
         ]

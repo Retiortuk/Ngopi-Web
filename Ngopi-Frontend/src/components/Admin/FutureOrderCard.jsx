@@ -36,7 +36,7 @@ function FutureOrderCard ({ order, onUpdate }) {
 
     const handleCancel = async () => {
         try {
-            await apiClient.put(`/orders/${order._id}/status`, { status: 'Dibatalkan' });
+            await apiClient.put(`/orders/updateOrder/${order._id}`, { status: 'Cancelled' });
             toast.success(`Orders #${order._id.slice(-4)} is Cancelled.`);
             onUpdate();
         } catch (error) {
@@ -63,7 +63,7 @@ function FutureOrderCard ({ order, onUpdate }) {
             <div className="card-footer d-flex justify-content-end gap-2">
                 { order.status === 'Waiting To Be Confirmed' &&  (
                     <>
-                        <button className="btn btn-outline-danger" onClick={() => handleCancel('Cancelled')}>Reject</button>
+                        <button className="btn btn-outline-danger" onClick={handleCancel}>Reject</button>
                         <button className="btn btn-dark" onClick={handleShowConfirmModal}>
                             Make It as Pickup: Now
                         </button>
