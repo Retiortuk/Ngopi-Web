@@ -24,12 +24,14 @@ function CheckOutAdmin() {
         const {user, isAuthenticated} = useAuth();
         const navigate = useNavigate();
 
+        const initialPickupTimes = pickupTimes[0]?.disabled ? '' : pickupTimes[0]?.times || '';
+
         // State Untuk Form
         const [customerName, setCustomerName] = useState(user?.name || '');
         const [customerPhone, setCustomerPhone] = useState('');
         const [notes, setNotes] = useState({});
         const [selectedPayment, setSelectedPayment] = useState('')
-        const [selectedPickupTimes, setSelectedPickupTimes] = useState('Now');
+        const [selectedPickupTimes, setSelectedPickupTimes] = useState(initialPickupTimes);
         const [isLoading, setIsLoading] = useState(false);
 
         const [showCashModal, setShowCashModal] = useState(false);
@@ -117,6 +119,9 @@ function CheckOutAdmin() {
 
         const handleOrderSubmit = async () => {
             // Validasi User :)
+            if(pickupTimes[0]?.disabled) {
+                return toast.error('Store is Closed!');
+            }
             if(!customerName) {
                 return toast.error('Name Required!');
             }
