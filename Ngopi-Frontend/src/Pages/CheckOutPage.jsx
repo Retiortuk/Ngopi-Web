@@ -11,7 +11,6 @@ import logoQRIS from "../images/Payment/Midtrans.png";
 import toast from "react-hot-toast";
 import apiClient from "../api/axiosConfig.js";
 
-// TODO: FIX LOOPING ERROR DUPLICATE 
 
 const paymentMethods = [
     { id: 'cash', name: 'Pay at Cashier', logoSrc: null },
@@ -24,12 +23,14 @@ function CheckOutPage() {
         const {user, isAuthenticated} = useAuth();
         const navigate = useNavigate();
 
+        const initialPickupTimes = pickupTimes[0]?.disabled ? '' : pickupTimes[0]?.times || '';
+
         // State Untuk Form
         const [customerName, setCustomerName] = useState(user?.name || '');
         const [customerPhone, setCustomerPhone] = useState('');
         const [notes, setNotes] = useState({});
         const [selectedPayment, setSelectedPayment] = useState('')
-        const [selectedPickupTimes, setSelectedPickupTimes] = useState('Now');
+        const [selectedPickupTimes, setSelectedPickupTimes] = useState(initialPickupTimes);
         const [isLoading, setIsLoading] = useState(false);
 
         // PPN Dan Total
@@ -111,6 +112,9 @@ function CheckOutPage() {
 
         const handleOrderSubmit = async () => {
             // Validasi User :)
+            if(pickupTimes[0]?.disabled) {
+                return toast.error('Our Store Closed, Sorry!');
+            }
             if(!customerName || !customerPhone) {
                 return toast.error('Name And Phone Number Required!');
             }
@@ -250,8 +254,8 @@ function CheckOutPage() {
                             {/* ----------------------------------------------------------------- */}
 
                             <div className="d-none d-lg-block mt-4">
-                                <Link to="/admin/manual-order" className="text-dark text-decoration-none">
-                                    &larr; Back To Menus
+                                <Link to="/cart" className="text-dark text-decoration-none">
+                                    &larr; Back To Cart
                                 </Link>
                             </div>
                         </div>
