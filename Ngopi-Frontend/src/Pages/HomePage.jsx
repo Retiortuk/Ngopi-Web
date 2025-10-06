@@ -4,10 +4,11 @@ import FeaturedSection from "../components/FeaturedSection.jsx";
 import MenuSection from "../components/MenuSection.jsx";
 import AboutSection from "../components/AboutSection.jsx";
 import Footer from "../components/Footer.jsx";
+import styles from "./HomePage.module.css";
 
 function HomePage() {
     return(
-        <div id="scroll-container" className="container-main" data-bs-spy="scroll" data-bs-target="#navbar-example" data-bs-offset="100" tabIndex="0">
+        <div id="scroll-container" className={`container-fluid px-0 ${styles.pageContainer}`} data-bs-spy="scroll" data-bs-target="#navbar-example" data-bs-offset="100" tabIndex="0">
             <HomeSection />
             <FeaturedSection />
             <MenuSection />
