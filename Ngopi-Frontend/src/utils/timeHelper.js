@@ -6,14 +6,14 @@ export function generatePickupTimes() {
 
     // Start Open Toko
     const startTime = new Date();
-    startTime.setHours(9, 30, 0, 0);
+    startTime.setHours(8, 30, 0, 0);
 
     // Close Toko
     const endTime = new Date();
     endTime.setHours(21, 0, 0, 0);
 
     // Check if now > endTime(Toko tutup)
-    if (now > endTime) {
+    if (now > endTime || now < startTime) {
         return[{times: 'Our Store Closed', disabled: true}]
     }
 
