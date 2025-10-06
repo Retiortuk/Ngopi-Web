@@ -59,8 +59,8 @@ function Navbar({ activeSection }) {
                     </Link>
                     
                     
-                    {/* <!-- Search Bar --> */}
-                    <div className="col-md-4 search-container">
+                    {/* <!-- Search Bar -->
+                    <div className="col-md-4  search-container">
                         <form className="position-relative" role="search">
                             <input type="search" className="form-control me-2" placeholder="Ngopi apa?" aria-label="Search" />
                             <button className="btn position-absolute end-0 top-50 translate-middle-y me-2 p-0 border-0 bg-transparent" type="submit">
@@ -69,10 +69,10 @@ function Navbar({ activeSection }) {
                                 </svg>
                             </button>
                         </form>
-                    </div>
+                    </div> */}
                     
                     {/* <!-- User Account and Cart --> */}
-                    <div className="col-6 col-md-4 d-flex userReq-container d-flex justify-content-end align-items-center gap-3">
+                    <div className="col-6 col-md-4 d-flex userReq-container d-flex justify-content-end align-items-center gap-3 ms-auto">
                         {/* <!-- Account User and Cart/Coffee Icon only visible on lg display --> */}
                         <div className="d-none d-md-flex gap-3 me-0 me-md-5 align-items-center">
                             {/* <!-- User --> */}
@@ -154,7 +154,7 @@ function Navbar({ activeSection }) {
                 {/* <!-- ROW FOR MENUS --> */}
                 <div className="row  nav-2 align-items-center text-center">
                     <div className="col d-flex align-items-center justify-content-center">
-                        <ul className="nav gap-1 gap-md-4 pt-3 justify-content-center flex-wrap">
+                        <ul className="nav gap-1 gap-md-4  justify-content-center flex-wrap">
                             <li className="nav-item d-none d-sm-block">
                                 <Link className={`${styles.navLink} nav-menu-item ${isOnHomePage && activeSection === 'home-sect' ? styles.active : ''}`} to="/#home-sect">
                                     Home
