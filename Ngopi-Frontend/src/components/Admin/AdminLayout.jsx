@@ -9,7 +9,7 @@ import { useAdminOrderStore } from "../../stores/adminOrderStore.js";
 import { Dropdown, Button } from "react-bootstrap";
 
 // inisialisasi Buat IO Notifikasi Realtime
-const socket = io('https://ngopi-backend.onrender.com/api');
+const socket = io('https://ngopi-backend.onrender.com');
 
 const playNotificationSound = () => {
     if (window.Tone) {
