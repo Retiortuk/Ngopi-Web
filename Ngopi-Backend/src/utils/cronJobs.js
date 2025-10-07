@@ -1,56 +1,70 @@
 import cron from "node-cron";
 import Order from "../models/orderModel.js";
+import { DateTime } from "luxon";
 
-const getJakartaTime = () => {
-    return new Date(new Date().toLocaleString('en-US', {timeZone: 'Asia/Jakarta'}));
-}
+const ZONE = 'Asia/Jakarta';
 
-const cancelExpiredOrders = async ()=> {
-    const now = getJakartaTime();
+const cancelExpiredOrders = async () => {
+  // now dalam milidetik di zone Jakarta
+  const now = DateTime.now().setZone(ZONE);
 
-    try {
-        const pendingOrders = await Order.find({
-            status : { $in: ['Waiting To Be Confirmed', 'Waiting For Payment']}
-        });
+  try {
+    const pendingOrders = await Order.find({
+      status: { $in: ['Waiting To Be Confirmed', 'Waiting For Payment'] }
+    });
 
-        for (const order of pendingOrders) {
-            let shouldCancel = false;
-            // let reason = ''; soon implemented
+    for (const order of pendingOrders) {
+      let shouldCancel = false;
 
-            if(order.pickupDetails.time === 'Now') {
-                const thrtyFiveMinutesAgo = new Date(now.getTime() - 35 * 60 * 1000);
-                if(order.createdAt < thrtyFiveMinutesAgo) {
-                    shouldCancel = true;
-                    // reason = 'Expired';
-                }
-            } else {
-                try {
-                    const pickupDate = getJakartaTime();
-                    const [hours, minutes] = order.pickupDetails.time.split(':');
-                    pickupDate.setHours(parseInt(hours, 10), parseInt(minutes, 10), 0, 0);
+      // pastikan pickupDetails dan time ada
+      const timeValue = order.pickupDetails?.time;
+      if (!timeValue) continue;
 
-                    if (now > pickupDate) {
-                        shouldCancel = true;
-                        // reason = 'expired';
-                    }
-                } catch (e) {
-                    console.error(`Format waktu salah untuk pesanan ${order._id}: ${order.pickupDetails.time}`);
-                }
-            }
+      if (timeValue === 'Now') {
+        // 35 menit yang lalu (millis)
+        const thirtyFiveMinAgo = now.minus({ minutes: 35 }).toMillis();
 
-            if(shouldCancel) {
-                order.status = 'Cancelled';
-                await order.save();
-            }
+        // createdAt mungkin Date object atau string -> pakai getTime()
+        const createdMillis = new Date(order.createdAt).getTime();
+
+        if (createdMillis < thirtyFiveMinAgo) {
+          shouldCancel = true;
         }
-    } catch (error) {
-        console.error("Error saat menjalankan cron job pembatalan pesanan:", error);
+      } else {
+        // format time diharapkan 'HH:mm'
+        try {
+          const parts = timeValue.split(':');
+          if (parts.length < 2) throw new Error('Invalid time format');
+
+          const hours = parseInt(parts[0], 10);
+          const minutes = parseInt(parts[1], 10);
+
+          // buat DateTime untuk hari ini di zona Jakarta dengan jam:menit dari order
+          const pickupDT = now.set({ hour: hours, minute: minutes, second: 0, millisecond: 0 });
+
+          // jika sekarang sudah lewat waktu pickup -> expired
+          if (now.toMillis() > pickupDT.toMillis()) {
+            shouldCancel = true;
+          }
+        } catch (e) {
+          console.error(`Format waktu salah untuk pesanan ${order._id}: ${timeValue}`, e);
+        }
+      }
+
+      if (shouldCancel) {
+        order.status = 'Cancelled';
+        await order.save();
+        console.log(`Order ${order._id} cancelled by cron (pickup time: ${timeValue})`);
+      }
     }
+  } catch (error) {
+    console.error("Error saat menjalankan cron job pembatalan pesanan:", error);
+  }
 };
 
 const initCronJobs = () => {
-    cron.schedule('* * * * *', cancelExpiredOrders);
-    console.log("Cron job untuk membatalkan pesanan kedaluwarsa telah dijadwalkan.");
+  cron.schedule('* * * * *', cancelExpiredOrders);
+  console.log("Cron job untuk membatalkan pesanan kedaluwarsa telah dijadwalkan.");
 };
 
 export default initCronJobs;
