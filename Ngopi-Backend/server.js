@@ -10,7 +10,8 @@ import uploadRoutes from './src/routes/uploadRoutes.js';
 import path from 'path';
 import http from 'http';
 import { Server } from 'socket.io';
-import initCronJobs from './src/utils/cornJobs.js';
+import initCronJobs from './src/utils/cronJobs.js';
+
 // Load environment variables from .env file
 dotenv.config();
 
@@ -21,9 +22,10 @@ const app = express();
 
 const httpServer = http.createServer(app);
 
+// TODO: FIX LOCALHOST TO VERCELAPP FRONTEND
 const io = new Server(httpServer, {
     cors: {
-        origin: "http://localhost:5173",
+        origin: process.env.FRONTEND_URL || "http://localhos:5173",
         methods: ["GET", "POST"]
     }
 });
@@ -66,7 +68,7 @@ app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 
-// This is the crucial part that starts the server and keeps it running
+
 httpServer.listen(
     PORT,
     ()=> {
