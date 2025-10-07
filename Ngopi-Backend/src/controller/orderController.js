@@ -351,7 +351,7 @@ const getJakartaTime = ()=> {
 // GET Active Orders  pickupTime: < 30 Menit
 const getActiveOrders = asynchandler(async(req,res)=> {
     const now = getJakartaTime();
-    const thirtyMinuteFromNow = new Date(now.getTime() + 30 * 60 * 1000);
+    const thirtyMinuteFromNow = Date(now.getTime() + 30 * 60 * 1000);
 
     const relevantOrders =  await Order.find({
         status: { $in : ['Waiting To Be Confirmed', 'Preparing', 'Ready To Pickup'], }
@@ -381,7 +381,7 @@ const getActiveOrders = asynchandler(async(req,res)=> {
 // GET future Orders pickuptimes > 30 menit lagi
 const getFutureOrders = asynchandler(async(req, res)=> {
     const now = new getJakartaTime();
-    const thirtyMinuteFromNow = new Date(now.getTime() + 30 * 60 * 1000);
+    const thirtyMinuteFromNow = Date(now.getTime() + 30 * 60 * 1000);
 
     const relevantOrders = await Order.find({
         status: {$in: ['Waiting To Be Confirmed']}
