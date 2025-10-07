@@ -358,6 +358,9 @@ const getActiveOrders = asynchandler(async(req,res)=> {
     }).sort({ createdAt: 'desc'});
 
     const activeOrders =  relevantOrders.filter(order=> {
+        if (!order.pickupDetails || !order.pickupDetails.time) {
+            return false;
+        }
         if(order.pickupDetails.time === 'Now') {
             return true;
         }
@@ -385,6 +388,9 @@ const getFutureOrders = asynchandler(async(req, res)=> {
     });
 
     const futureOrders = relevantOrders.filter(order=> {
+        if (!order.pickupDetails || !order.pickupDetails.time) {
+            return false;
+        }
         if(order.pickupDetails.time === 'Now') {
             return false;
         };
