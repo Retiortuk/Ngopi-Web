@@ -362,10 +362,14 @@ const getActiveOrders = asynchandler(async(req,res)=> {
             return true;
         }
 
-        const [hours, minutes] = order.pickupDetails.time.split(':');
-        const pickupDate = getJakartaTime();
-        pickupDate.setHours(hours, minutes, 0, 0);
-        return pickupDate > now && pickupDate <= thirtyMinuteFromNow;
+        try {
+            const [hours, minutes] = order.pickupDetails.time.split(':');
+            const pickupDate = getJakartaTime();
+            pickupDate.setHours(parseInt(hours, 10), parseInt(minutes, 10), 0, 0);
+            return pickupDate > now && pickupDate <= thirtyMinuteFromNow;
+        } catch (e) {
+            return false; 
+        }
     });
 
     res.json(activeOrders);
@@ -385,10 +389,14 @@ const getFutureOrders = asynchandler(async(req, res)=> {
             return false;
         };
 
-        const [hours, minutes] = order.pickupDetails.time.split(':');
-        const pickupDate = getJakartaTime();
-        pickupDate.setHours(hours, minutes, 0, 0);
-        return pickupDate > thirtyMinuteFromNow;
+        try {
+            const [hours, minutes] = order.pickupDetails.time.split(':');
+            const pickupDate = getJakartaTime();
+            pickupDate.setHours(parseInt(hours, 10), parseInt(minutes, 10), 0, 0);
+            return pickupDate > thirtyMinuteFromNow;
+        } catch (e) {
+            return false;
+        }
     });
     res.json(futureOrders);
 });
