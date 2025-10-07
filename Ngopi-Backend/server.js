@@ -22,9 +22,12 @@ const app = express();
 
 const httpServer = http.createServer(app);
 
+
+// Enable CORS biar bisa gitulah
+app.use(cors());
 const io = new Server(httpServer, {
     cors: {
-        origin: process.env.FRONTEND_URL || "http://localhost:5173",
+        origin: 'https://ngopi-frontend.vercel.app/' || "http://localhost:5173",
         methods: ["GET", "POST"]
     }
 });
@@ -41,9 +44,6 @@ io.on('connection', (socket) => {
         console.log('Pengguna terputus:', socket.id);
     });
 });
-
-// Enable CORS biar bisa gitulah
-app.use(cors());
 
 // Allow the app to accept JSON data in the body of requests
 app.use(express.json());
