@@ -27,7 +27,7 @@ const httpServer = http.createServer(app);
 app.use(cors());
 const io = new Server(httpServer, {
     cors: {
-        origin: 'https://ngopi-frontend.vercel.app/' || "http://localhost:5173",
+        origin: 'https://ngopi-frontend.vercel.app' || "http://localhost:5173",
         methods: ["GET", "POST"]
     }
 });
