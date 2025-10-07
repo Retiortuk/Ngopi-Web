@@ -342,9 +342,15 @@ const getHistory = asynchandler(async(req,res)=> {
     res.json(historyData);
 });
 
+
+// GET Asia/Jakarta Timzone:
+const getJakartaTime = ()=> {
+    return new Date(new Date().toLocaleString('en-US', {timeZone: 'Asia/Jakarta'}));
+}
+
 // GET Active Orders  pickupTime: < 30 Menit
 const getActiveOrders = asynchandler(async(req,res)=> {
-    const now = new Date();
+    const now = getJakartaTime();
     const thirtyMinuteFromNow = new Date(now.getTime() + 30 * 60 * 1000);
 
     const relevantOrders =  await Order.find({
@@ -357,7 +363,7 @@ const getActiveOrders = asynchandler(async(req,res)=> {
         }
 
         const [hours, minutes] = order.pickupDetails.time.split(':');
-        const pickupDate = new Date();
+        const pickupDate = getJakartaTime();
         pickupDate.setHours(hours, minutes, 0, 0);
         return pickupDate > now && pickupDate <= thirtyMinuteFromNow;
     });
@@ -367,7 +373,7 @@ const getActiveOrders = asynchandler(async(req,res)=> {
 
 // GET future Orders pickuptimes > 30 menit lagi
 const getFutureOrders = asynchandler(async(req, res)=> {
-    const now = new Date();
+    const now = new getJakartaTime();
     const thirtyMinuteFromNow = new Date(now.getTime() + 30 * 60 * 1000);
 
     const relevantOrders = await Order.find({
@@ -380,7 +386,7 @@ const getFutureOrders = asynchandler(async(req, res)=> {
         };
 
         const [hours, minutes] = order.pickupDetails.time.split(':');
-        const pickupDate = new Date();
+        const pickupDate = getJakartaTime();
         pickupDate.setHours(hours, minutes, 0, 0);
         return pickupDate > thirtyMinuteFromNow;
     });

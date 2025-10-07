@@ -1,8 +1,12 @@
 import cron from "node-cron";
 import Order from "../models/orderModel.js";
 
+const getJakartaTime = () => {
+    return new Date(new Date().toLocaleString('en-US', {timeZone: 'Asia/Jakarta'}));
+}
+
 const cancelExpiredOrders = async ()=> {
-    const now = new Date();
+    const now = getJakartaTime();
 
     try {
         const pendingOrders = await Order.find({
@@ -21,7 +25,7 @@ const cancelExpiredOrders = async ()=> {
                 }
             } else {
                 try {
-                    const pickupDate = new Date(order.createdAt);
+                    const pickupDate = getJakartaTime();
                     const [hours, minutes] = order.pickupDetails.time.split(':');
                     pickupDate.setHours(parseInt(hours, 10), parseInt(minutes, 10), 0, 0);
 
