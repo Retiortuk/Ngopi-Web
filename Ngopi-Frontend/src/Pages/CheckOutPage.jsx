@@ -118,6 +118,9 @@ function CheckOutPage() {
             if(!customerName || !customerPhone) {
                 return toast.error('Name And Phone Number Required!');
             }
+            if(customerPhone.length < 11) {
+                return toast.error('Phone Number Must At Least 11 Digits')
+            }
             if(!selectedPickupTimes) {
                 return toast.error('Pickup The Available Times!')
             }
@@ -253,7 +256,7 @@ function CheckOutPage() {
                             )}
                             {/* ----------------------------------------------------------------- */}
 
-                            <div className="d-none d-lg-block mt-4">
+                            <div className="mt-4">
                                 <Link to="/cart" className="text-dark text-decoration-none">
                                     &larr; Back To Cart
                                 </Link>

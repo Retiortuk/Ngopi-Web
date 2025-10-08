@@ -69,7 +69,7 @@ function OrdersPage() {
                         
                     )}
 
-                    <div className="d-none d-lg-block">
+                    <div>
                         <Link to="/" className="text-dark text-decoration-none d-inline-block">
                             &larr; Back To Home
                         </Link>

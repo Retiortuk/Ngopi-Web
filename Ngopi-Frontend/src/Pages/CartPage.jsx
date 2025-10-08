@@ -150,7 +150,7 @@ function CartPage() {
                             // CART ITEMS END ------
                         ))
                     )}
-                    <div className="d-none d-lg-block">
+                    <div>
                         <Link to="/" className="text-dark text-decoration-none mt-4 d-inline-block">
                             &larr; Back To Home
                         </Link>
