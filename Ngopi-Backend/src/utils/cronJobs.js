@@ -5,7 +5,6 @@ import { DateTime } from "luxon";
 const ZONE = 'Asia/Jakarta';
 
 const cancelExpiredOrders = async () => {
-  // now dalam milidetik di zone Jakarta
   const now = DateTime.now().setZone(ZONE);
 
   try {
@@ -16,22 +15,18 @@ const cancelExpiredOrders = async () => {
     for (const order of pendingOrders) {
       let shouldCancel = false;
 
-      // pastikan pickupDetails dan time ada
       const timeValue = order.pickupDetails?.time;
       if (!timeValue) continue;
 
       if (timeValue === 'Now') {
-        // 35 menit yang lalu (millis)
         const thirtyFiveMinAgo = now.minus({ minutes: 35 }).toMillis();
 
-        // createdAt mungkin Date object atau string -> pakai getTime()
         const createdMillis = new Date(order.createdAt).getTime();
 
         if (createdMillis < thirtyFiveMinAgo) {
           shouldCancel = true;
         }
       } else {
-        // format time diharapkan 'HH:mm'
         try {
           const parts = timeValue.split(':');
           if (parts.length < 2) throw new Error('Invalid time format');
@@ -39,11 +34,9 @@ const cancelExpiredOrders = async () => {
           const hours = parseInt(parts[0], 10);
           const minutes = parseInt(parts[1], 10);
 
-          // buat DateTime untuk hari ini di zona Jakarta dengan jam:menit dari order
           const pickupDT = now.set({ hour: hours, minute: minutes, second: 0, millisecond: 0 });
 
-          // jika sekarang sudah lewat waktu pickup -> expired
-          if (now.toMillis() > pickupDT.toMillis()) {
+          if (now.toMillis() > pickupDT.toMillis()) { 
             shouldCancel = true;
           }
         } catch (e) {
