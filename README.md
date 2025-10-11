@@ -1,385 +1,468 @@
-# Ngopi-Web
+# Ngopi-Web-App-System
+
+<br>
+
+<h2 style="text-align:center; font-style:italic;">
+     ----- SYSTEM DOCUMENTATION -----
+</h2>
 
 ---
 
-## Project From Udemy WebDev Course | Bootstrap - 101 | 
-Original Repository <a href="https://github.com/Retiortuk/BootCampFullstackWeb/tree/main/101-BootStrap" target="_blank">BootcampFullstackWeb/101-BootStrap</a>
 
-##### Currently Front-End Only Best Using Desktop For The Best Expreience
+##### About Project:
+<p>This Project Was Created Using <a href='https://www.mongodb.com/resources/languages/mern-stack'><u>MERN</u></a> Stack, This Project Based On My Own Problem, It is Always being my Dream to have a FNB Caffe Store so technically I created a system for my FNB Caffe Store so once I Opened My FNB Store It Won't become a problems anymore because I had the system and I know the flow of the system, Because I'm the one who Created it.  </p>
+
+<br>
+
+##### What is MERN Stack and Why?:
+<p>MERN Stack Based On MongoDB, ExpressJS, ReactJS, NodeJS You Can Learn More About it Here <a href="https://www.mongodb.com/resources/languages/mern-stack" style='font-style:italic;'>MERN</a>, Using MERN stack Is Really Fit on this system because it is so easy to manage For the development of the Ngopi web application, I have selected the MERN stack, a powerful and modern combination of technologies perfect for building high-performance web applications. The MERN stack consists of four key components:</p>
+
+- **MongoDB**: A flexible, document-based NoSQL database.
+- **Express.js**: A back-end web application framework for Node.js.
+- **React**: A front-end JavaScript library for building user interfaces.
+- **Node.js**: A JavaScript runtime environment that executes code on the server.
+
+<p>here are <strong>4 Reasons</strong> Why Do I used a MERN Stack:</p>
+
+<!-- 1 -->
+<p><strong>1. Seamless Development with a Single Language: JavaScript</strong></p>
+<p>One of the most significant advantages of the MERN stack is that the entire application, from the user interface (front-end) to the server logic (back-end), is written in JavaScript.</p>
+
+- ***Without Being Said***:  I can work more efficiently without switching between different programming languages. This consistency reduces complexity and speeds up the development of new features, like adding a new coffee blend to your menu or creating a loyalty points system.
+
+<!-- 2 -->
+<p><strong>2. Fast And Interactive UX With React</strong></p>
+<p>A coffee app should feel as smooth and responsive as a perfect espresso shot. React allows me to build a dynamic single-page application (SPA).</p>
+
+- ***Without Being Said***: When a user clicks to view different coffee origins, checks their order status, the page updates instantly without a full reload. This creates a seamless, app-like experience in the browser, keeping users engaged and happy.
+
+<!-- 3 -->
+<p><strong>3. Flexibility for Evolving Features with MongoDB</strong></p>
+<p>MongoDB is a NoSQL database that stores data in JSON-like documents, which means we don't have to define a rigid structure from the start.</p>
+
+- ***Without Being Said***: if I decide to add new information to coffee profiles—like acidity levels, brewing recommendations, or admin-submitted photos—we can do so easily without complex database migrations. This is perfect for an app that needs to grow and adapt.
+
+<!-- 4 -->
+<p><strong>4. High Performance and Scalability with Node.js and Express.js</strong></p>
+<p>MongoDB is a NoSQL database that stores data in JSON-like documents, which means we don't have to define a rigid structure from the start.</p>
+
+- ***Without Being Said***: Whether you have ten users or ten thousand users ordering their morning coffee at the same time, the app will remain fast and responsive. This ensures a reliable experience even during peak hours, preventing lost sales and frustrated customers.
+
+<br>
+
+<h3 style="text-align:center;">
+    List Of Contents
+</h3>
+
+* ***[1. Front-End Documentation](#front-end-documentation)***
+* ***[2. User/Developer Flow Documentation](#--userdeveloper-flow-documentation)***
+* ***[3. Using MidTrans Pay Simulator](#front-end-documentation)***
+* ***[4. Back-End Documentation](#front-end-documentation)***
+* ***[5. API Documentation](#front-end-documentation)***
+
 ---
 ## Front-End Documentation
 
-**With BootStrap 5**
 
-### index.html
+### - User/Developer Flow Documentation
 
-#### - Header
-```html
-<head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Ngopi.</title>
-        <link rel="stylesheet" href="style.css">
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Poetsen+One&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
-    </head>
-```
-Inside of the header includes link to the External CSS, Bootstrap 5 Properties
+<p>Visit The Website on <a href="https://ngopi-frontend.vercel.app/"><u>Ngopi</u></a></p>
 
-#### - Navbar
-```html
- <!-- NABAR -->
-        <nav id="navbar-example" class="navbar-expand-md sticky-top">
-            <div class="container-navbar bg-light shadow p-3 pt-1 position-relative">
-                <!-- ROW FOR BRAND, SEARCH, USER REQ -->
-                <div class="row nav-1 align-items-center">
-                    <!-- Brand -->
-                    <div class="col-md-4 brand-container d-flex justify-content-center justify-content-md-start align-items-center text-center">
-                        <h1 class="ms-0 ms-md-5" style="font-family: Plus Jakarta Sans, sans-serif;">Ngopi.</h1>
-                    </div>
-                    
-                    
-                    <!-- Search Bar -->
-                    <div class="col-md-4 search-container">
-                        <form class="position-relative" role="search">
-                            <input type="search" class="form-control me-2" placeholder="Ngopi apa?" aria-label="Search">
-                            <button class="btn position-absolute end-0 top-50 translate-middle-y me-2 p-0 border-0 bg-transparent" type="submit">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                                    <path d="M11.742 10.344a5.5 5.5 0 1 1 .707-.707l3.646 3.646a1 1 0 0 1-1.414 1.414l-3.646-3.646zM12.5 6a4.5 4.5 0 1 0-9 0 4.5 4.5 0 0 0 9 0z"/>
-                                </svg>
-                            </button>
-                        </form>
-                    </div>
-                    
-                    <!-- User Account and Cart -->
-                    <div class="col-6 col-md-4 d-flex userReq-container d-flex justify-content-end align-items-center gap-3">
-                        <!-- Account User and Cart/Coffee Icon only visible on lg display -->
-                        <div class="d-none d-md-flex gap-3 me-0 me-md-5">
-                            <!-- User -->
-                            <a href="#">
-                                <svg width="24px" height="24px" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M8 7C9.65685 7 11 5.65685 11 4C11 2.34315 9.65685 1 8 1C6.34315 1 5 2.34315 5 4C5 5.65685 6.34315 7 8 7Z" fill="#000000"></path> <path d="M14 12C14 10.3431 12.6569 9 11 9H5C3.34315 9 2 10.3431 2 12V15H14V12Z" fill="#000000"></path> </g></svg>
-                            </a>
-                            
-                            <!-- Cart/Coffee Icon -->
-                            <a href="#">
-                                <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill-rule="evenodd" clip-rule="evenodd" d="M8.41799 3.25089C8.69867 2.65917 9.30155 2.25 10 2.25H14C14.6984 2.25 15.3013 2.65917 15.582 3.25089C16.2655 3.25586 16.7983 3.28724 17.2738 3.47309C17.842 3.69516 18.3362 4.07266 18.6999 4.56242C19.0668 5.0565 19.2391 5.68979 19.4762 6.56144L20.2181 9.28272L20.4985 10.124C20.5065 10.1339 20.5144 10.1438 20.5222 10.1539C21.4231 11.3076 20.9941 13.0235 20.1362 16.4553C19.5905 18.638 19.3176 19.7293 18.5039 20.3647C17.6901 21.0001 16.5652 21.0001 14.3153 21.0001H9.68462C7.43476 21.0001 6.30983 21.0001 5.49605 20.3647C4.68227 19.7293 4.40943 18.638 3.86376 16.4553C3.00581 13.0235 2.57684 11.3076 3.47767 10.1539C3.48555 10.1438 3.4935 10.1338 3.50152 10.1239L3.7819 9.28271L4.52384 6.56145C4.76092 5.6898 4.93316 5.0565 5.30009 4.56242C5.66381 4.07266 6.15802 3.69516 6.72621 3.4731C7.20175 3.28724 7.73447 3.25586 8.41799 3.25089ZM8.41951 4.75231C7.75763 4.759 7.49204 4.78427 7.27224 4.87018C6.96629 4.98976 6.70018 5.19303 6.50433 5.45674C6.32822 5.69388 6.22488 6.0252 5.93398 7.09206L5.36442 9.18091C6.38451 9.00012 7.77753 9.00012 9.68462 9.00012H14.3153C16.2224 9.00012 17.6155 9.00012 18.6356 9.18092L18.066 7.09206C17.7751 6.0252 17.6718 5.69388 17.4957 5.45674C17.2998 5.19303 17.0337 4.98976 16.7278 4.87018C16.508 4.78427 16.2424 4.759 15.5805 4.75231C15.2992 5.3423 14.6972 5.75 14 5.75H10C9.30281 5.75 8.70084 5.3423 8.41951 4.75231Z" fill="#000000"></path> </g></svg>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <!-- ROW FOR BRAND, SEARCH, USER REQ END -->
+<br>
 
-                <!-- FOR ICONS USER IN THE LEFT TOP(Mobile) -->
-                <div class="d-md-none position-absolute top-0 start-0 py-2 px-3">   
-                    <a href="#">
-                        <svg width="20px" height="20px" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M8 7C9.65685 7 11 5.65685 11 4C11 2.34315 9.65685 1 8 1C6.34315 1 5 2.34315 5 4C5 5.65685 6.34315 7 8 7Z" fill="#000000"></path> <path d="M14 12C14 10.3431 12.6569 9 11 9H5C3.34315 9 2 10.3431 2 12V15H14V12Z" fill="#000000"></path> </g></svg>
-                    </a>
-                </div>                
-                <!-- FOR ICONS CART IN THE RIGHT TOP(Mobile) -->
-                <div class="d-md-none position-absolute top-0 end-0 py-2 px-3"> 
-                        <a href="#">
-                            <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill-rule="evenodd" clip-rule="evenodd" d="M8.41799 3.25089C8.69867 2.65917 9.30155 2.25 10 2.25H14C14.6984 2.25 15.3013 2.65917 15.582 3.25089C16.2655 3.25586 16.7983 3.28724 17.2738 3.47309C17.842 3.69516 18.3362 4.07266 18.6999 4.56242C19.0668 5.0565 19.2391 5.68979 19.4762 6.56144L20.2181 9.28272L20.4985 10.124C20.5065 10.1339 20.5144 10.1438 20.5222 10.1539C21.4231 11.3076 20.9941 13.0235 20.1362 16.4553C19.5905 18.638 19.3176 19.7293 18.5039 20.3647C17.6901 21.0001 16.5652 21.0001 14.3153 21.0001H9.68462C7.43476 21.0001 6.30983 21.0001 5.49605 20.3647C4.68227 19.7293 4.40943 18.638 3.86376 16.4553C3.00581 13.0235 2.57684 11.3076 3.47767 10.1539C3.48555 10.1438 3.4935 10.1338 3.50152 10.1239L3.7819 9.28271L4.52384 6.56145C4.76092 5.6898 4.93316 5.0565 5.30009 4.56242C5.66381 4.07266 6.15802 3.69516 6.72621 3.4731C7.20175 3.28724 7.73447 3.25586 8.41799 3.25089ZM8.41951 4.75231C7.75763 4.759 7.49204 4.78427 7.27224 4.87018C6.96629 4.98976 6.70018 5.19303 6.50433 5.45674C6.32822 5.69388 6.22488 6.0252 5.93398 7.09206L5.36442 9.18091C6.38451 9.00012 7.77753 9.00012 9.68462 9.00012H14.3153C16.2224 9.00012 17.6155 9.00012 18.6356 9.18092L18.066 7.09206C17.7751 6.0252 17.6718 5.69388 17.4957 5.45674C17.2998 5.19303 17.0337 4.98976 16.7278 4.87018C16.508 4.78427 16.2424 4.759 15.5805 4.75231C15.2992 5.3423 14.6972 5.75 14 5.75H10C9.30281 5.75 8.70084 5.3423 8.41951 4.75231Z" fill="#000000"></path> </g></svg>
-                        </a>
-                </div>  
-                <!-- FOR ICONS USER + CART(Mobile) END -->
+#### HomePage
 
-                <!-- ROW FOR MENUS -->
-                <div class="row  nav-2 align-items-center text-center">
-                    <div class="col d-flex align-items-center justify-content-center">
-                        <ul class="nav gap-1 gap-md-4 pt-3 justify-content-center flex-wrap">
-                            <li class="nav-item">
-                                <a class="nav-link nav-menu-item" aria-current="page" href="#home-sect">Home</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link nav-menu-item" href="#featured-sect">Featured</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link nav-menu-item" href="#menu-sect">Menu</a>
-                            </li>
-                            <li class="nav-item d-none d-sm-block">
-                                <a class="nav-link nav-menu-item" href="#about-sect">About Ngopi.</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+![HomePage](/md-asset/Ngopi-HomePage.png)
 
+<!-- Homepage -->
+<p>In this Home Page User Can <strong>View Their Carts, make an Order, View History, Tracking Their Orders, Login, Logout.</strong></p>
+
+<br>
+
+#### 1st Case: User Wants Order
+<p>To Order User Doesn't has to create an account or logged in but there is something that user Can't do if user not logged in or registered User Can't View Their History Of Their Orders.</p>
+
+**User Select Their Desired Items:**
+![user select item](/md-asset/user-select-item.png)
+
+<p>User Can Add How Much qty They Want With Button Control + for Add More item and - For delete of the previous item</p>
+
+<p style="font-style:italic;"><strong>Snippet Code For Control Quantity and Send It to Cart:</strong></p>
+<p style="font-style:italic;">ProductCard.jsx</p>
+
+```jsx
+    function ProductCard({ product }) {
+        const {cart, addToCart, removeFromCart} = userCartStore();
+        const productInCart = cart.find(item => item._id === product._id);
+        const quantityInCart = productInCart ? productInCart.quantity : 0;
+        // Add To Cart
+        const handleAddToCart = () => {
+            if(quantityInCart === 0) {
+                toast.success(`${product.name} Added To Cart`, {
+                    style: {
+                        fontFamily: 'Plus Jakarta Sans, sans-serif',
+                        fontSize: '16px',
+                        borderRadius: '5px',
+                        background: '#212529',
+                        color: '#fff',
+                        iconTheme: {
+                            primary: '#fff',
+                            secondary: '#212529'
+                        }
+                    },
+                });
+            }
+            addToCart(product)
+        };
+        // Remove From Cart
+        const handleRemoveFromCart = () => {
+            if(quantityInCart === 1) {
+                toast.error(`"${product.name}" Removed From Cart`, {
+                    style: {
+                        fontFamily: 'Plus Jakarta Sans, sans-serif',
+                        fontSize: '16px',
+                        borderRadius: '5px',
+                        background: '#212529',
+                        color: '#fff',
+                        iconTheme: {
+                            primary: '#fff',
+                            secondary: '#212529'
+                        }
+                    },
+                });
+            }
+            removeFromCart(product)
+        }
+
+        return(
+            <div className={`d-flex align-items-center gap-1 gap-sm-2 ${styles.quantityControls}`}>
+                <button className="btn btn-danger btn-sm" onClick={handleRemoveFromCart}>-</button>
+                <span className="fw-bold">{quantityInCart}</span>
+                <button className="btn btn-dark btn-sm" onClick={handleAddToCart}>+</button>
             </div>
-        </nav>
-        <!-- NAVBAR-END -->
+        )
+    }
 ```
-Inside of The Navbar There Are two Main navbar the **.nav-1** and **.nav-2**.
+<br>
 
-**- .nav-1**
-inside this nav-1 inlcudes Brand Name, Search Bar, Icon User and Cart
-```html
-  <!-- ROW FOR BRAND, SEARCH, USER REQ -->
-                <div class="row nav-1 align-items-center">
-                    <!-- Brand -->
-                    <div class="col-md-4 brand-container d-flex justify-content-center justify-content-md-start align-items-center text-center">
-                        <h1 class="ms-0 ms-md-5" style="font-family: Plus Jakarta Sans, sans-serif;">Ngopi.</h1>
+<p style="font-style:italic;">userCartStore.js</p>
+
+```javascript
+import { create } from "zustand";
+
+const getInitialCart = () => {
+    const cart = localStorage.getItem('cart');
+    return cart ? JSON.parse(cart) : [];
+};
+
+export const userCartStore = create((set) => ({
+    cart: getInitialCart(),
+
+    addToCart: (product) => {
+        set((state) => {
+            const existingProduct =  state.cart.find((item) => item._id === product._id);
+            let updatedCart
+
+            if(existingProduct) {
+                updatedCart = state.cart.map((item)=> item._id === product._id ? {...item, quantity: (item.quantity || 1) + 1} : item);
+            } else {
+                updatedCart = [...state.cart, {...product, quantity : 1}];
+            }
+            localStorage.setItem('cart', JSON.stringify(updatedCart));
+            return { cart : updatedCart}
+        });
+    },
+
+    removeFromCart: (product) => {
+        set((state) => {
+            const existingProduct = state.cart.find((item) => item._id === product._id);
+            let updatedCart;
+
+            if(!existingProduct) { //jika memang cart sudah kosong
+                return state;
+            }
+
+            if(existingProduct.quantity === 1) {
+                updatedCart =  state.cart.filter((item) => item._id !== product._id);
+            } else {
+                updatedCart = state.cart.map((item) => item._id === product._id ? {...item, quantity: item.quantity - 1 }: item)
+            }
+            localStorage.setItem('cart', JSON.stringify(updatedCart));
+            return { cart: updatedCart};
+        });
+    },
+}));
+
+```
+
+<br>
+
+**User View Their Selected Items in Cart:**
+![cart](/md-asset/cart.png)
+
+<p>User Can View and also can control their items, also can checkout their items when checkout clicked it will continue to the next page that is Checkout Page</p>
+
+<p style="font-style:italic;"><strong>Snippet Code For View Cart Includes Cart.jsx And userCartStore.js:</strong></p>
+
+<p style="font-style:italic;">Cart.jsx</p>
+
+```jsx
+import React from "react";
+import { Link, useLocation } from "react-router-dom";
+import { userCartStore } from "../stores/userCartStore.js";
+import styles from "./CartPage.module.css";
+
+
+const TrashIcon = () => (
+    <svg width="21px" height="21px" viewBox="0 0 24.00 24.00" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ff0000"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M10 11V17" stroke="#474747" strokeWidth="1.7759999999999998" strokeLinecap="round" strokeLinejoin="round"></path> <path d="M14 11V17" stroke="#474747" strokeWidth="1.7759999999999998" strokeLinecap="round" strokeLinejoin="round"></path> <path d="M4 7H20" stroke="#474747" strokeWidth="1.7759999999999998" strokeLinecap="round" strokeLinejoin="round"></path> <path d="M6 7H12H18V18C18 19.6569 16.6569 21 15 21H9C7.34315 21 6 19.6569 6 18V7Z" stroke="#474747" strokeWidth="1.7759999999999998" strokeLinecap="round" strokeLinejoin="round"></path> <path d="M9 5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5V7H9V5Z" stroke="#474747" strokeWidth="1.7759999999999998" strokeLinecap="round" strokeLinejoin="round"></path> </g></svg>
+);
+
+export const OrderSummary = ({subtotal, totalFinall, taxCount, taxRate, showBackLink, onOrder, isLoading}) => {
+    const location = useLocation();
+    const isOnCartPage = location.pathname === '/cart';
+
+    const ActionButton = () => {
+        if (isOnCartPage) {
+            return (
+                <Link to='/checkout' className="d-grid text-decoration-none">
+                    <button type="button" className="btn btn-dark btn-lg">Checkout</button>
+                </Link>
+            );
+        } else {
+            return (
+                <div className="d-grid">
+                    <button 
+                        type="button" 
+                        className="btn btn-dark btn-lg" 
+                        onClick={onOrder} 
+                        disabled={isLoading}
+                    >
+                        {isLoading ? 'Processing...' : 'Order'}
+                    </button>
+                </div>
+            );
+        }
+    };
+
+    // --- Tampilan Mobile ---
+    if (showBackLink) {
+        return (
+            <div className="card shadow-sm border-0 p-3">
+                <div className="card-body p-3">
+                    <div className="mb-2">
+                        <div className="d-flex justify-content-between">
+                            <small className="text-muted">Subtotal</small>
+                            <small>Rp{new Intl.NumberFormat('id-ID').format(subtotal)}</small>
+                        </div>
+                        <div className="d-flex justify-content-between">
+                            <small className="text-muted">PPN ({taxRate}%)</small>
+                            <small>Rp{new Intl.NumberFormat('id-ID').format(taxCount)}</small>
+                        </div>
                     </div>
+                    <hr className="my-2" />
                     
-                    
-                    <!-- Search Bar -->
-                    <div class="col-md-4 search-container">
-                        <form class="position-relative" role="search">
-                            <input type="search" class="form-control me-2" placeholder="Ngopi apa?" aria-label="Search">
-                            <button class="btn position-absolute end-0 top-50 translate-middle-y me-2 p-0 border-0 bg-transparent" type="submit">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                                    <path d="M11.742 10.344a5.5 5.5 0 1 1 .707-.707l3.646 3.646a1 1 0 0 1-1.414 1.414l-3.646-3.646zM12.5 6a4.5 4.5 0 1 0-9 0 4.5 4.5 0 0 0 9 0z"/>
-                                </svg>
-                            </button>
-                        </form>
-                    </div>
-                    
-                    <!-- User Account and Cart -->
-                    <div class="col-6 col-md-4 d-flex userReq-container d-flex justify-content-end align-items-center gap-3">
-                        <!-- Account User and Cart/Coffee Icon only visible on lg display -->
-                        <div class="d-none d-md-flex gap-3 me-0 me-md-5">
-                            <!-- User -->
-                            <a href="#">
-                                <svg width="24px" height="24px" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M8 7C9.65685 7 11 5.65685 11 4C11 2.34315 9.65685 1 8 1C6.34315 1 5 2.34315 5 4C5 5.65685 6.34315 7 8 7Z" fill="#000000"></path> <path d="M14 12C14 10.3431 12.6569 9 11 9H5C3.34315 9 2 10.3431 2 12V15H14V12Z" fill="#000000"></path> </g></svg>
-                            </a>
-                            
-                            <!-- Cart/Coffee Icon -->
-                            <a href="#">
-                                <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill-rule="evenodd" clip-rule="evenodd" d="M8.41799 3.25089C8.69867 2.65917 9.30155 2.25 10 2.25H14C14.6984 2.25 15.3013 2.65917 15.582 3.25089C16.2655 3.25586 16.7983 3.28724 17.2738 3.47309C17.842 3.69516 18.3362 4.07266 18.6999 4.56242C19.0668 5.0565 19.2391 5.68979 19.4762 6.56144L20.2181 9.28272L20.4985 10.124C20.5065 10.1339 20.5144 10.1438 20.5222 10.1539C21.4231 11.3076 20.9941 13.0235 20.1362 16.4553C19.5905 18.638 19.3176 19.7293 18.5039 20.3647C17.6901 21.0001 16.5652 21.0001 14.3153 21.0001H9.68462C7.43476 21.0001 6.30983 21.0001 5.49605 20.3647C4.68227 19.7293 4.40943 18.638 3.86376 16.4553C3.00581 13.0235 2.57684 11.3076 3.47767 10.1539C3.48555 10.1438 3.4935 10.1338 3.50152 10.1239L3.7819 9.28271L4.52384 6.56145C4.76092 5.6898 4.93316 5.0565 5.30009 4.56242C5.66381 4.07266 6.15802 3.69516 6.72621 3.4731C7.20175 3.28724 7.73447 3.25586 8.41799 3.25089ZM8.41951 4.75231C7.75763 4.759 7.49204 4.78427 7.27224 4.87018C6.96629 4.98976 6.70018 5.19303 6.50433 5.45674C6.32822 5.69388 6.22488 6.0252 5.93398 7.09206L5.36442 9.18091C6.38451 9.00012 7.77753 9.00012 9.68462 9.00012H14.3153C16.2224 9.00012 17.6155 9.00012 18.6356 9.18092L18.066 7.09206C17.7751 6.0252 17.6718 5.69388 17.4957 5.45674C17.2998 5.19303 17.0337 4.98976 16.7278 4.87018C16.508 4.78427 16.2424 4.759 15.5805 4.75231C15.2992 5.3423 14.6972 5.75 14 5.75H10C9.30281 5.75 8.70084 5.3423 8.41951 4.75231Z" fill="#000000"></path> </g></svg>
-                            </a>
+                    <div className="d-flex justify-content-between align-items-center">
+                        <div className="text-start">
+                            <small className="text-muted d-block">Total Purchase</small>
+                            <p className="fw-bold h5 mb-0">Rp{new Intl.NumberFormat('id-ID').format(totalFinall)}</p>
+                        </div>
+                        <div className="flex-grow-1 ms-3">
+                            <ActionButton />
                         </div>
                     </div>
                 </div>
-                <!-- ROW FOR BRAND, SEARCH, USER REQ END -->
-
-                <!-- FOR ICONS USER IN THE LEFT TOP(Mobile) -->
-                <div class="d-md-none position-absolute top-0 start-0 py-2 px-3">   
-                    <a href="#">
-                        <svg width="20px" height="20px" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M8 7C9.65685 7 11 5.65685 11 4C11 2.34315 9.65685 1 8 1C6.34315 1 5 2.34315 5 4C5 5.65685 6.34315 7 8 7Z" fill="#000000"></path> <path d="M14 12C14 10.3431 12.6569 9 11 9H5C3.34315 9 2 10.3431 2 12V15H14V12Z" fill="#000000"></path> </g></svg>
-                    </a>
-                </div>                
-                <!-- FOR ICONS CART IN THE RIGHT TOP(Mobile) -->
-                <div class="d-md-none position-absolute top-0 end-0 py-2 px-3"> 
-                        <a href="#">
-                            <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill-rule="evenodd" clip-rule="evenodd" d="M8.41799 3.25089C8.69867 2.65917 9.30155 2.25 10 2.25H14C14.6984 2.25 15.3013 2.65917 15.582 3.25089C16.2655 3.25586 16.7983 3.28724 17.2738 3.47309C17.842 3.69516 18.3362 4.07266 18.6999 4.56242C19.0668 5.0565 19.2391 5.68979 19.4762 6.56144L20.2181 9.28272L20.4985 10.124C20.5065 10.1339 20.5144 10.1438 20.5222 10.1539C21.4231 11.3076 20.9941 13.0235 20.1362 16.4553C19.5905 18.638 19.3176 19.7293 18.5039 20.3647C17.6901 21.0001 16.5652 21.0001 14.3153 21.0001H9.68462C7.43476 21.0001 6.30983 21.0001 5.49605 20.3647C4.68227 19.7293 4.40943 18.638 3.86376 16.4553C3.00581 13.0235 2.57684 11.3076 3.47767 10.1539C3.48555 10.1438 3.4935 10.1338 3.50152 10.1239L3.7819 9.28271L4.52384 6.56145C4.76092 5.6898 4.93316 5.0565 5.30009 4.56242C5.66381 4.07266 6.15802 3.69516 6.72621 3.4731C7.20175 3.28724 7.73447 3.25586 8.41799 3.25089ZM8.41951 4.75231C7.75763 4.759 7.49204 4.78427 7.27224 4.87018C6.96629 4.98976 6.70018 5.19303 6.50433 5.45674C6.32822 5.69388 6.22488 6.0252 5.93398 7.09206L5.36442 9.18091C6.38451 9.00012 7.77753 9.00012 9.68462 9.00012H14.3153C16.2224 9.00012 17.6155 9.00012 18.6356 9.18092L18.066 7.09206C17.7751 6.0252 17.6718 5.69388 17.4957 5.45674C17.2998 5.19303 17.0337 4.98976 16.7278 4.87018C16.508 4.78427 16.2424 4.759 15.5805 4.75231C15.2992 5.3423 14.6972 5.75 14 5.75H10C9.30281 5.75 8.70084 5.3423 8.41951 4.75231Z" fill="#000000"></path> </g></svg>
-                        </a>
-                </div>  
-                <!-- FOR ICONS USER + CART(Mobile) END -->
-```
-logo icon on the left is Brand and in the middle is search bar and on the right is user icon and cart, in responsive design when the dimension is small enough the Brand logo icon will move to the center and user icon will be on the left while cart icon will be on the right.
-
-**- .nav-2**
-```html
-   <!-- ROW FOR MENUS -->
-                <div class="row  nav-2 align-items-center text-center">
-                    <div class="col d-flex align-items-center justify-content-center">
-                        <ul class="nav gap-1 gap-md-4 pt-3 justify-content-center flex-wrap">
-                            <li class="nav-item">
-                                <a class="nav-link nav-menu-item" aria-current="page" href="#home-sect">Home</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link nav-menu-item" href="#featured-sect">Featured</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link nav-menu-item" href="#menu-sect">Menu</a>
-                            </li>
-                            <li class="nav-item d-none d-sm-block">
-                                <a class="nav-link nav-menu-item" href="#about-sect">About Ngopi.</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
             </div>
-        </nav>
-        <!-- NAVBAR-END -->
-```
-Inside of .nav-2 there are menus wrapped by UL and LI in HTML
-there are Home, Featured, Menu and About Ngopi. they are centered align is responsive design if the dimension small enough About Ngopi. .nav-item will be removed knowing that it's not the important.
-
----
-
-#### - Main
-
-inside of this main wrapped by a main container called .container-main with id #scroll-container to sync scroll to active menu in the navbar
-
-```html
-<div id="scroll-container" class="container-main" data-bs-spy="scroll" data-bs-target="#navbar-example" data-bs-offset="100" tabindex="0">
-    <section id="home-sect"></section>
-    <section id="featured-sect"></section>
-    <section id="menu-sect"></section>
-    <section id="about-sect"></section>
-</div>
-<footer></footer>
-
-```
-inside of that container there are 4 main section are Home, Featured, Menu, About
-
-**- Section #home-sect**
-```html
- <!-- home-sect -->
-            <section id="home-sect" class="py-1">
-                <div class="row home-section">
-                    
-                    <!-- Welcoming User -->
-                    <div class="col-12 mb-4" style="font-family: Plus Jakarta Sans, sans-serif;">
-                        <h1 class="text-center mt-5">Welcome to Ngopi.</h1>
-                        <p class="text-center">Your favorite coffee and toast shop</p>
-                    </div>
+        )
+    }
     
-                    <!-- IMAGE-HOME and DESCRIPTION-PROFILE -->
-                    <div class="col-12 d-flex flex-md-row flex-column align-items-center justify-content-center mt-5 gap-5">
-                        <!-- IMAGE-HOME -->
-                        <div class="col-4 image-home">
-                                <img src="./images/coffee.png" class="img-fluid" alt="Coffee">
-                        </div>
+    // --- Tampilan Desktop ---
+    return (
+        <div className="card shadow-sm border-0">
+            <div className="card-body">
+                <h4 className="card-title mb-4">Order Summary</h4>
+                <div className="d-flex justify-content-between mb-2">
+                    <p className="text-muted">Subtotal</p>
+                    <p className="fw-bold">Rp.{new Intl.NumberFormat('id-ID').format(subtotal)}</p>
+                </div>
+                {/* --- TAMBAHKAN RINCIAN PAJAK DI SINI (UNTUK DESKTOP) --- */}
+                <div className="d-flex justify-content-between mb-2">
+                    <p className="text-muted">PPN ({taxRate}%)</p>
+                    <p className="fw-bold">Rp.{new Intl.NumberFormat('id-ID').format(taxCount)}</p>
+                </div>
+                {/* ---------------------------------------------------- */}
+                <hr />
+                <div className="d-flex justify-content-between fw-bold mt-3">
+                    <p>Total</p>
+                    <p>Rp.{new Intl.NumberFormat('id-ID').format(totalFinall)}</p>
+                </div>
+                <div className="mt-4">
+                    <ActionButton />
+                </div>
+            </div>
+        </div>
+    )
+}
     
-                        <!-- DESCRIPTION-PROFILE -->    
-                        <div class="col-md-4 col-10 d-flex align-items-center justify-content-center text-md-start text-center mt-4 mt-md-0" style="font-family: Plus Jakarta Sans, sans-serif;">
-                            <div class="description-home">
-                                <h2 class="card-title text-md-start text-center mb-3">Coffee at Ngopi.</h2>
-                                <p class="card-text">Ngopi invites you to experience the authentic taste of Central Java with our wide range of local coffee blends. Grown in the fertile volcanic soil of our homeland, each blend captures the distinct terroir of the region, offering a unique sensory journey. From the robust kick of our Robusta to the nuanced sweetness of our Arabica, we meticulously select and expertly roast the finest beans to unlock their full aromatic potential. Discover coffee that is rich in flavor, steeped in tradition, and brimming with the spirit of Purwokerto.</p>
+
+
+function CartPage() {
+    const {cart, addToCart, removeFromCart, clearItemFromCart } = userCartStore();
+    let taxRate = 10;
+    const subtotal = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+    const taxCount = subtotal * (taxRate/100);
+    const totalFinall = subtotal + taxCount
+
+    const imageUrl = `${import.meta.env.VITE_API_BASE_URL}`
+    return  (
+        <div className="container py-4" style={{fontFamily: 'Plus Jakarta Sans, sans-serif'}}>
+            <div className="row">
+                
+                {/* CART */}
+                <div className={`col-lg-8 mb-4  ${styles.cartListMobile}`}>
+                    <h4 className="mb-1 mt-lg-4">Your Cart ({cart.length})</h4>
+                    {/* Cek Apakah Cart Kosong? */}
+                    {cart.length === 0 ? (
+                            <div className="alert alert-secondary mt-3">
+                                Your Cart is Empty <Link to='/' className="text-dark">Let's Ngopi!</Link>
                             </div>
-                        </div>
-                    </div>     
-                </div>
-            </section>
-            <!-- Home-Sect END -->
-```
-in Home section there are short welcoming user to the Ngopi. and text the short profile of the company on the left of that text there is a picture of the best signature of Ngopi's in responsive design when the dimension smal enough text will be in the center as well as the picture.
-
-**- Featured #featured-sect**
-```html
- <!-- Featured-SECT -->
-            <section id="featured-sect" class="py-1">
-
-                <div class="row featured-section mt-5">
-                    <div class="col-12 mb-4">
-                        <h2 class="text-center" style="font-family: Plus Jakarta Sans, sans-serif;">Featured</h2>
-                        <p class="text-center" style="font-family: Plus Jakarta Sans, sans-serif;">Our best-selling coffee and toast</p>
-                    </div>
-    
-                    <!-- Featured-Card -->
-                    <div class="card-container-feature">
-                        <!-- FEATURED 1 -->
-                        <div class="featured-card">
-                            <div class="card">
-                                <img src="./images/kopi-toast.webp" class="card-img-top" alt="">
-                                <div class="card-body">
-                                    <h5 class="card-title">Combo Toast</h5>
-                                    <div class="price-cartAdd d-flex justify-content-between align-items-center">
-                                        <p class="card-text price fw-bold">$30</p>
-                                        <a href="#" class="btn btn-dark">+</a>
+                    ): (
+                        cart.map((item)=> (
+                            // CART ITEMS START ---------
+                            <div className="card mb-2 border-0 shadow-sm">
+                                <div className="card-body">
+                                    <div className="d-flex align-items-center">
+                                        {/* GAMBAR ITEM */}
+                                        <img src={imageUrl + item.image} className="img-fluid rounded-3" alt="Items Pict" style={{ width: '75px' }} />
+        
+                                        {/* NAMA ITEM DAN HARGA */}
+                                        <div className="ms-3 flex-grow-1">
+                                            <h5 className="mb-1 fs-6 fs-md-5">{item.name}</h5>
+                                            <p className="small mb-0 text-muted fw-semibold fs-7">Rp{new Intl.NumberFormat('id-ID').format(item.price)}</p>
+                                        </div>
+        
+                                        {/* CONTROL QTY */}
+                                        <div className="d-flex align-items-center">
+                                            <button className="btn btn-danger btn-sm p-1 p-md-2" onClick={() => removeFromCart(item)} type="button">-</button>
+                                            <input type="text" className="form-control text-center mx-2 p-1 p-md-2" value={item.quantity} readOnly style={{ width: '40px' }} />
+                                            <button className="btn btn-dark btn-sm p-1 p-md-2" onClick={()=> addToCart(item)} type="button">+</button>
+                                        </div>
+        
+                                        {/* DELETE ITEM */}
+                                        <button className="btn btn-sm ms-2 ms-md-3 p-1" onClick={()=> clearItemFromCart(item)}><TrashIcon /></button>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <!-- SO On to The Nex Featured Item -->
+                            // CART ITEMS END ------
+                        ))
+                    )}
+                    <div>
+                        <Link to="/" className="text-dark text-decoration-none mt-4 d-inline-block">
+                            &larr; Back To Home
+                        </Link>
                     </div>
                 </div>
-            </section>
-```
-in Featured section there are cards that filled with best menus the component inside of that card includes image, menu's name, price, and the cart add button, in responsive design when the dimension small enough the cards will be on top each other.
-
-**- Menu Section #menu-sect**
-```html
- <!-- MENUS SECT -->
-            <section id="menu-sect" class="py-1">
-
-                <div class="row menu-section mt-5 pt-4">
-                    <div class="col-12 mb-4">
-                        <h2 class="text-center" style="font-family: Plus Jakarta Sans, sans-serif;">Menu</h2>
-                        <p class="text-center" style="font-family: Plus Jakarta Sans, sans-serif;">All of our menus</p>
-                    </div>
-                </div>
-    
-                <!-- MENU CARD -->
-                <div class="card-container-menu">
-                    <!-- MENU 1 -->
-                    <div class="menu-card">
-                        <div class="card">
-                            <img src="./images/kopi-toast.webp" class="card-img-top" alt="">
-                            <div class="card-body">
-                                <h5 class="card-title">Combo Toast</h5>
-                                <div class="price-cartAdd d-flex justify-content-between align-items-center">
-                                    <p class="card-text price fw-bold">$30</p>
-                                    <a href="#" class="btn btn-dark">+</a>
-                                </div>
+                {cart.length > 0 && (
+                    <>
+                        {/* SUMMARY ONLY IN DESKTOP*/}
+                        <div className="col-lg-4 d-none d-lg-block mt-4">
+                            <div className="position-sticky" style={{ top: '120px' }}>
+                                <OrderSummary subtotal={subtotal} totalFinall={totalFinall} taxCount={taxCount} taxRate={taxRate} />
                             </div>
                         </div>
-                    </div>
-                </div>
-            </section>
-```
-inside of this section same as featured but this one is all of the menus.
-
-**- About Section #about-sect**
-```html
-   <!-- About Ngpi. -->
-            <section id="about-sect" class="py-1">
-
-                <div class="row about-section mt-5 pt-4 mb-5" style="font-family: Plus Jakarta Sans, sans-serif;">
-                    <!-- TAGLINE  -->
-                    <div class="col-12 about-headline text-center justify-content-center align-items-center mt-5 pt-5">
-                        <h1>About Ngopi.</h1>
-                        <p>Learn of our journey.</p>
-                    </div>
-    
-                    <!-- ABOUT CONTENT -->
-                    <div class="col-12 about-container d-flex flex-md-row flex-column justify-content-center align-items-center mt-3">
-                        <!-- IMG -->
-                        <div class="col-4">
-                            <img src="images/ngopi-icon.png" class="img-fluid" alt="Ngopi.">
-                        </div>
-    
-                        <!-- TEXT -->
-                        <div class="col-md-4 col-10 d-flex align-items-center justify-content-center text-md-start text-center mt-4 mt-md-0">
-                            <div class="about-text">
-                                <h2 class="mb-3">Ngopi.</h2>
-                                <p>Ngopi Caffee is more than just a coffee shop; it's a community hub, a place where the rich aroma of freshly brewed coffee blends with the warmth of good company and conversation. Rooted in the Indonesian tradition of "Ngopi" - a relaxed invitation to have coffee and connect - we aim to create a welcoming and vibrant space for everyone to enjoy their daily dose of delight.</p>
-                                <p>Inspired by the lively "warungs" and "kedais" of Indonesia, where coffee breaks are an integral part of daily life and social interaction, Ngopi Caffee was established in 2026 in the heart of Purwokerto. Our founders, Gesa, envisioned a modern interpretation of this tradition, offering high-quality coffee and a comfortable ambiance that encourages connection and relaxation</p>
+                        {/* ONLY IN MOBILE */}
+                        <div className="d-lg-none">
+                            <div className="card shadow-lg border-0 position-fixed bottom-0 start-0 end-0" style={{zIndex: 1030}}>
+                                <OrderSummary subtotal={subtotal} totalFinall={totalFinall} taxCount={taxCount} taxRate={taxRate} showBackLink={true} />
                             </div>
                         </div>
-                    </div>
-    
-                    <!-- MOTTO -->
-                    <div class="col-12 about-motto text-center align-items-center justify-content-center mt-5">
-                        <h2>"Let's Ngopi."</h2>
-                        <p class="fst-italic">~ Est. 2026 ~</p>
-                    </div>
-                </div>
-            </section>
-```
-in this section using row from bootstrap atribute and inside of that row there are 3 col, col for tagline is on the center tagline is About, and col for main about content inside of that there are two col and they're display flex on left is the image icon logo and on the right is about text the journey of Ngopi, and the last col is motto.
-
-**- Footer**
-```html
-  <!-- FOOTER -->
-        <footer class="bg-light text-center text-lg-start mt-5" style=" font-family: Plus Jakarta Sans, sans-serif; height: auto; box-shadow:  0px -0.5px 5px rgba(0, 0, 0, 0.1);">
-
-            <div class="text-center footer-container align-items-center justify-content-center pt-4 py-4">
-
-                <div class="row d-flex justify-content-center align-items-center">
-                    <div class="col align-items-center justify-content-center">
-                        <a href="https://github.com/Retiortuk" class="text-decoration-none" target="_blank">
-                            <svg width="24px" height="24px" viewBox="0 0 48 48" id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><defs><style>.cls-1{fill:none;stroke:#000000;stroke-linecap:round;stroke-linejoin:round;fill-rule:evenodd;}</style></defs><path class="cls-1" d="M24,2.5a21.5,21.5,0,0,0-6.8,41.9c1.08.2,1.47-.46,1.47-1s0-1.86,0-3.65c-6,1.3-7.24-2.88-7.24-2.88A5.7,5.7,0,0,0,9,33.68c-1.95-1.33.15-1.31.15-1.31a4.52,4.52,0,0,1,3.29,2.22c1.92,3.29,5,2.34,6.26,1.79a4.61,4.61,0,0,1,1.37-2.88c-4.78-.54-9.8-2.38-9.8-10.62a8.29,8.29,0,0,1,2.22-5.77,7.68,7.68,0,0,1,.21-5.69s1.8-.58,5.91,2.2a20.46,20.46,0,0,1,10.76,0c4.11-2.78,5.91-2.2,5.91-2.2a7.74,7.74,0,0,1,.21,5.69,8.28,8.28,0,0,1,2.21,5.77c0,8.26-5,10.07-9.81,10.61a5.12,5.12,0,0,1,1.46,4c0,2.87,0,5.19,0,5.9s.39,1.24,1.48,1A21.5,21.5,0,0,0,24,2.5"></path></g></svg>
-                            <p class="fst-italic retiortuk">Web Created By: Retiortuk</p>
-                        </a>
-                    </div>
-                </div>
-                <p>© 2026 Ngopi. All rights reserved.</p>
-                <div class="d-sm-flex d-none footer-credits justify-content-center align-items-center gap-3">
-                        <p>All Product Images By Janji Jiwa Kopi</p>
-                        <p>All Illustration Images Available in Freepik</p>
-                </div>
+                    </>
+                )}
             </div>
+            
+        </div>
+    )
+}
 
-        </footer>
+export default CartPage;
 ```
-this is foooter and inside of this footer is copyright and website created by Retiortuk.
+<br>
 
----
+<p style="font-style:italic;">userCartStore.js</p>
+
+```javascript
+
+import { create } from "zustand";
+
+const getInitialCart = () => {
+    const cart = localStorage.getItem('cart');
+    return cart ? JSON.parse(cart) : [];
+};
+
+export const userCartStore = create((set) => ({
+    cart: getInitialCart(),
+
+    addToCart: (product) => {
+        set((state) => {
+            const existingProduct =  state.cart.find((item) => item._id === product._id);
+            let updatedCart
+
+            if(existingProduct) {
+                updatedCart = state.cart.map((item)=> item._id === product._id ? {...item, quantity: (item.quantity || 1) + 1} : item);
+            } else {
+                updatedCart = [...state.cart, {...product, quantity : 1}];
+            }
+            localStorage.setItem('cart', JSON.stringify(updatedCart));
+            return { cart : updatedCart}
+        });
+    },
+
+    removeFromCart: (product) => {
+        set((state) => {
+            const existingProduct = state.cart.find((item) => item._id === product._id);
+            let updatedCart;
+
+            if(!existingProduct) { //jika memang cart sudah kosong
+                return state;
+            }
+
+            if(existingProduct.quantity === 1) {
+                updatedCart =  state.cart.filter((item) => item._id !== product._id);
+            } else {
+                updatedCart = state.cart.map((item) => item._id === product._id ? {...item, quantity: item.quantity - 1 }: item)
+            }
+            localStorage.setItem('cart', JSON.stringify(updatedCart));
+            return { cart: updatedCart};
+        });
+    },
+    
+    clearItemFromCart: (product) => {
+        set((state)=> {
+            const updatedCart =  state.cart.filter((item) => item._id !== product._id);
+            localStorage.setItem('cart', JSON.stringify(updatedCart));
+            return {cart: updatedCart}
+        })
+    },
+
+    clearCart: () => {
+        set(()=> {
+            localStorage.removeItem('cart');
+            return {cart: []};
+        })
+    }
+}));
+```
+<br>
+
+**User Checkout Their Items:**
+![cart](/md-asset/checkoutPage.png)
+
+<p>in This Page User Can Add Note For Admin/Kitchen also user capable to edit or delete notes before orders been sent to the kitchen/admin</p>
+
+![cart](/md-asset/addNote.png)
+
+
+<p style="font-style:italic;"><strong>Snippet Code For View Cart Includes Cart.jsx And userCartStore.js:</strong></p>
+
+<p style="font-style:italic;">Cart.jsx</p>
+
 
