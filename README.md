@@ -56,9 +56,11 @@
 
 * ***[1. Front-End Documentation](#front-end-documentation)***
 * ***[2. User/Developer Flow Documentation](#--userdeveloper-flow-documentation)***
-* ***[3. Using MidTrans Pay Simulator](#front-end-documentation)***
-* ***[4. Back-End Documentation](#front-end-documentation)***
-* ***[5. API Documentation](#front-end-documentation)***
+* ***[3. 1st Case User Wants to Order](#1st-case-user-wants-order)***
+* ***[4. 2nd Case User Wants to Track The Order](#2nd-case-user-wants-to-track-the-orders)***
+* ***[5. Using MidTrans Pay Simulator](#midtrans-payment-simulator)***
+* ***[6. Back-End Documentation](#front-end-documentation)***
+* ***[7. API Documentation](#front-end-documentation)***
 
 ---
 ## Front-End Documentation
@@ -284,12 +286,10 @@ export const OrderSummary = ({subtotal, totalFinall, taxCount, taxRate, showBack
                     <p className="text-muted">Subtotal</p>
                     <p className="fw-bold">Rp.{new Intl.NumberFormat('id-ID').format(subtotal)}</p>
                 </div>
-                {/* --- TAMBAHKAN RINCIAN PAJAK DI SINI (UNTUK DESKTOP) --- */}
                 <div className="d-flex justify-content-between mb-2">
                     <p className="text-muted">PPN ({taxRate}%)</p>
                     <p className="fw-bold">Rp.{new Intl.NumberFormat('id-ID').format(taxCount)}</p>
                 </div>
-                {/* ---------------------------------------------------- */}
                 <hr />
                 <div className="d-flex justify-content-between fw-bold mt-3">
                     <p>Total</p>
@@ -456,13 +456,275 @@ export const userCartStore = create((set) => ({
 **User Checkout Their Items:**
 ![cart](/md-asset/checkoutPage.png)
 
+**Add Note**
+
 <p>in This Page User Can Add Note For Admin/Kitchen also user capable to edit or delete notes before orders been sent to the kitchen/admin</p>
 
 ![cart](/md-asset/addNote.png)
 
+<br>
 
-<p style="font-style:italic;"><strong>Snippet Code For View Cart Includes Cart.jsx And userCartStore.js:</strong></p>
+**Fill Details And Are Required Nothing is Optional**
+<p>Also User Must Fill The Orders Detail Such As Orderer's Name And Their Phone Numbers it is required if it is not filled then user cannot Order the items/continue the orders</p>
 
-<p style="font-style:italic;">Cart.jsx</p>
+![cart](/md-asset/handler_required.png)
+
+<br>
+
+**Pickup Times**
+
+<p>User Must Pick The Available Pickup Times From "Now" To up 4 hours During Operational Store, "Now" Means User Already At The Store And The Orders will be processing immediately And Will Be Ready To Pickup Soon As Possible</p>
+
+![pickupTimes](/md-asset/pickup-time.png)
+
+<p style="font-style:italic;"><strong>Snippet Code For Pickup Times:</strong></p>
+
+<p style="font-style:italic;">timeHelper.js</p>
+
+```javascript
+export function generatePickupTimes() {
+    // Inisialisasi Waktu Sekarang (local)
+    const now =  new Date();
+    // Slot Waktu yang tersedia akan masuk kesini
+    const availableSlots = [];
+
+    // Start Open Toko
+    const startTime = new Date();
+    startTime.setHours(8, 30, 0, 0);
+
+    // Close Toko
+    const endTime = new Date();
+    endTime.setHours(21, 0, 0, 0);
+
+    // Check if now > endTime(Toko tutup)
+    if (now > endTime || now < startTime) {
+        return[{times: 'Our Store Closed', disabled: true}]
+    }
+
+    // Waktu Sekarang dalam range startTime - endTime
+    let currentSlotTime = new Date(startTime);
+
+    while (currentSlotTime <= endTime) {
+        if(currentSlotTime > now) {
+            const hours = String(currentSlotTime.getHours()).padStart(2, '0');
+            const minutes = String(currentSlotTime.getMinutes()).padStart(2, '0');
+            availableSlots.push({times: `${hours}:${minutes}`})
+        }
+        currentSlotTime.setMinutes(currentSlotTime.getMinutes() + 30);
+    }
+
+    // push ke array yang sebenarnya
+    const finalPickupTimes = [
+        {
+            times:'Now',
+            description: "By Choosing this means you're at the store, and ready to pickup when your order called"
+        },
+        ...availableSlots.slice(0,4)
+    ];
+    return finalPickupTimes;
+}
+```
+
+<p style="font-style:italic;">CheckOutPage.jsx</p>
+
+```jsx
+import { generatePickupTimes } from "../utils/timeHelper.js";
+
+function CheckOutPage() {
+    const pickupTimes = generatePickupTimes();
+    const initialPickupTimes = pickupTimes[0]?.disabled ? '' : pickupTimes[0]?.times || '';
+    const [selectedPickupTimes, setSelectedPickupTimes] = useState(initialPickupTimes);
+
+    return (
+        {/* PICKUP TIMES */}
+        <div className="card shadow-sm border-0 mt-4">
+            <div className="card-body">
+                <h5 className="card-title mb-4">Pickup Times</h5>
+                {pickupTimes.map((pickup) => (
+                    <div key={pickup.times} className="form-check mb-4">
+                        <input 
+                            className={`form-check-input ${radioStyles.formCheckInputDark}`}
+                            type="radio" 
+                            name="pickupTimes" 
+                            id={`pickup-${pickup.times}`}
+                            checked={selectedPickupTimes === pickup.times}
+                            onChange={() => setSelectedPickupTimes(pickup.times)}
+                            disabled={pickup.disabled}
+                        />
+                        <label className="form-check-label w-100" htmlFor={`pickup-${pickup.times}`}>
+                            <div>
+                                <span>{pickup.times}</span>
+                                {pickup.description && (
+                                    <small className="form-text text-muted d-block mt-1">{pickup.description}</small>
+                                )}
+                            </div>
+                        </label>
+                    </div>
+                ))}
+            </div>
+        </div>
+    )
+}
+```
+
+<br>
+<br>
+
+**Payment Methods**
+<p>There Are 2 Options To For Payment Method Cash And Online Payment First Cash, cash is user pay front in the cashier user can use other methods than cash in cashier, Online Payment is User Can Pay Online Using QRIS, Virtual Account, etc.., This System Used MidTrans As a Payment GateAway</p>
+
+<p>Payment Method: Cash</p>
+
+![payment](/md-asset/payment_cash.png)
+
+<p>Payment Method: Online Using MidTrans as a Payment Gateaway</p>
+
+![payment](/md-asset/payment_online.png)
+
+**When User Order And Choose Online Payment**
+<p>When Order Button Pressed Frontend Will Call Midtrans API In Our System <a href ="https://docs.midtrans.com/">Learn More About MidTrans Flow Here For Developer</a>, short story API Is Called From Frontend</p>
+
+<p style="font-style:italic;"><strong>Snippet Code For MidTrans API Being Called :</strong></p>
+
+<p style="font-style:italic;">CheckOutPage.jsx</p>
+
+```jsx
+function CheckOutPage() {
+     const handleMidtransOrder = async (orderData) => {
+            setIsLoading(true);
+            try {
+                const {data: responseData} = await apiClient.post('/orders/online', orderData); 
+                const midtransToken = responseData.midtransToken;
+                const createdOrder = responseData.order;
+    
+                    window.snap.pay(midtransToken, {
+                        onSuccess: function(result) {
+                            toast.success("Payment Successfully!")
+                            if(!isAuthenticated) {saveGuestOrderId(createdOrder._id)}
+                            clearCart();
+                            navigate('/orders');
+                        },
+                        onPending: function(result) {
+                            toast("Waiting For Your Payment");
+                            if(!isAuthenticated) {saveGuestOrderId(createdOrder._id)}
+                            clearCart();
+                            navigate(`/orders`);
+                        },
+                        onError: function(result) {
+                            toast.error("Payment Failed")
+                        },
+                        onClose: function() {
+                            toast.error("You Close The Payment Popup")
+                            if(isAuthenticated) {
+                                apiClient.put(`/orders/${createdOrder._id}/cancel`)
+                                apiClient.delete(`/orders/delete-order/${createdOrder._id}`)
+                            } else {
+                                apiClient.put(`/orders/${createdOrder._id}/guest-cancel`)
+                                apiClient.delete(`/orders/delete-order-guest/${createdOrder._id}`)
+                            }
+                        }
+                    });
+            } catch (error) {
+                console.error('Failed To Process The Order:', error);
+                const errorMessage = error.response?.data?.message || "Failed To Proccess Your Order!";
+                toast.error(errorMessage);
+            } finally {
+                setIsLoading(false)
+            }
+        };
+}
+```
+
+<p>Frontend MidTrans Does ask for MidTrans Token to Backend</p>
+
+<p style="font-style:italic;"><strong>Snippet Code For Backend Send Token to Frontend :</strong></p>
+
+<p style="font-style:italic;">orderController.js</p>
+
+```javascript
+const createMidtransOrder = asyncHandler(async(req, res)=> {
+     const {
+        orderItems,
+        customerDetails,
+        pickupDetails,
+        paymentMethod,
+        taxPrice,
+        totalPrice,
+    } = req.body;
+
+     const order = new Order({
+        user: req.user ? req.user._id : null,
+        orderItems: orderItems.map(item => ({
+            name: item.name,
+            quantity: item.quantity,
+            image: item.image,
+            price: item.price,
+            note: item.note,
+            product: item.product
+        })),
+        customerDetails,
+        pickupDetails,
+        paymentMethod,
+        taxPrice,
+        totalPrice,
+        status: 'Waiting For Payment'
+    });
+
+    const createOrder = await order.save();
+
+    // CREATE TOKEN
+    const midtransToken =  await snap.createTransactionToken(parameter);
+
+    req.io.emit('newOrder', createOrder);
+    res.status(201).json({
+        order: createOrder,
+        midtransToken: midtransToken
+    });
+});
+```
+<br>
+
+<p>When Token Successfully Received By Frontend Then It will pop up embed by MidTrans To Select Available Online Payment Methods</p>
+
+![online-midtrans](/md-asset/embed-midtrans.png)
+
+<br>
+<p>Just Quick Example Here User Choose <strong>QRIS</strong> as a Payment Method</p>
+
+![qris](/md-asset/qris.png)
+
+<p><strong>How To Pay It?</strong> currently you cannot scan the QRIS because My MidTrans still in Development SandBox, To Make it not in Development I have to submit the details the data of my business which the FNB Store is Not Ready yet. so to make it work You Have to use <a href="https://simulator.sandbox.midtrans.com/"> MidTrans Payment Simulator </a></p>
+
+<br>
+
+##### MidTrans Payment Simulator
+<p>Copy The Image Address Of Your QRIS's QR Visit <a href="https://simulator.sandbox.midtrans.com/">Midtrans Payment Simulator</a> Select Your Payment Method as Example Here is a QRIS and paste your QRIS image Address </p>
+
+![qris](/md-asset/midtransPaymentsim.png)
+
+<p>Click "Scan QR" and "Paid"</p>
+
+![payment-success](/md-asset/payment-success.png)
+
+<p>And That's It Payment successful and user Done</p>
+
+<br>
+<br>
+
+#### 2nd Case: User Wants To Track The Orders
+<p>Actually if user just order something and the payment is sucessfully it will navigate user to orders page to track the orders but if you are in the home page, click the user icon logo and select "Orders"</p>
+
+![users-Modal](/md-asset/users-modal.png)
+
+<br>
+
+**Orders Page**
+<p>in this page where users tracking their orders where status Orders are <strong>"Waiting To Be Confirmed"</strong> it means user orders has been successfully Post to the Admin but admin has not yet accept the order if Admin has not yet accept the order more than 35 Minutes the order automatically Being <strong>"Cancelled"</strong> and it wont show up in Orders Page it will move to History Page, if Admin Accept The Order then status will Changed From "Waiting To Be Confirmed" To <strong>"Preparing"</strong> Once The Preparing is Done and The Orders is Ready the status will changed from "Preparing" to <strong>"Ready To Pickup"</strong>, and if user picked up the orders admin will changed order status from "Ready To Pickup" to <strong>"Finished"</strong> also Finished Status won't show up in Orders Page it will be move to History Page. </p>
+
+![orders-page](/md-asset/orders-page.png)
+
+
+
+
 
 
