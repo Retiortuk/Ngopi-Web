@@ -58,9 +58,11 @@
 * ***[2. User/Developer Flow Documentation](#--userdeveloper-flow-documentation)***
 * ***[3. 1st Case User Wants to Order](#1st-case-user-wants-order)***
 * ***[4. 2nd Case User Wants to Track The Order](#2nd-case-user-wants-to-track-the-orders)***
-* ***[5. Using MidTrans Pay Simulator](#midtrans-payment-simulator)***
-* ***[6. Back-End Documentation](#front-end-documentation)***
-* ***[7. API Documentation](#front-end-documentation)***
+* ***[5. 3rd Case: Login/Register](#3rd-case-user-wants-to-login-or-create-account)***
+* ***[6. 4th Case User Wants to View History](#4th-case-user-wants-to-view-their-history)***
+* ***[6. Using MidTrans Pay Simulator](#midtrans-payment-simulator)***
+* ***[7. Back-End Documentation](#front-end-documentation)***
+* ***[8. API Documentation](#front-end-documentation)***
 
 ---
 ## Front-End Documentation
@@ -81,7 +83,7 @@
 
 <br>
 
-#### 1st Case: User Wants Order
+### 1st Case: User Wants Order
 <p>To Order User Doesn't has to create an account or logged in but there is something that user Can't do if user not logged in or registered User Can't View Their History Of Their Orders.</p>
 
 **User Select Their Desired Items:**
@@ -571,7 +573,7 @@ function CheckOutPage() {
 <br>
 
 **Payment Methods**
-<p>There Are 2 Options To For Payment Method Cash And Online Payment First Cash, cash is user pay front in the cashier user can use other methods than cash in cashier, Online Payment is User Can Pay Online Using QRIS, Virtual Account, etc.., This System Used MidTrans As a Payment GateAway</p>
+<p>There Are 2 Options For Payment Method, Cash And Online Payment, First Cash, cash is user pay in front the cashier user can choose other methods than cash in cashier, Online Payment is User Can Pay Online Using QRIS, Virtual Account, etc.., This System Used MidTrans As a Payment GateAway</p>
 
 <p>Payment Method: Cash</p>
 
@@ -582,7 +584,7 @@ function CheckOutPage() {
 ![payment](/md-asset/payment_online.png)
 
 **When User Order And Choose Online Payment**
-<p>When Order Button Pressed Frontend Will Call Midtrans API In Our System <a href ="https://docs.midtrans.com/">Learn More About MidTrans Flow Here For Developer</a>, short story API Is Called From Frontend</p>
+<p>When Order Button Pressed Frontend Will Call Midtrans API In Our System <a href ="https://docs.midtrans.com/">Learn More About MidTrans Flow Here For Developer</a></p>
 
 <p style="font-style:italic;"><strong>Snippet Code For MidTrans API Being Called :</strong></p>
 
@@ -698,7 +700,7 @@ const createMidtransOrder = asyncHandler(async(req, res)=> {
 <br>
 
 ##### MidTrans Payment Simulator
-<p>Copy The Image Address Of Your QRIS's QR Visit <a href="https://simulator.sandbox.midtrans.com/">Midtrans Payment Simulator</a> Select Your Payment Method as Example Here is a QRIS and paste your QRIS image Address </p>
+<p>Copy The Image Address Of Your QRIS's QR, Visit <a href="https://simulator.sandbox.midtrans.com/">Midtrans Payment Simulator</a> Select Your Payment Method as Example Here is a QRIS and paste your QRIS image Address </p>
 
 ![qris](/md-asset/midtransPaymentsim.png)
 
@@ -711,7 +713,7 @@ const createMidtransOrder = asyncHandler(async(req, res)=> {
 <br>
 <br>
 
-#### 2nd Case: User Wants To Track The Orders
+### 2nd Case: User Wants To Track The Orders
 <p>Actually if user just order something and the payment is sucessfully it will navigate user to orders page to track the orders but if you are in the home page, click the user icon logo and select "Orders"</p>
 
 ![users-Modal](/md-asset/users-modal.png)
@@ -723,6 +725,501 @@ const createMidtransOrder = asyncHandler(async(req, res)=> {
 
 ![orders-page](/md-asset/orders-page.png)
 
+<p style="font-style:italic;"><strong>Snippet Code For Get User Orders :</strong></p>
+
+<p style="font-style:italic;">OrdersPage.jsx</p>
+
+```jsx
+import React, { useEffect } from "react";
+import { useState } from "react";
+import OrderCard from "./OrderCard.jsx";
+import { Link } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext.jsx";
+import apiClient from "../api/axiosConfig.js";
+import OrderCardSkeleton from "../components/OrderCardSkeleton.jsx";
+
+
+function OrdersPage() {
+    const [orders, setOrders] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const {isAuthenticated, user} =  useAuth();
+    
+
+    useEffect(()=> {
+        const fetchOrders = async ()=> {
+            try {
+                let response;
+                if(isAuthenticated) {
+                    console.log('Taking Orders Data From Database...');
+                    response = await apiClient.get('/orders/myOrder');
+                    setOrders(response.data)
+                } else {
+                    const guestOrderIds = JSON.parse(localStorage.getItem('guestOrderIds')) || [];
+                    if(guestOrderIds.length > 0) {
+                        response = await apiClient.post('/orders/guest', { orderIds: guestOrderIds });
+                        setOrders(response.data);
+                    } else {
+                        setOrders([]);
+                    }
+                }
+            } catch (error) {
+                console.error("Failed To Fetch Orders Data:", error);
+                toast.error("Cannot Fetch Orders Data.");
+                setOrders([]); 
+            } finally {
+                setIsLoading(false);
+            }
+        }
+        fetchOrders();
+    },[isAuthenticated]);
+
+    const activeStatuses = ['Waiting To Be Confirmed', 'Waiting For Payment', 'Preparing', 'Ready To Pickup'];
+    const activeOrders = orders.filter(order=> activeStatuses.includes(order.status));
+
+    return(
+        <div className="container py-4">
+            <div className="row">
+                <div className="col-12">
+                    <h4 className="mb-3 mt-lg-4">Your Order Tracking ({activeOrders.length})</h4>
+                    {isLoading ? (
+                        <>
+                            <OrderCardSkeleton />
+                            <OrderCardSkeleton />
+                            <OrderCardSkeleton />
+                        </>
+                    ): activeOrders.length === 0 ? (
+                        <div className="alert alert-secondary mt-3">
+                            No Active Order So far, <Link to='/' className="text-dark">Let's Ngopi!</Link>
+                        </div>
+                    ): (   
+
+                        <div className="d-grid gap-3">
+                            {activeOrders.map((order)=> (
+                                <OrderCard key={order._id} order={order} />
+                            ))}
+                        </div>
+                        
+                    )}
+
+                    <div>
+                        <Link to="/" className="text-dark text-decoration-none d-inline-block">
+                            &larr; Back To Home
+                        </Link>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+    )
+}
+
+export default OrdersPage;
+```
+
+<br>
+<br>
+
+### 3rd Case: User Wants To Login or Create Account
+<p>Some Features Are Not Accessible such as History Page if user not registered, or logged in Without being said Unregistered user cannot view their order's history, so in The Home Page Click user Icon Logo and select <strong>"Login"</strong>.</p>
+
+![users-Modal](/md-asset/login-click.png)
+
+<br>
+
+**Login Page**
+<p>in this page user can logged in with their account if they have an account if user unregistered user can click <strong>Register</strong> it will take user to Register Page.</p>
+
+![loginpage](/md-asset/loginpage.png)
+
+**Register Page**
+
+![register](/md-asset/registerPage.png)
+
+<p style="font-style:italic;"><strong>Snippet Code For Login Page And Register :</strong></p>
+
+<p style="font-style:italic;">LoginPage.jsx</p>
+
+```jsx
+import React from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext.jsx";
+import toast from "react-hot-toast";
+
+function LoginPage() {
+    const [showPassword, setShowPassword] = useState(false);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const {login} = useAuth();
+    const navigate = useNavigate();
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (!email || !password) {
+            toast.error('You Must Input All The Fields');
+            return ;
+        }
+        try {
+            const loggedInUser = await login(email, password);
+            toast.success(`Welcome To Ngopi! ${loggedInUser.name}`);
+            if (loggedInUser.isAdmin) {
+                navigate('/admin/dashboard')
+            } else {
+                navigate('/');
+            }
+        } catch(error) {
+            console.error('Failed To Login', error);
+            const errorMessage = error.response?.data?.message || 'Something Wrong Cant Log You in';
+            toast.error(errorMessage);
+        }
+    };
+
+
+    return(
+        <div className="d-flex vh-100 align-items-center justify-content-center bg-light" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
+            
+            <div className="bg-white p-5 rounded-4 shadow" style={{width: '100%', maxWidth: '450px'}}>
+                <div className="text-center mb-4">
+                    <Link to="/" className="h2 fw-bold text-dark text-decoration-none">
+                        Ngopi.
+                    </Link>
+                </div>
+                <form onSubmit={handleSubmit}>
+                    {/* EMAIL */}
+                    <div className="mb-3">
+                        <label htmlFor="email" className="form-label">
+                            Email
+                        </label>
+                        <input
+                            type="email" 
+                            id="email"
+                            className="form-control form-control-sm"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            placeholder=""
+                            required
+                        />
+                    </div>
+
+                    {/* PASSWORD */}
+                    <div className="mb-3">
+                        <label htmlFor="password" className="form-label">
+                            Password
+                        </label>
+                        <div className="position-relative">
+                            <input 
+                                type={showPassword ? 'text' : 'password'} 
+                                id="password"
+                                className="form-control form-control-sm"
+                                value={password}
+                                onChange={(e)=> setPassword(e.target.value)}
+                                placeholder=""
+                                required
+                            />
+                            <button
+                                type="button"
+                                onClick={()=> setShowPassword(!showPassword)}
+                                className="btn btn-sm position-absolute top-50 end-0 translate-middle-y me-2 border-0 bg-transparent text-muted"
+                            >
+                                {showPassword ? (
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-eye-slash" viewBox="0 0 16 16">
+                                        <path d="M13.359 11.238C15.06 9.72 16 8 16 8s-3-5.5-8-5.5a7.028 7.028 0 0 0-2.79.588l.77.771A5.94 5.94 0 0 1 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.134 13.134 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755-.165.165-.337.328-.517.486l.708.709z"/>
+                                        <path d="M11.297 9.176a3.5 3.5 0 0 0-4.474-4.474l.823.823a2.5 2.5 0 0 1 2.829 2.829l.822.822zm-2.943 1.288.822.822.083.083.083.083a3.5 3.5 0 0 1-4.474-4.474l.823.823a2.5 2.5 0 0 0 2.829 2.829z"/>
+                                        <path d="M3.35 5.47c-.18.16-.353.322-.518.487A13.134 13.134 0 0 0 1.172 8l.195.288c.335.48.83 1.12 1.465 1.755C4.121 11.332 5.881 12.5 8 12.5c.716 0 1.39-.133 2.02-.36l.77.772A7.029 7.029 0 0 1 8 13.5C3 13.5 0 8 0 8s.939-1.721 2.641-3.238l.708.709zm10.296 6.854-12-12 .708-.708 12 12-.708.708z"/>
+                                    </svg>
+                                ): (
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-eye" viewBox="0 0 16 16">
+                                        <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
+                                        <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
+                                    </svg>
+                                )}
+                            </button>
+
+                        </div>
+                    </div>
+
+                    <div className="mt-4 text-center">
+                        <small className="text-muted">Don't have an account? 
+                            <Link to="/register" className="text-decoration-underline text-dark fw-semibold"> Register </Link>
+                        </small>
+                    </div>
+
+                    <div>
+                        <button
+                            type="submit"
+                            className="btn btn-dark w-100">
+                                Login
+                            </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    );
+}
+
+export default LoginPage;
+```
+
+<p style="font-style:italic;">RegisterPage.jsx</p>
+
+```jsx
+import React from "react";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext.jsx";
+import toast from "react-hot-toast";
+
+function RegisterPage() {
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
+    const {register} = useAuth();
+    const navigate = useNavigate();
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        // Cek Kalo Masih kosong gk boleh daftar
+        if (!name || !email || !password) {
+            toast.error('You Must Input all The Fields');
+            return;
+        }
+        if (password.length < 6) {
+            toast.error('Password Needs At Least 6 Characters!');
+            return;
+        }
+
+        try {
+            const guestOrderIds = JSON.parse(localStorage.getItem('guestOrderIds')) || [];
+            await register(name, email, password, guestOrderIds);
+            if(guestOrderIds.length > 0) {
+                localStorage.removeItem('guestOrderIds')
+            }
+            toast.success("You're Registered! Login to Continue!");
+            navigate('/login');
+        } catch (error) {
+            console.error('Failed To Register', error);
+            const errorMessage = error.response?.data?.message || 'Registered Failed, Please Try Again!';
+            toast.error(errorMessage);
+        }
+    };
+    return(
+        <div className="d-flex vh-100 align-items-center justify-content-center bg-light" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
+            
+            <div className="bg-white p-5 rounded-4 shadow" style={{width: '100%', maxWidth: '450px'}}>
+                <div className="text-center mb-4">
+                    <Link to="/" className="h2 fw-bold text-dark text-decoration-none">
+                        Ngopi.
+                    </Link>
+                </div>
+                <form onSubmit={handleSubmit}>
+
+                    {/* NAMA */}
+                    <div className="mb-3">
+                        <label htmlFor="email" className="form-label">
+                            Your Name
+                        </label>
+                        <input
+                            type="text" 
+                            id="name"
+                            className="form-control form-control-sm"
+                            value={name}
+                            onChange={(e)=> setName(e.target.value)}
+                            placeholder=""
+                            required
+                            />
+                    </div>
+                    
+                    {/* EMAIL */}
+                    <div className="mb-3">
+                        <label htmlFor="email" className="form-label">
+                            Email
+                        </label>
+                        <input
+                            type="email" 
+                            id="email"
+                            className="form-control form-control-sm"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            placeholder=""
+                            required
+                        />
+                    </div>
+
+                    {/* PASSWORD */}
+                    <div className="mb-3">
+                        <label htmlFor="password" className="form-label">
+                            Password
+                        </label>
+                        <div className="position-relative">
+                            <input 
+                                type={showPassword ? 'text' : 'password'} 
+                                id="password"
+                                className="form-control form-control-sm fst-italic"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                placeholder=""
+                                required
+                            />
+                            <button
+                                type="button"
+                                onClick={()=> setShowPassword(!showPassword)}
+                                className="btn btn-sm position-absolute top-50 end-0 translate-middle-y me-2 border-0 bg-transparent text-muted"
+                            >
+                                {showPassword ? (
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-eye-slash" viewBox="0 0 16 16">
+                                        <path d="M13.359 11.238C15.06 9.72 16 8 16 8s-3-5.5-8-5.5a7.028 7.028 0 0 0-2.79.588l.77.771A5.94 5.94 0 0 1 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.134 13.134 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755-.165.165-.337.328-.517.486l.708.709z"/>
+                                        <path d="M11.297 9.176a3.5 3.5 0 0 0-4.474-4.474l.823.823a2.5 2.5 0 0 1 2.829 2.829l.822.822zm-2.943 1.288.822.822.083.083.083.083a3.5 3.5 0 0 1-4.474-4.474l.823.823a2.5 2.5 0 0 0 2.829 2.829z"/>
+                                        <path d="M3.35 5.47c-.18.16-.353.322-.518.487A13.134 13.134 0 0 0 1.172 8l.195.288c.335.48.83 1.12 1.465 1.755C4.121 11.332 5.881 12.5 8 12.5c.716 0 1.39-.133 2.02-.36l.77.772A7.029 7.029 0 0 1 8 13.5C3 13.5 0 8 0 8s.939-1.721 2.641-3.238l.708.709zm10.296 6.854-12-12 .708-.708 12 12-.708.708z"/>
+                                    </svg>
+                                ): (
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-eye" viewBox="0 0 16 16">
+                                        <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
+                                        <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
+                                    </svg>
+                                )}
+                            </button>
+
+                        </div>
+                    </div>
+
+                    <div className="mt-4 text-center">
+                        <small className="text-muted">Already have an account? 
+                            <Link to="/login" className="text-decoration-underline text-dark fw-semibold"> Login </Link>
+                        </small>
+                    </div>
+
+                    <div>
+                        <button
+                            type="submit"
+                            className="btn btn-dark w-100">
+                                Register
+                            </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    );
+}
+
+export default RegisterPage;
+```
+<br>
+<br>
+
+### 4th Case: User Wants To View Their History
+<p>before view history in History Page make sure that user/you have to registered or logged in if not then this page will apppear</p>
+
+![login-req](/md-asset/login-required.png)
+
+<br>
+
+<p>to go to History Orders Click Icon User Logo then Select "History"</p>
+
+![users-Modal](/md-asset/login-click.png)
+
+<br>
+
+<p>if you're registered and Logged in user/you can view History, in History Page includes the order that has order status <strong>"Finsihed"</strong> or <strong>"Cancelled"</strong></p>
+
+![history-page](/md-asset/history-page.png)
+
+<p style="font-style:italic;"><strong>Snippet Code For Get User History:</strong></p>
+
+<p style="font-style:italic;">HistoryPage.jsx</p>
+
+```jsx
+import React, { useEffect, useCallback, useState } from "react";
+import OrderCardSkeleton from "../components/OrderCardSkeleton.jsx";
+import HistoryOrderCard from "../components/Admin/HistoryOrderCard.jsx";
+import { Link } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext.jsx";
+import apiClient from "../api/axiosConfig.js";
+import toast from "react-hot-toast";
+
+
+function HistoryPage() {
+    const [history, setHistory] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const {isAuthenticated, user} = useAuth();
+
+    
+
+    useEffect(()=> {
+        const fetchHistory = async () => {
+            if(!isAuthenticated) {
+                return;
+            }
+            try {
+                const {data} = await apiClient.get(`/orders/Myhistory/${user._id}`);
+                setHistory(data);
+            } catch (error) {
+                console.error("Failed To Fetch History: Error:", error);
+                toast.error('Failed To Load History');
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        fetchHistory();
+    },[]);
+
+
+    return(
+        <div className="container py-4">
+            <div className="row">
+                <div className="col-12">
+                    {/* History Only for Registered User */}
+                    {isAuthenticated ? (
+                        <>  
+                            <h4 className="mb-3 mt-lg-4">Your History ({history.length})</h4>
+
+                            {isLoading ? (
+                                <>
+                                    <OrderCardSkeleton />
+                                    <OrderCardSkeleton />
+                                </>
+
+                            ): history.length === 0 ? (
+                                <div className="alert alert-secondary mt-3">
+                                    No History So far, <Link to='/' className="text-dark">Let's Ngopi!</Link>
+                                </div>
+                            ): (
+                                history.map((order)=> (
+                                    <HistoryOrderCard key={order._id} order={order} />
+                                ))
+                            )}
+                        </>
+                    ) : (
+                        <div className="alert alert-secondary mt-3">
+                            Login to See Your History, <Link to='/login' className="text-dark">Let's Login!</Link>
+                        </div>
+                    )}
+                    <div className="d-none d-lg-block">
+                            <Link to="/" className="text-dark text-decoration-none d-inline-block">
+                                &larr; Back To Home
+                            </Link>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+    )
+}
+
+export default HistoryPage;
+```
+<br>
+<br>
+
+---
+
+## Back-End Documentation
 
 
 
