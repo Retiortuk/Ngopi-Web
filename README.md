@@ -60,12 +60,14 @@
 * ***[4. 2nd Case User Wants to Track The Order](#2nd-case-user-wants-to-track-the-orders)***
 * ***[5. 3rd Case: Login/Register](#3rd-case-user-wants-to-login-or-create-account)***
 * ***[6. 4th Case User Wants to View History](#4th-case-user-wants-to-view-their-history)***
-* ***[6. Using MidTrans Pay Simulator](#midtrans-payment-simulator)***
-* ***[7. Back-End Documentation](#front-end-documentation)***
-* ***[8. API Documentation](#front-end-documentation)***
+* ***[7. Using MidTrans Pay Simulator](#midtrans-payment-simulator)***
+* ***[8. Admin/Developer Flow Documentation](#--admindeveloper-flow-documentation)***
+* ***[9. Back-End Documentation](#front-end-documentation)***
+* ***[10. API Documentation](#front-end-documentation)***
 
 ---
 ## Front-End Documentation
+
 
 
 ### - User/Developer Flow Documentation
@@ -1214,6 +1216,169 @@ function HistoryPage() {
 
 export default HistoryPage;
 ```
+<br>
+<br>
+
+### - Admin/Developer Flow Documentation
+
+<br>
+
+#### Admin Dashboard
+
+<br>
+
+![adminDashboard](/md-asset/dashboard-admin.png)
+
+<!-- Homepage -->
+<p>In this Admin Dashboard Page an Admin Can see The Summary From <strong>The Total Earnings, Available Stock, Active Orders, Future Orders</strong>, also admin can <strong>Sign Out.</strong></p>
+
+<br>
+
+### 1st Case: Admin Wants To Manage Stock CRUD
+<p>navigate to Manage Stock Page To Get There you can click "Available Stock" On Admin Dahsboard Page, Or You can Click Manage Stock on sidebar</p>
+
+<br>
+
+#### Manage Stock Page
+![manageStock](/md-asset/manage-stock.png)
+<p>In this Page Admin Can do a <strong>CRUD</strong> Create, Read, Update, Delete. Click "Edit" then it will Popup Dropdown.</p>
+
+![edit](/md-asset/edit-dropdown.png)
+<p>There are <strong>Edit Menu, Delete Menu, Marked As Sold Out</strong>.</p>
+
+<br>
+
+**Admin Wants To Edit Menu**
+<p>After The Dropdown Appeared Admin Select "Edit Menu" then a Modal will pop up</p>
+
+![edit-produt](/md-asset/Edit-product.png)
+<p>Here an Admin Can <strong>Change The Name of The Product , Product Price, make the product be as a Featured Product</strong></p>
+
+<p style="font-style:italic;"><strong>Snippet Code For: Edit Menu</strong></p>
+
+<p style="font-style:italic;">EditProductModal.jsx</p>
+
+```jsx
+function EditProductModal({show, onHide, product, onUpdate}) {
+    const [name, setName] = useState('');
+    const [price, setPrice] = useState('');
+    const [isFeatured, setIsFeatured] = useState(false);
+
+    useEffect(() => {
+        if (product) {
+            setName(product.name);
+            setPrice(product.price.toString());
+            setIsFeatured(product.isFeatured);
+        }
+    }, [product]);
+
+    const handleSave = async (e) => {
+        e.preventDefault();
+
+        const priceNumber =  Number(price);
+        if(!priceNumber || priceNumber <= 0) {
+            toast.error("Price Cannot be Emptied Or Rp.0");
+            return; 
+        }
+        try {
+            const updatedData = { name, price : priceNumber, isFeatured };
+            await apiClient.put(`/product/update/${product._id}`, updatedData);
+            
+            toast.success(`'${name}' success updated!.`);
+            onUpdate(); 
+            onHide();
+        } catch (error) {
+            toast.error("Failed to Update.");
+            console.error("Error updating product:", error);
+        }
+    };
+
+    if(!product) return null;
+};
+```
+
+<br>
+
+**Admin Wants To Delete Menu**
+
+<p>On Dropdown Click <strong>"Delete Menu"</strong> then java script alert confirmation window will popup</p>
+
+![delete-menu](/md-asset/delete-stock.png)
+<p>Once admin press that ok on confirmation then it will delete the item</p>
+
+<p style="font-style:italic;"><strong>Snippet Code For: Delete Menu</strong></p>
+
+<p style="font-style:italic;">ManageCard.jsx</p>
+
+```jsx
+ const handleDeleteStock = async() => {
+        if(window.confirm(`Are You Sure You Want To Delete ${product.name}? This Can't Be Cancelled`)) {
+            try {
+                await apiClient.delete(`/product/delete/${product._id}`);
+                toast.success('Sucessfully Delete The Item');
+            } catch (error) {
+                toast.error('Cannot Delete The Item');
+                console.error('Error Message:', error);
+            }
+        }
+    };
+```
+<br>
+
+**Marked As Sold Out/Available**
+<p>when admin Click <strong>"Mark As Sold Out"</strong> it will update the stock to sold out or not available when it is Marked As Sold Out then admin can make it available again by click <strong>"Mark As Available"</strong></p>
+
+![soldout](/md-asset/mark-as-soldout.png)
+
+<p>also when the stock is sold out the item will not available to purchase either in user side or admin side</p>
+
+<p style="font-style:italic;"><strong>Snippet Code For: Mark As Soldout/Available</strong></p>
+
+<p style="font-style:italic;">ManageCard.jsx</p>
+
+```jsx
+<Dropdown.Menu>
+    <Dropdown.Item onClick={handleEditPrice}>Edit Menu</Dropdown.Item>
+    <Dropdown.Item onClick={handleDeleteStock}>Delete Menu</Dropdown.Item>
+    <Dropdown.Item onClick={handleStockToggle}>
+        {product.isAvailable ? 'Marked As Sold Out' : 'Mark As Available'}
+    </Dropdown.Item>
+</Dropdown.Menu>
+```
+<br>
+<br>
+
+### 2nd Case: Admin Wants To Do Manual Order
+<p>navigate to Manual Order Page To Get There, this page used for admin when user order with offline way which comes to the store and order it manually</p>
+
+<br>
+
+#### Manual Order
+![manual-order](/md-asset/manual-order.png)
+<p>In this Page Admin Can do a <strong>Add Item</strong> according to what user/buyer wants, then click <strong>Checkout</strong>.</p>
+
+![cekout](/md-asset/eckout.png)
+<p>Same as regular user order here's the checkout page for admin must fill all the data once it done then click <strong>Order</strong>.</p>
+
+<br>
+
+**Where Does The Order Go?**
+<p>All The Orders Are Showed Up in Active Orders, Future Orders Page.</p>
+
+<br>
+<br>
+
+### 3rd Case: Admin Wants to Check Active Orders
+<p>All The Orders Sent To Admin Where Pickup Times is <strong>"Now"</strong> or <strong>Less than 30 Minutes Before Pickup</strong>, it will show up here </p>
+
+<br>
+
+#### Active Orders
+
+
+
+
+
 <br>
 <br>
 
