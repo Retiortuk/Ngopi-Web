@@ -62,7 +62,12 @@
 * ***[6. 4th Case User Wants to View History](#4th-case-user-wants-to-view-their-history)***
 * ***[7. Using MidTrans Pay Simulator](#midtrans-payment-simulator)***
 * ***[8. Admin/Developer Flow Documentation](#--admindeveloper-flow-documentation)***
-* ***[9. Back-End Documentation](#front-end-documentation)***
+* ***[9. 1st Case: Admin Wants to Manage Stock CRUD ](#1st-case-admin-wants-to-manage-stock-crud)***
+* ***[10. 2nd Case: Admin Wants to Do Manual Order ](#2nd-case-admin-wants-to-do-manual-order)***
+* ***[11. 3rd Case: Admin Wants to Check Active Orders ](#3rd-case-admin-wants-to-check-active-orders)***
+* ***[12. 4th Case: Admin Wants to Check Future Orders ](#4th-case-admin-wants-to-check-future-orders)***
+* ***[13. 5th Case: Admin Wants to See Orders history ](#5th-case-admin-wants-to-see-history)***
+* ***[14. Back-End Documentation](#back-end-documentation)***
 * ***[10. API Documentation](#front-end-documentation)***
 
 ---
@@ -1375,8 +1380,195 @@ function EditProductModal({show, onHide, product, onUpdate}) {
 
 #### Active Orders
 
+![active-order](/md-asset/active-orders.png)
 
+<p>in this page an Admin Can See All The <strong>Active Orders</strong>, an Orders called Active Orders When Order that has a Pickup Time "Now", And Orders that has a Pickuptime 30 Minutes Ahead of Current time, if an orders has Pickup Time Now and had past than 35 Minutes and admin still not accept the order it will automatically being cancelled same case if it past beyond pickup time it won't showed up in active orders anymore it will move to History Page, The Active orders it will showed up in the left side of the page Called <strong>Ongoing Orders</strong> Waiting Admin Confirmation, once Admin Confirmed it, it stills showed up in The Left Side the different is the status changed to <strong>Preparing</strong>. </p>
 
+![preparing](/md-asset/preparing.png)
+
+<p>if an Admin Is Done With Preparing the orders, Admin Can Click <strong>Ready To Pickup</strong> and it will move to the right side of the page <strong>Ready To Pickup</strong></p>
+
+![ready-pickup](/md-asset/ready-to.png)
+
+<p>admin can click <strong>"Finished The Order"</strong> if a buyer/user came took the item</p>
+
+<p style="font-style:italic;"><strong>Snippet Code For: Accept Active Orders, Change The Status</strong></p>
+
+<p style="font-style:italic;">OrderCardAdmin.jsx</p>
+
+```jsx
+function OrderCardAdmin() {
+    const handleUpdateStatus = async(newStatus)=> {
+        if(isFuture) {
+            console.log("test")
+        }
+        try {
+            await apiClient.put(`/orders/updateOrder/${order._id}`, {status: newStatus});
+            toast.success(`Order #${order._id.slice(-4)} Updated!`);
+            onUpdate();
+        } catch (error) {
+            toast.error('Failed To Update Status')
+            console.error('Something Wrong:', error);
+        }
+    };
+
+    return(
+        <div className="card-footer d-flex justify-content-end gap-2">
+                {order.status === 'Waiting To Be Confirmed' && (
+                    <>
+                        <button className="btn btn-outline-danger" onClick={() => handleUpdateStatus('Cancelled')}>Reject</button>
+                        <button className="btn btn-dark" onClick={() => handleUpdateStatus('Preparing')}>
+                            Accept & Prepare it
+                        </button>
+                    </>
+                )}
+                {order.status === 'Preparing' && (
+                    <button className="btn btn-dark" onClick={() => handleUpdateStatus('Ready To Pickup')}>
+                        Ready To Pickup
+                    </button>
+                )}
+                {order.status === 'Ready To Pickup' && (
+                    <button className="btn btn-success" onClick={() => handleUpdateStatus('Finished')}>
+                        Finished The Order
+                    </button>
+                )}
+            </div>
+    )
+}
+```
+<br>
+<br>
+
+### 4th Case: Admin Wants To Check Future Orders
+<p>in this page admin Can See Upcoming Orders, where Pickuptime is still beyond 30 Minutes and More. </p>
+
+#### Future Orders
+
+![future-orders](/md-asset/future-orders.png)
+
+<p>In this page admin can see an Upcoming Orders also Admin Can Change the Pickuptime to Now, Example if a Buyer/User Comes Early to the Store and Wants to Pickup The Order Immediately admin Can Click <strong>Make it is as Pickup Now</strong> then it will pop up the modal for making sure that admin wants to do this action, also admin can Reject The Upcoming Ordes.</p>
+
+![modal](/md-asset/modal.png)
+
+<p style="font-style:italic;"><strong>Snippet Code For: Change Pickuptime to Now and Reject Orders</strong></p>
+
+<p style="font-style:italic;">OrderCardAdmin.jsx</p>
+
+```jsx
+ const handleUpdatePickup = async(newPickupTime)=> {
+        try {
+            await apiClient.put(`/orders/updatePickupTime/${order._id}`, {time: newPickupTime});
+            toast.success(`Order #${order._id.slice(-4)} Updated!`);
+            onUpdate();
+        } catch (error) {
+            toast.error('Failed To Update Status')
+            console.error('Something Wrong:', error);
+        }
+    };
+
+    const handleCancel = async () => {
+        try {
+            await apiClient.put(`/orders/updateOrder/${order._id}`, { status: 'Cancelled' });
+            toast.success(`Orders #${order._id.slice(-4)} is Cancelled.`);
+            onUpdate();
+        } catch (error) {
+            toast.error("Failed To Reject Orders.");
+        }
+    };
+
+    return(
+         <div className="card-footer d-flex justify-content-end gap-2">
+                { order.status === 'Waiting To Be Confirmed' &&  (
+                    <>
+                        <button className="btn btn-outline-danger" onClick={handleCancel}>Reject</button>
+                        <button className="btn btn-dark" onClick={handleShowConfirmModal}>
+                            Make It as Pickup: Now
+                        </button>
+                    </>
+                )}
+            </div>
+
+            <Modal show={showConfirmModal} onHide={handleCloseConfirmModal} centered size="">
+                    <Modal.Header closeButton>
+                        <Modal.Title>Confirmation</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <p>Are You sure want to change the order Pickup Time to be "Now"?</p>
+                        <p className="small text-muted">This Action will move Future Orders to "Ongoing Orders" And You Have To Confirm it Again in Active Orders Page Make Sure The Customer is Here Already.</p>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="danger" onClick={handleCloseConfirmModal}>
+                            No
+                        </Button>
+                        <Button variant="dark" onClick={() => handleUpdatePickup('Now')}>
+                            Yes
+                        </Button>
+                    </Modal.Footer>
+            </Modal>
+    )
+```
+<br>
+<br>
+
+### 5th Case: Admin Wants To See History
+<p>Orders Being Called In History Page When They Have a Status <strong>Cancelled</strong> And <strong>Finished.</strong></p>
+
+#### History Page
+
+![history](/md-asset/historyAdmin-page.png)
+
+<p>Admin Can see The History in this page all the history orders of users/buyers</p>
+
+<p style="font-style:italic;"><strong>Snippet Code For: View History</strong></p>
+
+<p style="font-style:italic;">HistoryOrder.jsx</p>
+
+```jsx
+const fetchHistory = useCallback(async () => {
+    setIsLoading(true);
+    try {
+        const endPoint = user?.isAdmin ? '/orders/history' : `/orders/Myhistory/${user._id}`;
+        const { data } = await apiClient.get(endPoint);
+        setHistory(data);
+    } catch(error) {
+        console.error('Failed To Fetch History: ', error);
+        toast.error('Failed To Load History!')
+    } finally {
+        setIsLoading(false);
+    }
+}, [user?.isAdmin]);
+
+useEffect(()=> {
+    fetchHistory();
+}, [fetchHistory])
+
+return(
+    <>
+        <div className="row g-4">
+            <div className="col-lg-12">
+                <h4 className="mb-3">History</h4>
+                <p className="text-muted mb-4">History Orders</p>
+                {isLoading ? (
+                    <>
+                        <OrderCardSkeleton />
+                        <OrderCardSkeleton />
+                    </>
+                ): history.length === 0 ? (
+                    <div className="alert alert-secondary">
+                        No History!
+                    </div>
+                ): (
+                    <div className="d-grid gap-3">
+                        {history.map((order)=> (
+                            <HistoryOrderCard key={order._id} order={order} />
+                        ))}
+                    </div>
+                )}
+            </div>
+        </div>
+    </>
+)
+```
 
 
 <br>
