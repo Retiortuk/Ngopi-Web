@@ -68,7 +68,7 @@
 * ***[12. 4th Case: Admin Wants to Check Future Orders ](#4th-case-admin-wants-to-check-future-orders)***
 * ***[13. 5th Case: Admin Wants to See Orders history ](#5th-case-admin-wants-to-see-history)***
 * ***[14. Back-End Documentation](#back-end-documentation)***
-* ***[10. API Documentation](#front-end-documentation)***
+* ***[15. API Documentation](#api-documentation)***
 
 ---
 ## Front-End Documentation
@@ -1578,7 +1578,427 @@ return(
 
 ## Back-End Documentation
 
+<p><strong>Main Goals</strong> from the backend in this system is Creating Database Schema, API, Controller, Routes </p>
 
+<p><strong>Technology that used in this system</strong></p>
 
+- **Database**: <a href="https://www.mongodb.com/">MongoDB</a>
+- **Backend Machine**: <a href="https://nodejs.org/">NodeJS</a>
+- **Authentication**: <a href="https://en.wikipedia.org/wiki/JSON_Web_Token">JWT (Json Web Token)</a>
+- **Controller And Routes Management**: <a href="https://expressjs.com/">ExpressJS</a>
+- **Backend Hosting**: <a href="https://render.com/">Render</a>
 
+<br>
 
+#### Database Schema
+
+**User Database**
+
+```javascript
+const userSchema = mongoose.Schema(
+    {
+        name: {type: String, required: true},
+        email: {type: String, required: true, unique: true},
+        password: {type: String, required: true},
+        isAdmin: {type: Boolean, required: true, default: false}
+    },
+    {timestamps: true}
+);
+```
+
+**Product Database**
+
+```javascript
+const productSchema = mongoose.Schema(
+    {
+        name: {type: String, required: true},
+        price: {type: Number, required: true, default: 0},
+        image: {type: String, required: true},
+        isFeatured: {type: Boolean, required: true, default: false},
+        isAvailable: {type: Boolean, require: true, default: true}
+    },
+    {timestamps: true}
+)
+```
+
+**Order Schema**
+
+```javascript
+const orderSchema = mongoose.Schema({
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: false,
+        ref: 'User',
+    },
+    customerDetails: {
+        name: {type: String, required: true},
+        phone: {type: String},
+    },
+    orderItems: [
+        {
+            name: {type: String, required: true},
+            quantity: {type: Number, required: true},
+            image: {type: String, required: true},
+            price: {type: Number, required: true},
+            note: {type: String, required: false},
+            product: {type: mongoose.Schema.Types.ObjectId, required: true, ref: 'Product'}
+        },
+    ],
+    pickupDetails: {
+        type: {type: String, required: true, default: 'Pickup'},
+        time: {type: String, required: true}
+    },
+    paymentMethod: {type: String, required: true},
+    paymentResult: {
+        transaction_id: { type: String },
+        payment_type: { type: String }, 
+        status_message: { type: String },
+        transaction_time: { type: String },
+    },
+    taxPrice: {type: Number, required: true, default: 0.0},
+    totalPrice: {type: Number, required: true, default: 0.0},
+    status: {type: String, required: true, default: 'Waiting For Payment'},
+},
+    {timestamps: true}
+)
+```
+<br>
+
+### API Documentation
+
+<br>
+
+#### --- User API ---
+
+```md
+Base Endpoint: https://ngopi-backend.onrender.com/api/users
+```
+<br>
+
+**API For Register New User**
+
+```md
+Endpoint: https://ngopi-backend.onrender.com/api/users/register
+```
+<p style="font-style:italic;"><strong>Method: POST</strong><br>
+<strong>Visibility: Public</strong>
+</p>
+<p></p>
+
+<br>
+
+**API For Login**
+
+```md
+Endpoint: https://ngopi-backend.onrender.com/api/users/login
+```
+<p style="font-style:italic;"><strong>Method: POST</strong><br>
+<strong>Visibility: Public</strong>
+</p>
+<p></p>
+
+<br>
+
+**API For Get User Profile**
+
+```md
+Endpoint: https://ngopi-backend.onrender.com/api/users/profile
+```
+<p style="font-style:italic;"><strong>Method: GET</strong><br>
+<strong>Visibility: Private (Registered User)</strong>
+</p>
+<p></p>
+
+<br>
+
+**API For Update User Profile**
+
+```md
+Endpoint: https://ngopi-backend.onrender.com/api/users/profile
+```
+<p style="font-style:italic;"><strong>Method: PUT</strong><br>
+<strong>Visibility: Private (Registered User)</strong>
+</p>
+<p></p>
+
+<br>
+
+**API For Get All Users**
+
+```md
+Endpoint: https://ngopi-backend.onrender.com/api/users/
+```
+<p style="font-style:italic;"><strong>Method: GET</strong><br>
+<strong>Visibility: Private (Only Admin)</strong>
+</p>
+<p></p>
+
+<br>
+
+**API For Get Delete User By ID**
+
+```md
+Endpoint: https://ngopi-backend.onrender.com/api/users/delete/:id
+
+Example: https://ngopi-backend.onrender.com/api/users/delete/07679876
+```
+<p style="font-style:italic;"><strong>Method: DELETE</strong><br>
+<strong>Visibility: Private (Only Admin)</strong>
+</p>
+<p></p>
+
+<br>
+
+#### --- Products API ---
+
+```md
+Base Endpoint: https://ngopi-backend.onrender.com/api/product
+```
+<br>
+
+**API For Get All Products**
+
+```md
+Endpoint: https://ngopi-backend.onrender.com/api/product/
+```
+<p style="font-style:italic;"><strong>Method: GET</strong><br>
+<strong>Visibility: Public</strong>
+</p>
+<p></p>
+
+<br>
+
+**API For Get All Featured Products**
+
+```md
+Endpoint: https://ngopi-backend.onrender.com/api/product/featured
+```
+<p style="font-style:italic;"><strong>Method: GET</strong><br>
+<strong>Visibility: Public</strong>
+</p>
+<p></p>
+
+<br>
+
+**API For Post New Product**
+
+```md
+Endpoint: https://ngopi-backend.onrender.com/api/product/post
+```
+<p style="font-style:italic;"><strong>Method: POST</strong><br>
+<strong>Visibility: Private (Only Admin)</strong>
+</p>
+<p></p>
+
+<br>
+
+**API For Delete Product By ID**
+
+```md
+Endpoint: https://ngopi-backend.onrender.com/api/product/delete/:id
+
+Endpoint: https://ngopi-backend.onrender.com/api/product/delete/245367
+```
+<p style="font-style:italic;"><strong>Method: DELETE</strong><br>
+<strong>Visibility: Private (Only Admin)</strong>
+</p>
+<p></p>
+
+<br>
+
+**API For Update Product By ID**
+
+```md
+Endpoint: https://ngopi-backend.onrender.com/api/product/update/:id
+
+Endpoint: https://ngopi-backend.onrender.com/api/product/update/245367
+```
+<p style="font-style:italic;"><strong>Method: PUT</strong><br>
+<strong>Visibility: Private (Only Admin)</strong>
+</p>
+<p></p>
+
+<br>
+
+#### --- Orders API ---
+
+```md
+Base Endpoint: https://ngopi-backend.onrender.com/api/order
+```
+<br>
+
+**API For Post Payment Method By Cash Order**
+
+```md
+Endpoint: https://ngopi-backend.onrender.com/api/order/cash-order
+```
+<p style="font-style:italic;"><strong>Method: POST</strong><br>
+<strong>Visibility: Registered User</strong>
+</p>
+<p></p>
+
+<br>
+
+**API For Post Payment Method By Online Order**
+
+```md
+Endpoint: https://ngopi-backend.onrender.com/api/order/cash-order
+```
+<p style="font-style:italic;"><strong>Method: POST</strong><br>
+<strong>Visibility: Registered User</strong>
+</p>
+<p></p>
+
+<br>
+
+**API For Post Order For Unregister User**
+
+```md
+Endpoint: https://ngopi-backend.onrender.com/api/order/guest
+```
+<p style="font-style:italic;"><strong>Method: POST</strong><br>
+<strong>Visibility: Public</strong>
+</p>
+<p></p>
+
+<br>
+
+**API For Get Orders By ID**
+
+```md
+Endpoint: https://ngopi-backend.onrender.com/api/order/myOrder/:id
+Example: https://ngopi-backend.onrender.com/api/order/myOrder/7898798
+```
+<p style="font-style:italic;"><strong>Method: GET</strong><br>
+<strong>Visibility: Public</strong>
+</p>
+<p></p>
+
+<br>
+
+**API For Get Orders**
+
+```md
+Endpoint: https://ngopi-backend.onrender.com/api/order/myOrder
+```
+<p style="font-style:italic;"><strong>Method: GET</strong><br>
+<strong>Visibility: Private (Registered User)</strong>
+</p>
+<p></p>
+
+<br>
+
+**API For Get All User's Orders**
+
+```md
+Endpoint: https://ngopi-backend.onrender.com/api/order/allOrder
+```
+<p style="font-style:italic;"><strong>Method: GET</strong><br>
+<strong>Visibility: Private (Admin Only)</strong>
+</p>
+<p></p>
+
+<br>
+
+**API For Get Active Orders**
+
+```md
+Endpoint: https://ngopi-backend.onrender.com/api/order/active-orders
+```
+<p style="font-style:italic;"><strong>Method: GET</strong><br>
+<strong>Visibility: Private (Admin Only)</strong>
+</p>
+<p></p>
+
+<br>
+
+**API For Get Future Orders**
+
+```md
+Endpoint: https://ngopi-backend.onrender.com/api/order/future-orders
+```
+<p style="font-style:italic;"><strong>Method: GET</strong><br>
+<strong>Visibility: Private (Admin Only)</strong>
+</p>
+<p></p>
+
+<br>
+
+**API For Update Order's Status**
+
+```md
+Endpoint: https://ngopi-backend.onrender.com/api/order/updateOrder/:id
+Example: https://ngopi-backend.onrender.com/api/order/updateOrder/987678
+```
+<p style="font-style:italic;"><strong>Method: PUT</strong><br>
+<strong>Visibility: Private (Admin Only)</strong>
+</p>
+<p></p>
+
+<br>
+
+**API For Update Order's Pickup Time**
+
+```md
+Endpoint: https://ngopi-backend.onrender.com/api/order/updatePickupTime/:id
+Example: https://ngopi-backend.onrender.com/api/order/updatePickupTime/987678
+```
+<p style="font-style:italic;"><strong>Method: PUT</strong><br>
+<strong>Visibility: Private (Admin Only)</strong>
+</p>
+<p></p>
+
+<br>
+
+**API For Cancel Order By ID**
+
+```md
+Endpoint: https://ngopi-backend.onrender.com/api/order/:id/cancel
+Example: https://ngopi-backend.onrender.com/api/order/88989/cancel
+```
+<p style="font-style:italic;"><strong>Method: PUT</strong><br>
+<strong>Visibility: Private (Admin Only)</strong>
+</p>
+<p></p>
+
+<br>
+
+**API For Get All History Orders**
+
+```md
+Endpoint: https://ngopi-backend.onrender.com/api/order/history
+```
+<p style="font-style:italic;"><strong>Method: GET</strong><br>
+<strong>Visibility: Private (Admin Only)</strong>
+</p>
+<p></p>
+
+<br>
+
+**API For Get History By ID**
+
+```md
+Endpoint: https://ngopi-backend.onrender.com/api/order/Myhistory/:id
+Example: https://ngopi-backend.onrender.com/api/order/Myhistory/80989
+```
+<p style="font-style:italic;"><strong>Method: GET</strong><br>
+<strong>Visibility: Private (Registered User)</strong>
+</p>
+<p></p>
+
+<br>
+
+**API For Delete Order**
+
+```md
+Endpoint: https://ngopi-backend.onrender.com/api/order/delete-order/:id
+Example: https://ngopi-backend.onrender.com/api/order/delete-order/80989
+```
+<p style="font-style:italic;"><strong>Method: DELETE</strong><br>
+<strong>Visibility: Registered User</strong>
+</p>
+<p></p>
+
+---
+
+## That's it For Now :)
